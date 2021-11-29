@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `User_State` (
 CREATE TABLE IF NOT EXISTS `User` (
     `id`			INT		AUTO_INCREMENT			NOT NULL,
     `state`			INT		NOT NULL,
-	`nome`		VARCHAR(100)		NOT NULL,
+	`name`		VARCHAR(100)		NOT NULL,
 	`email`		VARCHAR(150)		NOT NULL,
 	`password`		VARCHAR(150)		NOT NULL,
 	`birtday`		Date		NOT NULL,
@@ -26,21 +26,21 @@ GO
 
 CREATE TABLE IF NOT EXISTS `Shopping` (
     `id`			INT		AUTO_INCREMENT			NOT NULL,
-	`nome`		VARCHAR(100)		NOT NULL,
+	`name`		VARCHAR(100)		NOT NULL,
 	`location`		VARCHAR(500)		NOT NULL,
 	`capacity`		INT		NOT NULL,
-	`abertura`		time		NOT NULL,
-	`fecho`		time		NOT NULL,
+	`opening`		time		NOT NULL,
+	`closing`		time		NOT NULL,
 	PRIMARY KEY(`id`)
 );
 GO
 CREATE TABLE IF NOT EXISTS `Store` (
     `id`			INT		AUTO_INCREMENT			NOT NULL,
-	`nome`		VARCHAR(100)		NOT NULL,
+	`name`		VARCHAR(100)		NOT NULL,
 	`location`		VARCHAR(500)		NOT NULL,
 	`capacity`		INT		NOT NULL,
-	`abertura`		time		NOT NULL,
-	`fecho`		time		NOT NULL,
+	`opening`		time		NOT NULL,
+	`closing`		time		NOT NULL,
 	`id_shopping`		int		NOT NULL,
 	PRIMARY KEY(`id`),
 	FOREIGN KEY (`id_shopping`) REFERENCES Shopping(`id`)
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `Store` (
 GO
 CREATE TABLE IF NOT EXISTS `Product` (
     `id`			INT		AUTO_INCREMENT			NOT NULL,
-	`nome`		VARCHAR(100)		NOT NULL,
+	`name`		VARCHAR(100)		NOT NULL,
 	`reference`		VARCHAR(500)		NOT NULL,
 	`stock`		INT		NOT NULL,
 	`price`		float		NOT NULL,
@@ -60,11 +60,11 @@ CREATE TABLE IF NOT EXISTS `Product` (
 GO
 CREATE TABLE IF NOT EXISTS `Park` (
     `id`			INT		AUTO_INCREMENT			NOT NULL,
-	`nome`		VARCHAR(100)		NOT NULL,
+	`name`		VARCHAR(100)		NOT NULL,
 	`location`		VARCHAR(500)		NOT NULL,
 	`capacity`		INT		NOT NULL,
-	`abertura`		time		NOT NULL,
-	`fecho`		time		NOT NULL,
+	`opening`		time		NOT NULL,
+	`closing`		time		NOT NULL,
 	`id_shopping`		int		NOT NULL,
 	PRIMARY KEY(`id`),
 	FOREIGN KEY (`id_shopping`) REFERENCES Shopping(`id`)
@@ -90,7 +90,7 @@ GO
 
 CREATE TABLE IF NOT EXISTS `Sensor` (
     `id`			INT		AUTO_INCREMENT			NOT NULL,
-	`tipo`		VARCHAR(100)		NOT NULL,
+	`type`		VARCHAR(100)		NOT NULL,
 	PRIMARY KEY(`id`)
 );
 GO
