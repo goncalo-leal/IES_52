@@ -6,6 +6,15 @@ A shopping habits analysis service.
 ShopAholytics is a web app that studies everything related to client behaviour, providing useful info for managers and marketing teams. With our service, companies will be able to quickly analyze shopping tendencies during specific periods of time and tracks the shoppers' flow in realtime. Our main goal is to provide the necessary data to make smarter, more efective business choices.
 
 
+## Autores
+
+| Nome | Função | Email | Nmec |
+| :---: | :---: | :---: | :---: |
+| Alexandre Serras | Architect | alexandreserras@ua.pt | 97505 |
+| Gonçalo Leal | Team Manager | goncalolealsilva@ua.pt | 98008 |
+| João Farias | Product Owner | joaobernardo0@ua.pt | 12345 |
+| Vasco Regal | DevOps Master | vascoregal24@ua.pt | 97636 |
+
 ## Use Cases
 
 | Use case | User stories |
@@ -14,7 +23,13 @@ ShopAholytics is a web app that studies everything related to client behaviour, 
 
 ## Architecture
 
+### Diagram
+
+**Diagrama arquitetura**
+
 ### Frontend
+
+**Tecnologia frontend**
 
 ### Data Capture
 
@@ -29,18 +44,15 @@ The service layer of our web-app is a **Spring** based REST API using **Java Per
 
 #### Message Broker
 
+**Tecnologia processamento rPI**
+
 ### Database
 
 We store all our data on a **mySQL** database.
 
+#### Data Model
+
+**imagem do ER**
 
 
 
-## Autores
-
-| Nome | Função | Email | Nmec |
-| :---: | :---: | :---: | :---: |
-| Alexandre Serras | Architect | alexandreserras@ua.pt | 97505 |
-| Gonçalo Leal | Team Manager | goncalolealsilva@ua.pt | 98008 |
-| João Farias | Product Owner | joaobernardo0@ua.pt | 12345 |
-| Vasco Regal | DevOps Master | vascoregal24@ua.pt | 97636 |
