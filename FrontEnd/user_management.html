@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ShopAholytics | Home</title>
+  <title>ShopAholytics | Management</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -71,7 +71,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                     with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="index.html" class="nav-link active">
+                    <a href="index.html" class="nav-link">
                         <i class="nav-icon fa fa-circle"></i>
                         <p>
                             Home
@@ -86,8 +86,8 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
+                <li class="nav-item menu-open">
+                    <a href="#" class="nav-link active">
                         <i class="nav-icon fa fa-circle"></i>
                         <p>
                             User Management
@@ -96,7 +96,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="user_management.html" class="nav-link">
+                            <a href="user_management.html" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Manage</p>
                             </a>
@@ -137,7 +137,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">ShopAholytics</h1>
+                    <h1 class="m-0">User Management</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -147,90 +147,6 @@
     <!-- Main content -->
     <div class="content">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-header border-0">
-                            <div class="d-flex justify-content-between">
-                                <h3 class="card-title">Shopping Visitors</h3>
-                                <!--<a href="javascript:void(0);">View Report</a>-->
-                            </div>
-                        </div>
-                    <div class="card-body">
-                        <div class="d-flex">
-                        <p class="d-flex flex-column">
-                            <span class="text-bold text-lg">820</span>
-                            <span>Visitors This Week</span>
-                        </p>
-                        <p class="ml-auto d-flex flex-column text-right">
-                            <span class="text-success">
-                            <i class="fas fa-arrow-up"></i> 12.5%
-                            </span>
-                            <span class="text-muted">Since last week</span>
-                        </p>
-                        </div>
-                        <!-- /.d-flex -->
-
-                        <div class="position-relative mb-4">
-                        <canvas id="visitors-chart" height="200"></canvas>
-                        </div>
-
-                        <div class="d-flex flex-row justify-content-end">
-                        <span class="mr-2">
-                            <i class="fas fa-square text-primary"></i> This Week
-                        </span>
-
-                        <span>
-                            <i class="fas fa-square text-gray"></i> Last Week
-                        </span>
-                        </div>
-                    </div>
-                    </div>
-                    <!-- /.card -->
-                </div>
-                <!-- /.col-md-6 -->
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-header border-0">
-                        <h3 class="card-title">Occupation Overview</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
-                        <p class="text-success text-xl">
-                            <i class="fas fa-car"></i>
-                            <span class="text-muted">Parking Capacity</span>
-                        </p>
-                        <p class="d-flex flex-column text-right">
-                            <span class="font-weight-bold">
-                                192/200 spots occupied
-                            </span>
-                            <span class="font-weight-bold">
-                                <i class="ion ion-android-arrow-up text-success"></i> + 12% in the last hour
-                            </span>
-                        </p>
-                        </div>
-                        <!-- /.d-flex -->
-                        <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
-                        <p class="text-warning text-xl">
-                            <i class="fas fa-shopping-bag"></i>
-                            <span class="text-muted">Shopping Capacity</span>
-                        </p>
-                        <p class="d-flex flex-column text-right">
-                            <span class="font-weight-bold">
-                                1003/10000 people
-                            </span>
-                            <span class="font-weight-bold">
-                                <i class="ion ion-android-arrow-down text-warning"></i> - 0.8% in the last hour
-                            </span>
-                        </p>
-                        </div>
-                        <!-- /.d-flex -->
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-md-6 -->
-            </div>
-            <!-- /.row -->
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
