@@ -1,0 +1,25 @@
+Estatisticas:
+	Página com as estatisticas loja:
+		- Percentagem de vendas que a loja tem por pessoas que entram
+		- Quais os produtos mais vendidos da loja , tipo um top-10
+		- Aqueles diagramas tipo um circulo de homens vs mulheres de  percentagem de compras
+		- Algo tipo diagrama circular comas idades distribuidas por percentagem
+		- Frequencia de ocupação da loja, tipo no tempo que esta aberto e consoante a capacidade quantas pessoas estão la em media
+		- Qual a hora que a loja é mais concorrida
+		- Dia da semana mais visitado
+		- Atual ocupação da loja
+	Páginas com as estatisticas do parque:
+		- Percentagem de ocupação do parque
+		- Gráfico a distribuir pelas horas de quando o parque esta mais ocupado
+		- Grafico com as percentagens do dia da semana que esta mais ocupado
+		- Atual ocupação do parque
+	Páginas com as estatisticas do shopping:
+		- Percentagem de ocupação por horas do shopping
+		- Atual ocupação do shopping
+		- Percentagem de distribuição das pessoas pela loja , aqui não ia ser 100 %
+		- Quais as lojas mais visitadas do shopping
+		- Aquele grafico com a distribuição das lojas pelo shopping de onde se encontram e assim mas isso não sei  como fazer
+		- Dias da semana para saber quando está mais ocupado
+		- Podiamos ter tipo um fluxo tipo que era feito às semanas e com isto conseguiamos saber se o shopping estava a ser mais ou menos visitado
+		
+		
