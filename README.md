@@ -44,7 +44,7 @@ The service layer of our web-app is a **Spring** based REST API using **Java Per
 
 #### Message Broker
 
-To make the bridge between the data generation and our database, we use *RabbitMQ*.
+To make the bridge between the data generation and our database, we use **RabbitMQ**.
 
 ### Database
 
