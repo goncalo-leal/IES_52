@@ -12,7 +12,7 @@ ShopAholytics is a web app that studies everything related to client behaviour, 
 | :---: | :---: | :---: | :---: |
 | Alexandre Serras | Architect | alexandreserras@ua.pt | 97505 |
 | Gonçalo Leal | Team Manager | goncalolealsilva@ua.pt | 98008 |
-| João Farias | Product Owner | joaobernardo0@ua.pt | 12345 |
+| João Farias | Product Owner | joaobernardo0@ua.pt | 98679 |
 | Vasco Regal | DevOps Master | vascoregal24@ua.pt | 97636 |
 
 ## Use Cases
@@ -52,7 +52,7 @@ We store all our data on a **mySQL** database.
 
 #### Data Model
 
-*imagem do ER
+<img src="https://media.discordapp.net/attachments/912492914943344680/915037849978552360/unknown.png?width=984&height=579" width="600"/>
 
 
 
