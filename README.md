@@ -6,7 +6,7 @@ A shopping habits analysis service.
 ShopAholytics is a web app that studies everything related to client behaviour, providing useful info for managers and marketing teams. With our service, companies will be able to quickly analyze shopping tendencies during specific periods of time and tracks the shoppers' flow in realtime. Our main goal is to provide the necessary data to make smarter, more efective business choices.
 
 
-## Autores
+## Authors
 
 | Nome | Função | Email | Nmec |
 | :---: | :---: | :---: | :---: |
@@ -15,11 +15,6 @@ ShopAholytics is a web app that studies everything related to client behaviour, 
 | João Farias | Product Owner | joaobernardo0@ua.pt | 98679 |
 | Vasco Regal | DevOps Master | vascoregal24@ua.pt | 97636 |
 
-## Use Cases
-
-| Use case | User stories |
-|--|--|
-| **USE CASE 1**| **USER STORY 1**<br/> User Story 1 description|
 
 ## Architecture
 
