@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShopAholytics | Home</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/dist/css/adminlte.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+</head>
+<!--
+`body` tag options:
+
+  Apply one or more of the following classes to to the body tag
+  to get the desired effect
+
+  * sidebar-collapse
+  * sidebar-mini
+-->
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="fullscreen" href="login.html" role="button">
+                Login
+            </a>
+        </li>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="index.html" class="brand-link text-center">
+        <span class="brand-text font-weight-bold">ShopAholytics</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="info">
+                <a class="d-block">Alexander Pierce</a>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                    with font-awesome or any other icon font library -->
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link active">
+                        <i class="nav-icon fa fa-circle"></i>
+                        <p>
+                            Home
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="statistics.html" class="nav-link">
+                        <i class="nav-icon fa fa-circle"></i>
+                        <p>
+                            Statistics
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-circle"></i>
+                        <p>
+                            User Management
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="user_management.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Manage</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="add_user.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Add User</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+        <div class="fixed-bottom">
+            <ul class="nav nav-pills nav-sidebar flex-column">
+                <!-- Add icons to the links using the .nav-icon class
+                    with font-awesome or any other icon font library -->
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="nav-icon fa fa-cog"></i>
+                        <p>
+                            Account Settings
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">New Store Manager</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="card d-flex mt-5 justify-content-center mx-auto" style="width:900px">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">User Information</p>
+    
+                <form action="./index.html" method="post">
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Email">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Username">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 form-check-inline">
+                            <div class="form-check">
+                                <input type="radio" id="male" class="form-check-input" name="gender" checked>
+                                <label for="male" class="form-check-label">
+                                    Male
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" id="female" class="form-check-input" name="gender">
+                                <label for="female" class="form-check-label">
+                                    Female
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" id="other" class="form-check-input" name="gender">
+                                <label for="other" class="form-check-label">
+                                    Other
+                                </label>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-4">
+                            TODO: BIRTHDAY (DATE PICKER)
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <div class="form-group mb-3">
+                        <div class="row">
+                            <div class="col-8">
+                                <label for="store">Store</label>
+                                <select class="form-control" id="store">
+                                    <option selected>Choose a store...</option>
+                                    <option value="1">Store 1</option>
+                                    <option value="2">Store 2</option>
+                                    <option value="3">Store 3</option>
+                                    <option value="4">Store 4</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="justify-content-center d-flex mx-auto">
+                        <button type="submit" class="btn btn-primary btn-block" style="width:200px">Create</button>
+                    </div>
+                </form>
+
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+
+   
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+
+  <!-- Main Footer -->
+    <footer class="main-footer">
+        <strong>ShopAholytics &copy; 2021 <a href="https://github.com/goncalo-leal/IES_52"><i class="fab fa-github"></i></a>.</strong>
+            All rights reserved.
+        <div class="float-right d-none d-sm-inline-block">
+            <b>Version</b> 1.0 | <b>Iteration</b> 1
+        </div>
+    </footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="./AdminLTE-3.1.0/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="./AdminLTE-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE -->
+<script src="./AdminLTE-3.1.0/dist/js/adminlte.js"></script>
+
+<!-- OPTIONAL SCRIPTS -->
+<script src="./AdminLTE-3.1.0/plugins/chart.js/Chart.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="./AdminLTE-3.1.0/dist/js/demo.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="./AdminLTE-3.1.0/dist/js/pages/dashboard3.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="./AdminLTE-3.1.0/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/jszip/jszip.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script>
+    $(function () {
+        var table = $("#example1").DataTable({
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "autoWidth": false,
+            "responsive": true,
+            "paging": false,
+            "lengthChange": false,
+            "info": false,
+            "columnDefs": [
+                { "searchable": true, "targets": 0 },
+                { "searchable": false, "targets": 1 },
+                { "searchable": false, "targets": 2 },
+                { "searchable": false, orderable: false, "targets": 3 },
+            ],
+            "dom": '<"top"i>rt<"bottom"><"clear">'
+        });
+        
+        $('#mySearchButton').on( 'keyup click', function () {
+            table.search($('#mySearchText').val()).draw();
+        } );  
+    });
+</script>
+</body>
+</html>
