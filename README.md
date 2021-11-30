@@ -52,7 +52,7 @@ We store all our data on a **mySQL** database.
 
 #### Data Model
 
-<img src="https://media.discordapp.net/attachments/912492914943344680/915037849978552360/unknown.png?width=984&height=579" width="600"/>
+![erDiagram](Schemas/er.png)
 
 
 
