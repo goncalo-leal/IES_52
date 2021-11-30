@@ -25,11 +25,11 @@ ShopAholytics is a web app that studies everything related to client behaviour, 
 
 ### Diagram
 
-*Diagrama arquitetura
+![architecture](Schemas/architecture.png)
 
 ### Frontend
 
-*Tecnologia frontend
+Our frontend will be developed using HTML CSS and Javascript
 
 ### Data Capture
 
@@ -44,7 +44,7 @@ The service layer of our web-app is a **Spring** based REST API using **Java Per
 
 #### Message Broker
 
-*Tecnologia processamento rPI
+To make the bridge between the data generation and our database, we use *RabbitMQ*.
 
 ### Database
 
@@ -52,7 +52,8 @@ We store all our data on a **mySQL** database.
 
 #### Data Model
 
-![erDiagram](Schemas/er.png)
+![databaseDiagram](Schemas/database.png)
+
 
 
 
