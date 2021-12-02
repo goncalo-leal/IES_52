@@ -2,8 +2,7 @@ Estatisticas:
 	Página com as estatisticas loja:
 		- Percentagem de vendas que a loja tem por pessoas que entram
 		- Quais os produtos mais vendidos da loja , tipo um top-10
-		- Aqueles diagramas tipo um circulo de homens vs mulheres de  percentagem de compras
-		- Algo tipo diagrama circular comas idades distribuidas por percentagem
+		- conjuntos de produtos mais comprados
 		- Frequencia de ocupação da loja, tipo no tempo que esta aberto e consoante a capacidade quantas pessoas estão la em media
 		- Qual a hora que a loja é mais concorrida
 		- Dia da semana mais visitado
