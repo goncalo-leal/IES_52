@@ -1,0 +1,33 @@
+version: "3.0"
+services:
+  db:
+    image: mysql:latest
+    env_file: ./.env
+    environment:
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+    ports:
+      - $MYSQL_LOCAL_PORT:$MYSQL_DOCKER_PORT
+    volumes:
+      - datafiles:/var/lib/mysql
+    restart: always
+      
+  #api:
+  #  depends_on:
+  #    - db
+  #  build: ./api/ShopAholytics
+  #  env_file: ./.env
+  #  environment:
+  #    SPRING_DATASOURCE_URL: jdbc:mysql://db:$MYSQL_DOCKER_PORT/$MYSQL_DATABASE
+  #    SPRING_DATASOURCE_USERNAME: $MYSQL_USER
+  #    SPRING_DATASOURCE_PASSWORD: $MYSQL_PASSWORD
+  #  ports:
+  #    - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+  #  restart: on-failure
+      
+volumes:
+  datafiles:
+       
+
