@@ -14,18 +14,23 @@ services:
       - datafiles:/var/lib/mysql
     restart: always
       
-  #api:
-  #  depends_on:
-  #    - db
-  #  build: ./api/ShopAholytics
-  #  env_file: ./.env
-  #  environment:
-  #    SPRING_DATASOURCE_URL: jdbc:mysql://db:$MYSQL_DOCKER_PORT/$MYSQL_DATABASE
-  #    SPRING_DATASOURCE_USERNAME: $MYSQL_USER
-  #    SPRING_DATASOURCE_PASSWORD: $MYSQL_PASSWORD
-  #  ports:
-  #    - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
-  #  restart: on-failure
+  api:
+    depends_on:
+      - db
+    build: ./api/ShopAholytics
+    env_file: ./.env
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.datasource.url"  : "jdbc:mysql://db:$MYSQL_DOCKER_PORT/$MYSQL_DATABASE?useSSL=true",
+        "spring.datasource.username" : "$MYSQL_USER",
+        "spring.datasource.password" : "$MYSQL_PASSWORD",
+        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL8Dialect",
+        "spring.jpa.hibernate.ddl-auto" : "update",
+        "server.port": $SPRING_DOCKER_PORT
+      }'
+    ports:
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+    restart: on-failure
       
 volumes:
   datafiles:
