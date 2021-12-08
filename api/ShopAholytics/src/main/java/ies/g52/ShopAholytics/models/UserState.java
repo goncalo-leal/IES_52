@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
 public class UserState {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "description")
     private String description;
@@ -29,7 +29,7 @@ public class UserState {
     }
 
     
-    public UserState(Long id) {
+    public UserState(int id) {
         this.id = id;
     }
 
@@ -38,7 +38,7 @@ public class UserState {
         this.description = description;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 

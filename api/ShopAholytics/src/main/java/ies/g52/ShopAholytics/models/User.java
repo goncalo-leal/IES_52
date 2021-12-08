@@ -20,7 +20,7 @@ public class User {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "password")
     //@JsonIgnore
@@ -63,7 +63,7 @@ public class User {
         this.state = state;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
