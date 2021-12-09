@@ -27,6 +27,10 @@ services:
         "spring.datasource.password" : "$MYSQL_PASSWORD",
         "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL8Dialect",
         "spring.jpa.hibernate.ddl-auto" : "update",
+	"spring.rabbitmq.host" : "localhost",
+	"spring.rabbitmq.port" : $RMQ_DOCKER_PORT,
+	"spring.rabbitmq.username" : $RMQ_USER,
+	"spring.rabbitmq.password": $RMQ_PASSWORD,
         "server.port": $SPRING_DOCKER_PORT
       }'
     ports:
