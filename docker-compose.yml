@@ -26,6 +26,11 @@ services:
   #  ports:
   #    - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
   #  restart: on-failure
+
+  mq:
+    image: rabbitmq:management
+    ports:
+      - $RMQ_LOCAL_PORT:$RMQ_DOCKER_PORT
       
 volumes:
   datafiles:
