@@ -17,6 +17,7 @@ services:
   api:
     depends_on:
       - db
+      - mq
     build: ./api/ShopAholytics
     env_file: ./.env
     environment:
@@ -43,6 +44,11 @@ services:
       - $CLIENT_LOCAL_PORT:$CLIENT_DOCKER_PORT
     volumes:
       - ./FrontEnd:/usr/share/nginx/html
+
+  mq:
+    image: rabbitmq:management
+    ports:
+      - $RMQ_LOCAL_PORT:$RMQ_DOCKER_PORT
 
 volumes:
   datafiles:
