@@ -32,6 +32,18 @@ services:
       - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
     restart: on-failure
       
+  client:
+    depends_on:
+      - api
+    build: ./FrontEnd
+    env_file: ./.env
+    environment:
+      API_URL: "localhost:$SPRING_DOCKER_PORT"
+    ports:
+      - $CLIENT_LOCAL_PORT:$CLIENT_DOCKER_PORT
+    volumes:
+      - ./FrontEnd:/usr/share/nginx/html
+
 volumes:
   datafiles:
        
