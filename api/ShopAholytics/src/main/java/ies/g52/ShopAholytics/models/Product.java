@@ -33,14 +33,14 @@ public class Product {
     private int stock;
 
     @Column(name = "price")
-    private long price;
+    private float price;
 
     @Column(name = "description")
     private String description;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_store", nullable = false)
-    private Store id_store;
+    private Store store;
 
     
 
@@ -49,13 +49,13 @@ public class Product {
     }
 
 
-    public Product(String name, String reference, int stock, long price, String description, Store id_store) {
+    public Product(String name, String reference, int stock, float price, String description, Store store) {
         this.name = name;
         this.reference = reference;
         this.stock = stock;
         this.price = price;
         this.description = description;
-        this.id_store = id_store;
+        this.store = store;
     }
 
 
@@ -90,11 +90,11 @@ public class Product {
         this.stock = stock;
     }
 
-    public long getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 
@@ -107,11 +107,11 @@ public class Product {
     }
 
     public Store getId_store() {
-        return id_store;
+        return store;
     }
 
-    public void setId_store(Store id_store) {
-        this.id_store = id_store;
+    public void setId_store(Store store) {
+        this.store = store;
     }
 
     

@@ -23,7 +23,7 @@ public class ProductController {
    @Autowired
    private StoreService serviceStore;
 
-    @PostMapping("/addProduct")
+    @PostMapping("/addProduct/{pid}")
     public Product newProduct( @RequestBody Product s,@PathVariable(value = "pid") int pid) {
         return serviceProduct.saveProduct(new Product(s.getName(),s.getReference(),s.getStock(),s.getPrice(),s.getDescription(), serviceStore.getStoreById(pid)));
     }

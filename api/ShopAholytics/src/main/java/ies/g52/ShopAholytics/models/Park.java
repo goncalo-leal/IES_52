@@ -2,6 +2,7 @@ package ies.g52.ShopAholytics.models;
 
 
 import java.time.LocalTime;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Park")
@@ -45,22 +49,25 @@ public class Park {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_shopping", nullable = false)
-    private Shopping id_shopping;
+    private Shopping shopping;
 
+
+    @OneToMany(mappedBy = "park")
+    @JsonIgnore
+    private Set<SensorPark> sensorPark;
 
     public Park() {
     }
 
     
-
     public Park(String name, String location, int capacity, LocalTime opening, LocalTime closing,
-            Shopping id_shopping) {
+            Shopping shopping) {
         this.name = name;
         this.location = location;
         this.capacity = capacity;
         this.opening = opening;
         this.closing = closing;
-        this.id_shopping = id_shopping;
+        this.shopping = shopping;
     }
 
 
@@ -122,12 +129,12 @@ public class Park {
 
 
     public Shopping getId_shopping() {
-        return id_shopping;
+        return shopping;
     }
 
 
-    public void setId_shopping(Shopping id_shopping) {
-        this.id_shopping = id_shopping;
+    public void setId_shopping(Shopping shopping) {
+        this.shopping = shopping;
     }
 
     

@@ -21,7 +21,7 @@ public class UserController {
     private UserStateService serviceUserState;
 
     
-    @PostMapping("/addUser")
+    @PostMapping("/addUser/{pid}")
     public User newUser( @PathVariable(value = "pid") int pid, @Valid  @RequestBody User m) {
         return serviceUser.saveUser(new User (m.getPassword(),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),serviceUserState.getUserStateById(pid)));
     }

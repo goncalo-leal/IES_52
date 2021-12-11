@@ -21,7 +21,7 @@ public class StoreController {
     private ShoppingServices shoppingServices;
 
 
-    @PostMapping("/addStore")
+    @PostMapping("/addStore/{pid}")
     public Store newStore( @RequestBody Store s,  @PathVariable(value = "pid") int pid) {
         return StoreServices.saveStore(new Store (s.getLocation(),s.getName(),s.getCapacity(),s.getOpening(),s.getClosing(),shoppingServices.getShoppingById(pid)));
     }

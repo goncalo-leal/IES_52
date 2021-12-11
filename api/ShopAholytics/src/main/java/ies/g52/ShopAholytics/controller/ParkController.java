@@ -22,7 +22,7 @@ public class ParkController {
    @Autowired
    private ShoppingServices servicesShopping;
 
-    @PostMapping("/addPark")
+    @PostMapping("/addPark/{pid}")
     public Park newPark( @RequestBody Park s,@PathVariable(value = "pid") int pid) {
         return servicePark.savePark(new Park(s.getName(),s.getLocation(),s.getCapacity(),s.getOpening(),s.getClosing(),servicesShopping.getShoppingById(pid)));
     }

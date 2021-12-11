@@ -1,6 +1,7 @@
 package ies.g52.ShopAholytics.models;
 
 import java.time.LocalTime;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -38,22 +40,30 @@ public class Store {
 
     @Column(name = "closing")
     private LocalTime closing;
+    
+    @OneToMany(mappedBy = "store")
+    private Set<StoreManager> managers;
+
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_shopping", nullable = false)
-    private Shopping id_shopping;
-
+    private Shopping shopping;
+    
+    @OneToMany(mappedBy = "store")
+    private Set<Product> products;
+    
     public Store() {
     }
 
-    public Store( String location, String name, int capacity, LocalTime opening, LocalTime closing ,Shopping id_shopping) {
+
+    public Store( String location, String name, int capacity, LocalTime opening, LocalTime closing ,Shopping shopping) {
         
         this.location = location;
         this.name = name;
         this.capacity = capacity;
         this.opening = opening;
         this.closing = closing;
-        this.id_shopping=id_shopping;
+        this.shopping=shopping;
     }
 
     public int getId() {
@@ -103,11 +113,11 @@ public class Store {
     }
 
     public Shopping getId_shopping() {
-        return id_shopping;
+        return shopping;
     }
 
-    public void setId_shopping(Shopping id_shopping) {
-        this.id_shopping = id_shopping;
+    public void setId_shopping(Shopping shopping) {
+        this.shopping = shopping;
     }
     
 }
