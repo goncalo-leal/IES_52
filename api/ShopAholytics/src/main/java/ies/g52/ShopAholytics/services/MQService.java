@@ -23,7 +23,7 @@ public class MQService {
     }
 
     
-    public List<ShoppingStoresParksView> shoppingStoresParksGet(int id) {
+    public ShoppingStoresParksView shoppingStoresParksGet(int id) {
         return shoppingRepository.findParksStoresById(id);
     }
     

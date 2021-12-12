@@ -14,6 +14,6 @@ public interface ShoppingRepository  extends JpaRepository<Shopping,Integer> {
 
     List<ShoppingIDMappingView> findMappingsBy();
 
-    List<ShoppingStoresParksView> findParksStoresById(int id);
+    ShoppingStoresParksView findParksStoresById(int id);
     
 }

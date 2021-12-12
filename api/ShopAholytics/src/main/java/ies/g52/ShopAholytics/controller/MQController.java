@@ -22,7 +22,7 @@ public class MQController {
     }
 
     @GetMapping("/Shopping")
-    public List<ShoppingStoresParksView> storesAndParksOfShopping(@RequestParam(value = "id")  int id) {
+    public ShoppingStoresParksView storesAndParksOfShopping(@RequestParam(value = "id")  int id) {
         return mqService.shoppingStoresParksGet(id);   
     }
 }
