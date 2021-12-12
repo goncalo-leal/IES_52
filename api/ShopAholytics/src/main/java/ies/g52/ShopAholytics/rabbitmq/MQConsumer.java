@@ -10,5 +10,6 @@ public class MQConsumer {
     public void consumer(Message message) {
         System.out.println(message);
     }
+
 }
 

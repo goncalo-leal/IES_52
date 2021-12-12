@@ -9,7 +9,7 @@ import ies.g52.ShopAholytics.models.Shopping;
 import ies.g52.ShopAholytics.repository.ShoppingRepository;
 
 @Service
-public class ShoppingServices {
+public class ShoppingService {
     @Autowired
     private ShoppingRepository repository;
 
@@ -23,6 +23,10 @@ public class ShoppingServices {
 
     public List<Shopping> getShopping() {
         return repository.findAll();
+    }
+
+    public Shopping getShoppingByName(String name) {
+        return repository.findByName(name);
     }
 
     public Shopping getShoppingById(int id) {

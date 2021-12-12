@@ -12,8 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "Park")
@@ -42,8 +43,8 @@ public class Park {
     @Column(name = "closing")
     private LocalTime closing;
     
-
-    @ManyToOne(optional = false)
+    @JsonIgnoreProperties("parks")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_shopping", nullable = false)
     private Shopping id_shopping;
 
@@ -119,17 +120,6 @@ public class Park {
     public void setClosing(LocalTime closing) {
         this.closing = closing;
     }
-
-
-    public Shopping getId_shopping() {
-        return id_shopping;
-    }
-
-
-    public void setId_shopping(Shopping id_shopping) {
-        this.id_shopping = id_shopping;
-    }
-
     
     
 }

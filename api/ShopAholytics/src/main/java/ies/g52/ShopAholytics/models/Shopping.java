@@ -2,18 +2,16 @@ package ies.g52.ShopAholytics.models;
 
 
 import java.time.LocalTime;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "Shopping")
@@ -38,6 +36,12 @@ public class Shopping {
 
     @Column(name = "closing")
     private LocalTime closing;
+
+    @OneToMany(cascade= CascadeType.ALL ,mappedBy = "id_shopping", orphanRemoval = true)
+    private Set<Park> parks;
+
+    @OneToMany(cascade = CascadeType.ALL ,mappedBy = "id_shopping", orphanRemoval = true)
+    private Set<Store> stores;
 
     public Shopping() {
     }
@@ -95,6 +99,22 @@ public class Shopping {
 
     public void setClosing(LocalTime closing) {
         this.closing = closing;
+    }
+
+    public Set<Park> getParks() {
+        return this.parks;
+    }
+
+    public void setParks(Set<Park> parks) {
+        this.parks = parks;
+    }
+
+    public Set<Store> getStores() {
+        return this.stores;
+    }
+
+    public void setStores(Set<Store> stores) {
+        this.stores = stores;
     }
 
     
