@@ -5,14 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import ies.g52.ShopAholytics.models.Shopping;
-import ies.g52.ShopAholytics.services.ShoppingService;
+import ies.g52.ShopAholytics.services.ShoppingServices;
 
 
 @RestController
 @RequestMapping("/api/")
 public class ShoppingController {
     @Autowired
-    private ShoppingService shoppingService;
+    private ShoppingServices shoppingService;
 
 
     @PostMapping("/addShopping")

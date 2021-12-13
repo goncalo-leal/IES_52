@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 import ies.g52.ShopAholytics.models.Park;
 import ies.g52.ShopAholytics.services.ParkService;
-import ies.g52.ShopAholytics.services.ShoppingService;
+import ies.g52.ShopAholytics.services.ShoppingServices;
 import java.util.List;
 
 @RestController
@@ -16,7 +16,7 @@ public class ParkController {
     
 
    @Autowired
-   private ShoppingService shoppingService;
+   private ShoppingServices shoppingService;
 
     @PostMapping("/addPark")
     public Park newPark( @RequestBody Park s,@PathVariable(value = "pid") int pid) {

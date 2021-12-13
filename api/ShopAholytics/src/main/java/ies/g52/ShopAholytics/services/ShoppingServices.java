@@ -9,7 +9,7 @@ import ies.g52.ShopAholytics.models.Shopping;
 import ies.g52.ShopAholytics.repository.ShoppingRepository;
 
 @Service
-public class ShoppingService {
+public class ShoppingServices {
     @Autowired
     private ShoppingRepository repository;
 
