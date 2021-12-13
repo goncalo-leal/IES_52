@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import ies.g52.ShopAholytics.models.Store;
-import ies.g52.ShopAholytics.services.ShoppingService;
+import ies.g52.ShopAholytics.services.ShoppingServices;
 import ies.g52.ShopAholytics.services.StoreService;
 
 
@@ -16,7 +16,8 @@ public class StoreController {
     private StoreService storeService;
 
     @Autowired
-    private ShoppingService shoppingService;
+    private ShoppingServices shoppingService;
+
 
 
     @PostMapping("/addStore")
