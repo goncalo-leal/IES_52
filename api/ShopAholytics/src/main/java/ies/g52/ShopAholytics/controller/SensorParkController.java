@@ -1,5 +1,6 @@
 package ies.g52.ShopAholytics.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -7,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import ies.g52.ShopAholytics.models.Park;
 import ies.g52.ShopAholytics.models.Sensor;
 import ies.g52.ShopAholytics.models.SensorPark;
 import ies.g52.ShopAholytics.models.User;
@@ -39,7 +41,18 @@ public class SensorParkController {
         }
         return null;
     }
-
+    @GetMapping("/SensorParks/{pid}")
+    public List<Sensor> findSensorByStore(@PathVariable(value = "pid") int pid) {
+        List<SensorPark> a = SensorParkService.getSensorParks();
+        Park park = parkServices.getParkById(pid);
+        List<Sensor> ret= new ArrayList<>();
+        for (SensorPark qu: a){
+            if (qu.getPark().getId() == park.getId() ){
+                ret.add(qu.getSensor());
+            }
+        }
+        return ret;
+    }
     @GetMapping("/SensorParks")
     public List<SensorPark> findAllSensorPark() {
         List<SensorPark> a = SensorParkService.getSensorParks();

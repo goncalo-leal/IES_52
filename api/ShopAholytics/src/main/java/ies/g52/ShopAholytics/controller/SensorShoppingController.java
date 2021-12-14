@@ -1,5 +1,6 @@
 package ies.g52.ShopAholytics.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import ies.g52.ShopAholytics.models.Sensor;
 import ies.g52.ShopAholytics.models.SensorShopping;
+import ies.g52.ShopAholytics.models.Shopping;
 import ies.g52.ShopAholytics.services.SensorService;
 import ies.g52.ShopAholytics.services.SensorShoppingService;
 import ies.g52.ShopAholytics.services.ShoppingServices;
@@ -31,7 +33,8 @@ public class SensorShoppingController {
     public SensorShopping newSensorShopping(@PathVariable(value = "pid") int pid, @PathVariable(value = "shopping") int shopping) {
         Sensor s = sensorService.getSensorById(pid);
         if (s.getSensorPark() == null && s.getSensorShopping()==null && s.getSensorStore()==null ){
-        return SensorShoppingServices.saveSensorShopping(new SensorShopping (shoppingServices.getShoppingById(shopping),sensorService.getSensorById(pid)));
+            
+            return SensorShoppingServices.saveSensorShopping(new SensorShopping (shoppingServices.getShoppingById(shopping),sensorService.getSensorById(pid)));
          }
          return null;
     }
@@ -41,6 +44,35 @@ public class SensorShoppingController {
         List<SensorShopping> a = SensorShoppingServices.getSensorShoppings();
         return a;
     }
+
+    @GetMapping("/SensorShoppings/{pid}")
+    public List<Sensor> findSensorByStore(@PathVariable(value = "pid") int pid) {
+        List<SensorShopping> a = SensorShoppingServices.getSensorShoppings();
+        Shopping shopping = shoppingServices.getShoppingById(pid);
+        List<Sensor> ret= new ArrayList<>();
+        for (SensorShopping qu: a){
+            if (qu.getShopping().getId() == shopping.getId() ){
+                ret.add(qu.getSensor());
+            }
+        }
+        return ret;
+    }
+    
+    /*@GetMapping("/getAllSensorShoppings/{pid}")
+    public List<Sensor> findSensorByStore(@PathVariable(value = "pid") int pid) {
+        List<SensorShopping> a = SensorShoppingServices.getSensorShoppings();
+        Shopping shopping = shoppingServices.getShoppingById(pid);
+        List<Sensor> ret= new ArrayList<>();
+        for (SensorShopping qu: a){
+            if (qu.getShopping().getId() == shopping.getId() ){
+                ret.add(qu.getSensor());
+            }
+        }
+        return ret;
+    }*/
+
+
+
     @GetMapping("/SensorShopping")
     public SensorShopping findSensorShoppingById(@RequestParam(value = "id")  int id) {
         List<SensorShopping> a = SensorShoppingServices.getSensorShoppings();

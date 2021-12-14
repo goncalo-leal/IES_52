@@ -19,10 +19,10 @@ public class SensorController {
     @PostMapping("/addSensor")
     public Sensor newSensor( @RequestBody Sensor s) {
         if (s.getType().equalsIgnoreCase(SensorEnum.ENTRACE.toString())){
-            return SensorServices.saveSensor(new Sensor (s.getType()));
+            return SensorServices.saveSensor(new Sensor (s.getType(),s.getName()));
         }
         else if(s.getType().equalsIgnoreCase(SensorEnum.EXIT.toString())){
-            return SensorServices.saveSensor(new Sensor (s.getType()));
+            return SensorServices.saveSensor(new Sensor (s.getType(),s.getName()));
         }
         return null;
         
