@@ -68,5 +68,21 @@ public class Sensor {
     public void setType(String type){
         this.type=type;
     }
+
+
+    public SensorShopping getSensorShopping() {
+        return this.sensorShopping;
+    }
+
+    public SensorPark getSensorPark() {
+        return this.sensorPark;
+    }
+
+    public SensorStore getSensorStore() {
+        return this.sensorStore;
+    }
+
+
+    
 }   
 

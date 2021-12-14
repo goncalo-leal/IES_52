@@ -18,9 +18,13 @@ public class ParkController {
    @Autowired
    private ShoppingServices shoppingService;
 
-    @PostMapping("/addPark")
+    @PostMapping("/addPark/{pid}")
     public Park newPark( @RequestBody Park s,@PathVariable(value = "pid") int pid) {
-        return parkService.savePark(new Park(s.getName(),s.getLocation(),s.getCapacity(),s.getOpening(),s.getClosing(),shoppingService.getShoppingById(pid)));
+        if (s.getCapacity() > 0 ){
+            return parkService.savePark(new Park(s.getName(),s.getLocation(),s.getCapacity(),s.getOpening(),s.getClosing(),shoppingService.getShoppingById(pid)));
+
+        }
+        return null;
     }
 
     

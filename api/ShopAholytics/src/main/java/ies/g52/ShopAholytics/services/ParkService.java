@@ -41,6 +41,10 @@ public class ParkService {
     public Park updatePark(Park Park) {
         Park existingPark = repository.findById((int)Park.getId()).orElse(null);
         existingPark.setName(Park.getName());
+        existingPark.setLocation(Park.getLocation());
+        existingPark.setCapacity(Park.getCapacity());
+        existingPark.setOpening(Park.getOpening());
+        existingPark.setClosing(Park.getClosing());
         return repository.save(existingPark);
     }
 

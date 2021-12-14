@@ -34,8 +34,10 @@ public class SensorDataService {
         return "SensorData removed !! " + id;
     }
 
-    public SensorData updateSensorData(SensorData sensorData) {
-        SensorData existingShoppingManager = repository.findById((int)sensorData.getId()).orElse(null);
-        return repository.save(existingShoppingManager);
-    }
+    // Não faz sentido alterar nem sequer os dados
+    //public SensorData updateSensorData(SensorData sensorData) {
+    //    SensorData existingShoppingManager = repository.findById((int)sensorData.getId()).orElse(null);
+    //    existingShoppingManager.setData(sensorData.getData());
+    //    return repository.save(existingShoppingManager);
+    //}
 }

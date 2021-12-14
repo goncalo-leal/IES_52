@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import ies.g52.ShopAholytics.models.Sensor;
 import ies.g52.ShopAholytics.models.SensorShopping;
 import ies.g52.ShopAholytics.services.SensorService;
 import ies.g52.ShopAholytics.services.SensorShoppingService;
@@ -28,7 +29,11 @@ public class SensorShoppingController {
 
     @PostMapping("/addSensorShopping/{pid}/{shopping}")
     public SensorShopping newSensorShopping(@PathVariable(value = "pid") int pid, @PathVariable(value = "shopping") int shopping) {
+        Sensor s = sensorService.getSensorById(pid);
+        if (s.getSensorPark() == null && s.getSensorShopping()==null && s.getSensorStore()==null ){
         return SensorShoppingServices.saveSensorShopping(new SensorShopping (shoppingServices.getShoppingById(shopping),sensorService.getSensorById(pid)));
+         }
+         return null;
     }
 
     @GetMapping("/SensorShoppings")
@@ -49,10 +54,11 @@ public class SensorShoppingController {
         
     }
 
-    @PutMapping("/updateSensorShopping")
-    public SensorShopping updateSensorShopping(@RequestBody SensorShopping shopping) {
-        return SensorShoppingServices.updateSensorShopping(shopping);
-    }
+    // Não faz sentido dar update deste método
+    //@PutMapping("/updateSensorShopping")
+    //public SensorShopping updateSensorShopping(@RequestBody SensorShopping shopping) {
+    //    return SensorShoppingServices.updateSensorShopping(shopping);
+    //}
 
     @DeleteMapping("/deleteSensorShopping/{id}")
     public String deleteSensorShopping(@PathVariable int id) {

@@ -21,9 +21,12 @@ public class ProductController {
    @Autowired
    private StoreService storeService;
 
-    @PostMapping("/addProduct")
+    @PostMapping("/addProduct/{pid}")
     public Product newProduct( @RequestBody Product s,@PathVariable(value = "pid") int pid) {
-        return productService.saveProduct(new Product(s.getName(),s.getReference(),s.getStock(),s.getPrice(),s.getDescription(), storeService.getStoreById(pid)));
+        if (s.getPrice() > 0 && s.getStock() > 0 ){
+            return productService.saveProduct(new Product(s.getName(),s.getReference(),s.getStock(),s.getPrice(),s.getDescription(), storeService.getStoreById(pid)));
+        }
+        return null;
     }
 
     

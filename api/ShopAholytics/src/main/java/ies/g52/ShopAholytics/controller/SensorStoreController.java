@@ -2,17 +2,18 @@ package ies.g52.ShopAholytics.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
+//import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import ies.g52.ShopAholytics.models.Sensor;
 import ies.g52.ShopAholytics.models.SensorStore;
-import ies.g52.ShopAholytics.models.User;
+//import ies.g52.ShopAholytics.models.User;
 import ies.g52.ShopAholytics.services.SensorService;
 import ies.g52.ShopAholytics.services.SensorStoreService;
 import ies.g52.ShopAholytics.services.StoreService;
-import ies.g52.ShopAholytics.services.UserService;
+//import ies.g52.ShopAholytics.services.UserService;
 
 
 
@@ -31,7 +32,12 @@ public class SensorStoreController {
 
     @PostMapping("/addSensorStore/{pid}/{store}")
     public SensorStore newSensorStore(@PathVariable(value = "pid") int pid, @PathVariable(value = "store") int store) {
-        return SensorStoreServices.saveSensorStore(new SensorStore (storeService.getStoreById(store),sensorService.getSensorById(pid)));
+        Sensor s = sensorService.getSensorById(pid);
+        if (s.getSensorPark() == null && s.getSensorShopping()==null && s.getSensorStore()==null ){
+            return SensorStoreServices.saveSensorStore(new SensorStore (storeService.getStoreById(store),sensorService.getSensorById(pid)));
+
+        }
+        return null;
     }
 
     @GetMapping("/SensorStores")
@@ -52,10 +58,11 @@ public class SensorStoreController {
         
     }
 
-    @PutMapping("/updateSensorStore")
-    public SensorStore updateSensorStore(@RequestBody SensorStore user) {
-        return SensorStoreServices.updateSensorStore(user);
-    }
+    // Não faz sentido dar update deste método
+    //@PutMapping("/updateSensorStore")
+    //public SensorStore updateSensorStore(@RequestBody SensorStore user) {
+    //    return SensorStoreServices.updateSensorStore(user);
+    //}
 
     @DeleteMapping("/deleteSensorStore/{id}")
     public String deleteSensorStore(@PathVariable int id) {

@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Shopping")
 public class Shopping {
-
+    private int sum_shops_capacity;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -53,13 +53,23 @@ public class Shopping {
         this.capacity = capacity;
         this.opening = opening;
         this.closing = closing;
+        this.sum_shops_capacity=0;
     }
+
 
     public int getId() {
         return id;
     }
 
-    
+
+    public int getSum_shops_capacity() {
+        return this.sum_shops_capacity;
+    }
+
+    public void setSum_shops_capacity(int sum_shops_capacity) {
+        this.sum_shops_capacity = sum_shops_capacity;
+    }
+
 
     public String getLocation() {
         return location;

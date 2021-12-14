@@ -42,6 +42,12 @@ public class ShoppingServices {
     public Shopping updateShopping(Shopping user) {
         //acho que este e o user esta incompleto mas preciso de testar para saber
         Shopping existingShopping = repository.findById((int)user.getId()).orElse(null);
+        existingShopping.setName(user.getName());
+        existingShopping.setLocation(user.getLocation());
+        existingShopping.setCapacity(user.getCapacity());
+        existingShopping.setOpening(user.getOpening());
+        existingShopping.setClosing(user.getClosing());
+        
         return repository.save(existingShopping);
     }
 

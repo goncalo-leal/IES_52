@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import ies.g52.ShopAholytics.models.Shopping;
 import ies.g52.ShopAholytics.models.Store;
 import ies.g52.ShopAholytics.services.ShoppingServices;
 import ies.g52.ShopAholytics.services.StoreService;
@@ -20,9 +21,15 @@ public class StoreController {
 
 
 
-    @PostMapping("/addStore")
+    @PostMapping("/addStore/{pid}")
     public Store newStore( @RequestBody Store s,  @PathVariable(value = "pid") int pid) {
-        return storeService.saveStore(new Store (s.getLocation(),s.getName(),s.getCapacity(),s.getOpening(),s.getClosing(),shoppingService.getShoppingById(pid)));
+        Shopping shopping = shoppingService.getShoppingById(pid);
+        int var = shopping.getSum_shops_capacity() + s.getCapacity();
+        if (s.getCapacity() > 0 && var < shopping.getCapacity()){
+            shopping.setSum_shops_capacity(var);
+            return storeService.saveStore(new Store (s.getLocation(),s.getName(),s.getCapacity(),s.getOpening(),s.getClosing(),shoppingService.getShoppingById(pid)));
+        }
+        return null;
     }
 
     @GetMapping("/Stores")
