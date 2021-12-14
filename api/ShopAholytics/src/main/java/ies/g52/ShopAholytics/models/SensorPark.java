@@ -28,10 +28,12 @@ public class SensorPark {
     
     @Id
     @Column(name = "id_sensor")
+    @JsonIgnore
     private int id;
 
     @ManyToOne
     @JoinColumn(name="id_park")
+    @JsonIgnore
     private Park park;
 
     @OneToOne
@@ -47,7 +49,6 @@ public class SensorPark {
 
     public SensorPark(){}
     
-    @JsonIgnore
     public Sensor getSensor() {
         return this.sensor;
     }

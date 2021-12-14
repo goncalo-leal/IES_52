@@ -16,6 +16,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.InheritanceType;
 
 
@@ -25,10 +28,12 @@ public class SensorStore {
     
     @Id
     @Column(name = "id_sensor")
+    @JsonIgnore
     private int id;
 
     @ManyToOne
     @JoinColumn(name="id_store")
+    @JsonIgnore
     private Store store;
 
     @OneToOne
