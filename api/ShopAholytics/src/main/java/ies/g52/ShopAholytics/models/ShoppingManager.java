@@ -44,6 +44,7 @@ public class ShoppingManager {
 
     public ShoppingManager(){}
 
+
     public Shopping getShopping() {
         return this.shopping;
     }
@@ -54,6 +55,10 @@ public class ShoppingManager {
 
     public int getId() {
         return this.id;
+    }
+
+    public void setUser(User user){
+        this.user=user;
     }
 
     public User getUser() {
