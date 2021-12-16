@@ -52,10 +52,10 @@ public class ShoppingManagerController {
     }
 
     // updates são feitos no shopping e no user
-    //@PutMapping("/updateShoppingManager")
-    //public ShoppingManager updateStoreManager(@RequestBody ShoppingManager user) {
-    //    return ShoppingManagerServices.updateShoppingManager(user);
-    //}
+    @PutMapping("/updateShoppingManager")
+    public ShoppingManager updateStoreManager(@RequestBody ShoppingManager user) {
+        return ShoppingManagerServices.updateShoppingManager(user);
+    }
 
     @DeleteMapping("/deleteShoppingManager/{id}")
     public String deleteStoreManager(@PathVariable int id) {
