@@ -27,18 +27,18 @@ public class ShoppingController {
         return null;
     }
 
-    @GetMapping("/storesShopping/{pid}")
-    public Set<Store> findAllStoresShopping(@PathVariable int pid) {
-        Shopping s = shoppingService.getShoppingById(pid);
+    @GetMapping("/storesShopping/{id}")
+    public Set<Store> findAllStoresShopping(@PathVariable int id) {
+        Shopping s = shoppingService.getShoppingById(id);
 
         Set<Store> ret=s.getStores();
         
         return ret;
     }
 
-    @GetMapping("/parksShopping/{pid}")
-    public Set<Park> findAllParksShopping(@PathVariable int pid) {
-        Shopping s = shoppingService.getShoppingById(pid);
+    @GetMapping("/parksShopping/{id}")
+    public Set<Park> findAllParksShopping(@PathVariable int id) {
+        Shopping s = shoppingService.getShoppingById(id);
 
         Set<Park> ret=s.getParks();
         
