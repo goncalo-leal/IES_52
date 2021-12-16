@@ -37,6 +37,8 @@ public class ShoppingManagerService {
 
     public ShoppingManager updateShoppingManager(ShoppingManager ShoppingManager) {
         ShoppingManager existingShoppingManager = repository.findById((int)ShoppingManager.getId()).orElse(null);
+        existingShoppingManager.setShopping(ShoppingManager.getShopping());
+        existingShoppingManager.setUser(ShoppingManager.getUser());
         return repository.save(existingShoppingManager);
     }
 
