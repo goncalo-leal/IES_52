@@ -12,6 +12,7 @@ import ies.g52.ShopAholytics.models.User;
 import ies.g52.ShopAholytics.services.StoreManagerService;
 import ies.g52.ShopAholytics.services.StoreService;
 import ies.g52.ShopAholytics.services.UserService;
+import ies.g52.ShopAholytics.services.UserStateService;
 
 
 
@@ -27,10 +28,21 @@ public class StoreManagerController {
     @Autowired
     private UserService serviceUser;
 
+    @Autowired
+    private UserStateService userStateService;
 
     @PostMapping("/addStoreManager/{pid}/{store}")
     public StoreManager newStoreManager(@PathVariable(value = "pid") int pid, @PathVariable(value = "store") int store) {
         return StoreManagerServices.saveStoreManager(new StoreManager (serviceUser.getUserById(pid),StoreServices.getStoreById(store)));
+    }
+
+    @PostMapping("/addShoppingManager/{store}")
+    public StoreManager newShoppingManagerWithNewUser( @PathVariable(value = "store") int store,@RequestBody User m) {
+
+        User user = new User(m.getPassword(),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1));
+        serviceUser.saveUser(user);
+
+        return StoreManagerServices.saveStoreManager(new StoreManager (user,StoreServices.getStoreById(store)));
     }
 
     @GetMapping("/StoreManagers")

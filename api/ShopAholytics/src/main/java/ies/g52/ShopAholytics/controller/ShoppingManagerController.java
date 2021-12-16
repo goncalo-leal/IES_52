@@ -43,7 +43,6 @@ public class ShoppingManagerController {
         serviceUser.saveUser(user);
 
         return ShoppingManagerServices.saveShoppingManager(new ShoppingManager(user,shoppingServices.getShoppingById(shopping)));
-
     }
 
     @GetMapping("/ShoppingManagers")
