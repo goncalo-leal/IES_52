@@ -1,7 +1,5 @@
-//import consts from "consts";
-
-
-const BASE_URL = "http://localhost:8080"
+import consts from "./consts.js";
+import SessionManager from "./session.js";
 
 $(document).ready(function() {
     $("#login").click(function() {
@@ -11,22 +9,18 @@ $(document).ready(function() {
 
 
 
-
-
 const login = function() {
     var email = $("#email").val();
     var psw = $("#psw").val();
 
-    console.log(`{ email: ${email}, psw: ${psw} }`)
-
     $.ajax({
-        url: BASE_URL + '/auth/login/?email=' + email + "&password=" + psw,
+        url: consts.BASE_URL + '/auth/login/?email=' + email + "&password=" + psw,
         type: "POST",
+        contentType: "application/json",
+        dataType: "json",
         success: function(data) {
-            console.log(data);
-
             if (data) {
-                localStorage.setItem("email", email);
+                SessionManager.set("session", data);
                 window.location.href = "./index.html";
             } else {
                 console.log("nao autenticado");

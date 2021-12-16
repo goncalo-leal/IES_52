@@ -3,7 +3,7 @@ const PORT = "8080";
 
 
 const consts = {
-    BASE_URL = `http://${URL}:${PORT}`
+    BASE_URL: `http://${URL}:${PORT}`
 }
 
 

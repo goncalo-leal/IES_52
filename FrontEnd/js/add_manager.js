@@ -1,12 +1,8 @@
-
-
-
-const BASE_URL = "http://localhost:8080"
+import consts from "./consts.js";
+import SessionManager from "./session.js";
 
 $(document).ready(function() {
-    $("#login").click(function() {
-        login();
-    })
+    loadStores();
 });
 
 
@@ -44,6 +40,6 @@ const login = function() {
 
 const loadStores = function() {
     $.ajax({
-        url: BASE_URL + '/api/'
+        url: consts.BASE_URL + '/api/'
     })
 }
