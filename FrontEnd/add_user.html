@@ -27,7 +27,7 @@
   * sidebar-collapse
   * sidebar-mini
 -->
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini" style="display: none">
 <div class="wrapper">
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -150,7 +150,7 @@
             <div class="card-body login-card-body">
                 <p class="login-box-msg">User Information</p>
     
-                <form">
+                <form>
                     <div class="input-group mb-3">
                         <input type="email" class="form-control" placeholder="Email" id="email">
                         <div class="input-group-append">
@@ -170,19 +170,19 @@
                     <div class="row">
                         <div class="col-6 form-check-inline">
                             <div class="form-check">
-                                <input type="radio" id="male" class="form-check-input" name="gender" checked>
+                                <input type="radio" id="male" value="male" class="form-check-input" name="gender" checked>
                                 <label for="male" class="form-check-label">
                                     Male
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input type="radio" id="female" class="form-check-input" name="gender">
+                                <input type="radio" id="female" value="female" class="form-check-input" name="gender">
                                 <label for="female" class="form-check-label">
                                     Female
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input type="radio" id="other" class="form-check-input" name="gender">
+                                <input type="radio" id="other" value="other" class="form-check-input" name="gender">
                                 <label for="other" class="form-check-label">
                                     Other
                                 </label>
@@ -200,16 +200,12 @@
                                 <label for="store">Store</label>
                                 <select class="form-control" id="store">
                                     <option selected>Choose a store...</option>
-                                    <option value="1">Store 1</option>
-                                    <option value="2">Store 2</option>
-                                    <option value="3">Store 3</option>
-                                    <option value="4">Store 4</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="justify-content-center d-flex mx-auto">
-                        <button type="submit" class="btn btn-primary btn-block" style="width:200px">Create</button>
+                        <button id="add_manager" type="button" class="btn btn-primary btn-block" style="width:200px">Create</button>
                     </div>
                 </form>
 
