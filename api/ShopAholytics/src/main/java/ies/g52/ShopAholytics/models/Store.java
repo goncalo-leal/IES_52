@@ -24,6 +24,9 @@ public class Store {
     private int id;
 
 
+    @Column(name = "current_capacity")
+    private int current_capacity;
+
     @Column(name = "location")
     private String location;
 
@@ -55,6 +58,7 @@ public class Store {
         this.opening = opening;
         this.closing = closing;
         this.id_shopping=id_shopping;
+        this.current_capacity=0;
     }
 
     public int getId() {
@@ -103,5 +107,14 @@ public class Store {
         this.closing = closing;
     }
 
+    public int getCurrent_capacity() {
+        return current_capacity;
+    }
+
+
+
+    public void setCurrent_capacity(int current_capacity) {
+        this.current_capacity = current_capacity;
+    }
     
 }
