@@ -26,7 +26,7 @@ public class AuthController {
         User u = userRepository.findByEmail(email);
         if (u != null) {
             if (u.getPassword().equals(password)) {
-                ShoppingManager s = shoppingManagerRepository.getById(u.getId());
+                ShoppingManager s = shoppingManagerRepository.findById(u.getId()).orElse(null);
                 System.out.println(s);
                 return s;
             }
