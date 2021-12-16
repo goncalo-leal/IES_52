@@ -14,6 +14,7 @@ import ies.g52.ShopAholytics.services.ShoppingManagerService;
 import ies.g52.ShopAholytics.services.ShoppingServices;
 import ies.g52.ShopAholytics.services.StoreService;
 import ies.g52.ShopAholytics.services.UserService;
+import ies.g52.ShopAholytics.services.UserStateService;
 
 @RestController
 @RequestMapping("/api/")
@@ -27,9 +28,21 @@ public class ShoppingManagerController {
     @Autowired
     private UserService serviceUser;
 
+    @Autowired
+    private UserStateService userStateService;
+
     @PostMapping("/addShoppingManager/{pid}/{shopping}")
     public ShoppingManager newShoppingManager(@PathVariable(value = "pid") int pid, @PathVariable(value = "shopping") int shopping) {
         return ShoppingManagerServices.saveShoppingManager(new ShoppingManager(serviceUser.getUserById(pid),shoppingServices.getShoppingById(shopping)));
+    }
+
+    @PostMapping("/addShoppingManager/{shopping}")
+    public ShoppingManager newShoppingManagerWithNewUser(@PathVariable(value = "shopping") int shopping, @RequestBody User m) {
+
+        User user = new User(m.getPassword(),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1));
+        serviceUser.saveUser(user);
+
+        return ShoppingManagerServices.saveShoppingManager(new ShoppingManager(user,shoppingServices.getShoppingById(shopping)));
     }
 
     @GetMapping("/ShoppingManagers")
