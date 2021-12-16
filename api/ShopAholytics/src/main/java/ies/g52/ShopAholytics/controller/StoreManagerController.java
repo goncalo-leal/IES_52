@@ -36,7 +36,7 @@ public class StoreManagerController {
         return StoreManagerServices.saveStoreManager(new StoreManager (serviceUser.getUserById(pid),StoreServices.getStoreById(store)));
     }
 
-    @PostMapping("/addShoppingManager/{store}")
+    @PostMapping("/addStoreManager/{store}")
     public StoreManager newShoppingManagerWithNewUser( @PathVariable(value = "store") int store,@RequestBody User m) {
 
         User user = new User(m.getPassword(),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1));
@@ -44,6 +44,7 @@ public class StoreManagerController {
 
         return StoreManagerServices.saveStoreManager(new StoreManager (user,StoreServices.getStoreById(store)));
     }
+    
 
     @GetMapping("/StoreManagers")
     public List<StoreManager> findAllStoreManager() {
