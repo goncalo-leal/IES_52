@@ -37,6 +37,8 @@ public class SensorParkService {
 
     public SensorPark updateSensorPark(SensorPark SensorPark) {
         SensorPark existingSensorPark = repository.findById((int)SensorPark.getId()).orElse(null);
+        existingSensorPark.setSensor(SensorPark.getSensor());
+        existingSensorPark.setPark(SensorPark.getPark());
         return repository.save(existingSensorPark);
     }
 

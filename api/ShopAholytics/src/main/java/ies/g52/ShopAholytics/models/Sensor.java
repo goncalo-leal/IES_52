@@ -32,15 +32,21 @@ public class Sensor {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "name")
+    private String name;
+
     @OneToOne(mappedBy = "sensor")
+    @JsonIgnore
     @PrimaryKeyJoinColumn
     private SensorShopping sensorShopping;
 
     @OneToOne(mappedBy = "sensor")
+    @JsonIgnore
     @PrimaryKeyJoinColumn
     private SensorPark sensorPark;
 
     @OneToOne(mappedBy = "sensor")
+    @JsonIgnore
     @PrimaryKeyJoinColumn
     private SensorStore sensorStore;
 
@@ -50,12 +56,21 @@ public class Sensor {
 
     public Sensor() {
     }
-
-   
-    public Sensor(String type){
+    public Sensor(String type,String name){
         this.type=type;
+        this.name=name;
     }
 
+
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name){
+        this.name=name;
+    }
+   
+   
     public String getType(){
         return this.type;
     }
@@ -68,5 +83,21 @@ public class Sensor {
     public void setType(String type){
         this.type=type;
     }
+
+
+    public SensorShopping getSensorShopping() {
+        return this.sensorShopping;
+    }
+
+    public SensorPark getSensorPark() {
+        return this.sensorPark;
+    }
+
+    public SensorStore getSensorStore() {
+        return this.sensorStore;
+    }
+
+
+    
 }   
 

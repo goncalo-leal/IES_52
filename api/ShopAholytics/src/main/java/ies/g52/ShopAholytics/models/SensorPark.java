@@ -16,6 +16,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.InheritanceType;
 
 
@@ -25,10 +28,12 @@ public class SensorPark {
     
     @Id
     @Column(name = "id_sensor")
+    @JsonIgnore
     private int id;
 
     @ManyToOne
     @JoinColumn(name="id_park")
+    @JsonIgnore
     private Park park;
 
     @OneToOne
@@ -43,7 +48,7 @@ public class SensorPark {
     }
 
     public SensorPark(){}
-
+    
     public Sensor getSensor() {
         return this.sensor;
     }
@@ -52,6 +57,9 @@ public class SensorPark {
         this.sensor = sensor;
     }
 
+    public void setPark(Park p){
+        this.park=p;
+    }
 
     public int getId() {
         return this.id;

@@ -1,5 +1,6 @@
 package ies.g52.ShopAholytics.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -7,6 +8,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import ies.g52.ShopAholytics.models.Park;
+import ies.g52.ShopAholytics.models.Sensor;
 import ies.g52.ShopAholytics.models.SensorPark;
 import ies.g52.ShopAholytics.models.User;
 import ies.g52.ShopAholytics.services.ParkService;
@@ -32,9 +35,24 @@ public class SensorParkController {
 
     @PostMapping("/addSensorPark/{pid}/{park}")
     public SensorPark newSensorPark(@PathVariable(value = "pid") int pid, @PathVariable(value = "park") int park) {
+        Sensor s = sensorService.getSensorById(pid);
+        if (s.getSensorPark() == null && s.getSensorShopping()==null && s.getSensorStore()==null ){
         return SensorParkService.saveSensorPark(new SensorPark (parkServices.getParkById(park),sensorService.getSensorById(pid)));
+        }
+        return null;
     }
-
+    @GetMapping("/SensorParks/{pid}")
+    public List<Sensor> findSensorByStore(@PathVariable(value = "pid") int pid) {
+        List<SensorPark> a = SensorParkService.getSensorParks();
+        Park park = parkServices.getParkById(pid);
+        List<Sensor> ret= new ArrayList<>();
+        for (SensorPark qu: a){
+            if (qu.getPark().getId() == park.getId() ){
+                ret.add(qu.getSensor());
+            }
+        }
+        return ret;
+    }
     @GetMapping("/SensorParks")
     public List<SensorPark> findAllSensorPark() {
         List<SensorPark> a = SensorParkService.getSensorParks();
@@ -53,10 +71,11 @@ public class SensorParkController {
         
     }
 
-    @PutMapping("/updateSensorPark")
-    public SensorPark updateSensorPark(@RequestBody SensorPark user) {
-        return SensorParkService.updateSensorPark(user);
-    }
+    // não faz sentido update para este método
+    //@PutMapping("/updateSensorPark/{pid}")
+    //public SensorPark updateSensorPark(@PathVariable(value = "pid") int park) {
+    //    return SensorParkService.updateSensorPark(SensorParkService.getSensorParkById(park));
+    //}
 
     @DeleteMapping("/deleteSensorPark/{id}")
     public String deleteSensorPark(@PathVariable int id) {

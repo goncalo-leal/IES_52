@@ -17,7 +17,10 @@ public class ShoppingController {
 
     @PostMapping("/addShopping")
     public Shopping newShopping( @RequestBody Shopping s) {
-        return shoppingService.saveShopping(new Shopping (s.getLocation(),s.getName(),s.getCapacity(),s.getOpening(),s.getClosing()));
+        if (s.getCapacity() >0  ){
+            return shoppingService.saveShopping(new Shopping (s.getLocation(),s.getName(),s.getCapacity(),s.getOpening(),s.getClosing()));
+        }
+        return null;
     }
 
     @GetMapping("/Shoppings")

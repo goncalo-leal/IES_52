@@ -34,6 +34,9 @@ public class Park {
     private String location;
 
 
+    @Column(name = "current_capacity")
+    private int current_capacity;
+
     @Column(name = "capacity")
     private int capacity;
 
@@ -62,9 +65,10 @@ public class Park {
         this.opening = opening;
         this.closing = closing;
         this.id_shopping = id_shopping;
+        this.current_capacity=0;
     }
 
-
+    
 
     public int getId() {
         return id;
@@ -119,6 +123,18 @@ public class Park {
 
     public void setClosing(LocalTime closing) {
         this.closing = closing;
+    }
+
+
+
+    public int getCurrent_capacity() {
+        return current_capacity;
+    }
+
+
+
+    public void setCurrent_capacity(int current_capacity) {
+        this.current_capacity = current_capacity;
     }
     
     

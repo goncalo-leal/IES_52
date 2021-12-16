@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import ies.g52.ShopAholytics.enumFolder.SensorEnum;
 import ies.g52.ShopAholytics.models.Sensor;
 import ies.g52.ShopAholytics.services.SensorService;
 
@@ -17,7 +18,14 @@ public class SensorController {
 
     @PostMapping("/addSensor")
     public Sensor newSensor( @RequestBody Sensor s) {
-        return SensorServices.saveSensor(new Sensor (s.getType()));
+        if (s.getType().equalsIgnoreCase(SensorEnum.ENTRACE.toString())){
+            return SensorServices.saveSensor(new Sensor (s.getType(),s.getName()));
+        }
+        else if(s.getType().equalsIgnoreCase(SensorEnum.EXIT.toString())){
+            return SensorServices.saveSensor(new Sensor (s.getType(),s.getName()));
+        }
+        return null;
+        
     }
 
     @GetMapping("/Sensors")

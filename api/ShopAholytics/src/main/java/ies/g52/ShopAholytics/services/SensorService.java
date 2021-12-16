@@ -37,6 +37,7 @@ public class SensorService {
 
     public Sensor updateSensor(Sensor Sensor) {
         Sensor existingSensor = repository.findById((int)Sensor.getId()).orElse(null);
+        existingSensor.setName(Sensor.getName());
         return repository.save(existingSensor);
     }
 

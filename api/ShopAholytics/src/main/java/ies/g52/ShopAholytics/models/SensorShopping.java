@@ -15,16 +15,20 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "Sensor_Shopping")
 public class SensorShopping {
     
     @Id
     @Column(name = "id_sensor")
+    @JsonIgnore
     private int id;
 
     @ManyToOne
     @JoinColumn(name="id_shopping")
+    @JsonIgnore
     private Shopping shopping;
 
     @OneToOne

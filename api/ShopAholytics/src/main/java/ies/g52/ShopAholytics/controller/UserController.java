@@ -2,6 +2,7 @@ package ies.g52.ShopAholytics.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import ies.g52.ShopAholytics.enumFolder.UserStateEnum;
 import ies.g52.ShopAholytics.models.User;
 import ies.g52.ShopAholytics.models.UserState;
 import ies.g52.ShopAholytics.services.UserService;
@@ -20,14 +21,23 @@ public class UserController {
     private UserStateService userStateService;
 
     
-    @PostMapping("/addUser")
+    @PostMapping("/addUser/{pid}")
     public User newUser( @PathVariable(value = "pid") int pid, @Valid  @RequestBody User m) {
         return userService.saveUser(new User (m.getPassword(),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(pid)));
     }
 
     @PostMapping("/addUserState")
     public UserState newUserState( @RequestBody UserState s) {
-        return userStateService.saveUserState(new UserState (s.getDescription()));
+        if (s.getDescription().equalsIgnoreCase(UserStateEnum.APPROVED.toString())){
+            return userStateService.saveUserState(new UserState (s.getDescription()));
+        }
+        else if(s.getDescription().equalsIgnoreCase(UserStateEnum.ARCHIVED.toString())){
+            return userStateService.saveUserState(new UserState (s.getDescription()));
+        }
+        else if(s.getDescription().equalsIgnoreCase(UserStateEnum.NOT_ARCHIVED.toString())){
+            return userStateService.saveUserState(new UserState (s.getDescription()));
+        }
+        return null;
     }
 
     

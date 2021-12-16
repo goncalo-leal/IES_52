@@ -38,6 +38,11 @@ public class StoreService {
     public Store updateStore(Store user) {
         //acho que este e o user esta incompleto mas preciso de testar para saber
         Store existingStore = repository.findById((int)user.getId()).orElse(null);
+        existingStore.setName(user.getName());
+        existingStore.setLocation(user.getLocation());
+        existingStore.setCapacity(user.getCapacity());
+        existingStore.setOpening(user.getOpening());
+        existingStore.setClosing(user.getClosing());
         return repository.save(existingStore);
     }
 

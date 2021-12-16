@@ -43,10 +43,11 @@ public class SensorDataController {
         
     }
 
-    @PutMapping("/updateSensorData")
-    public SensorData updateSensorData(@RequestBody SensorData sensor) {
-        return sensorDataService.updateSensorData(sensor);
-    }
+    // Não faz sentido dar update dos dados
+    //@PutMapping("/updateSensorData")
+    //public SensorData updateSensorData(@RequestBody SensorData sensor) {
+    //    return sensorDataService.updateSensorData(sensor);
+    //}
 
     @DeleteMapping("/deleteSensorData/{id}")
     public String deleteSensorData(@PathVariable int id) {
