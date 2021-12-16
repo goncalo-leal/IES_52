@@ -41,7 +41,7 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <a class="nav-link" data-widget="fullscreen" href="login.html" role="button">
+            <a class="nav-link" data-widget="fullscreen" href="login.html" role="button" id="loginBttn">
                 Login
             </a>
         </li>
@@ -61,7 +61,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="info">
-                <a class="d-block">Alexander Pierce</a>
+                <a id="sm_name" class="d-block"></a>
             </div>
         </div>
 
@@ -150,9 +150,9 @@
             <div class="card-body login-card-body">
                 <p class="login-box-msg">User Information</p>
     
-                <form action="./index.html" method="post">
+                <form">
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Email">
+                        <input type="email" class="form-control" placeholder="Email" id="email">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -160,7 +160,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Username">
+                        <input type="text" class="form-control" placeholder="Username" id="username">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -267,6 +267,7 @@
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script type="module" src="js/add_manager.js"></script>
 <script>
     $(function () {
         var table = $("#example1").DataTable({

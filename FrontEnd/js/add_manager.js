@@ -1,8 +1,9 @@
 import consts from "./consts.js";
 import SessionManager from "./session.js";
+import updateView from "./common.js"
 
 $(document).ready(function() {
-    loadStores();
+    updateView();
 });
 
 
@@ -38,8 +39,20 @@ const login = function() {
 }
 */
 
+const add_manager = function() {
+    var email = $("#email").val();
+    var username = $("#username").val()
+    var gender = $('input[type="radio"][name="gender"]:checked').val()
+    var birthday = null
+    var store = $("store").val()
+
+    $.ajax({
+        url: BASE_URL + '/api/'
+    })
+}
+
 const loadStores = function() {
     $.ajax({
-        url: consts.BASE_URL + '/api/'
+        url: consts.BASE_URL + '/api/Stores'
     })
 }
