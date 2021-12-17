@@ -9,7 +9,6 @@ $(document).ready(function() {
     loadTable();
 
     $("#mySearchText").on('input', function() {
-        console.log("e");
         search();
     })
 });
@@ -38,9 +37,9 @@ const loadTable = function() {
 
 
 const renderTable = function (data) {
-    $("#managers").empty();
+    $("#managers_body").empty();
     data.forEach(function(e, i) {
-        $("#managers").append(trTemplate(e.user.name, e.user.email, e.store.name, true));
+        $("#managers_body").append(trTemplate(e.user.name, e.user.email, e.store.name, true));
     })
 }
 
