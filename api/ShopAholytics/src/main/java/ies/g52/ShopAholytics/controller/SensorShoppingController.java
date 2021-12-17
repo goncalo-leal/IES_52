@@ -58,6 +58,17 @@ public class SensorShoppingController {
 
         return shop;
     }
+    @PostMapping("/addSensorShopping/{shopping}")
+    public SensorShopping newSensorShoppingWithNewSensor(@PathVariable(value = "shopping") int shopping, @RequestBody Sensor s1) {
+        Sensor s = new Sensor(s1.getType(), s1.getName());
+        sensorService.saveSensor(s);
+        
+        if (s.getSensorPark() == null && s.getSensorShopping()==null && s.getSensorStore()==null ){
+            
+            return SensorShoppingServices.saveSensorShopping(new SensorShopping (shoppingServices.getShoppingById(shopping),s));
+         }
+         return null;
+    }
 
     @GetMapping("/SensorShoppings")
     public List<SensorShopping> findAllSensorShopping() {

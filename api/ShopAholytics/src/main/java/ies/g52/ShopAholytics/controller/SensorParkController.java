@@ -61,6 +61,16 @@ public class SensorParkController {
 
         return park;
     }
+    @PostMapping("/addSensorPark/{park}")
+    public SensorPark newSensorParkWithNewSensor(@PathVariable(value = "park") int park, @RequestBody Sensor s1) {
+        Sensor s = new Sensor(s1.getType(), s1.getName());
+
+        sensorService.saveSensor(s);
+        if (s.getSensorPark() == null && s.getSensorShopping()==null && s.getSensorStore()==null ){
+            return SensorParkService.saveSensorPark(new SensorPark(parkServices.getParkById(park), s));
+        }
+        return null;
+    }
 
 
     @GetMapping("/SensorParks/{pid}")
