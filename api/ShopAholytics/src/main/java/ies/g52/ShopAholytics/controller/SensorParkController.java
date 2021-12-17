@@ -41,6 +41,28 @@ public class SensorParkController {
         }
         return null;
     }
+
+    @PostMapping("/entrancePark/{id_sensor}")
+    public Park entranceStore(@PathVariable(value = "id_sensor") int id_sensor) {
+        SensorPark sensor = SensorParkService.getSensorParkById(id_sensor);
+        Park park = parkServices.getParkById(sensor.getPark().getId());
+
+        park.setCapacity(park.getCapacity()+1);
+
+        return park;
+    }
+
+    @PostMapping("/exitPark/{id_sensor}")
+    public Park exitPark(@PathVariable(value = "id_sensor") int id_sensor) {
+        SensorPark sensor = SensorParkService.getSensorParkById(id_sensor);
+        Park park = parkServices.getParkById(sensor.getPark().getId());
+
+        park.setCapacity(park.getCapacity()+1);
+
+        return park;
+    }
+
+
     @GetMapping("/SensorParks/{pid}")
     public List<Sensor> findSensorByStore(@PathVariable(value = "pid") int pid) {
         List<SensorPark> a = SensorParkService.getSensorParks();

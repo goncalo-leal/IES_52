@@ -51,6 +51,7 @@ public class ShoppingManager {
         this.shopping = shopping;
     }
 
+
     public int getId() {
         return this.id;
     }
@@ -63,9 +64,7 @@ public class ShoppingManager {
         return this.user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  
 
 
     @Override

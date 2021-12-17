@@ -42,6 +42,26 @@ public class SensorStoreController {
         return null;
     }
 
+    @PostMapping("/entranceStore/{id_sensor}")
+    public Store entranceStore(@PathVariable(value = "id_sensor") int id_sensor) {
+        SensorStore sensor = SensorStoreServices.getSensorStoreById(id_sensor);
+        Store store = storeService.getStoreById(sensor.getStore().getId());
+
+        store.setCapacity(store.getCapacity()+1);
+
+        return store;
+    }
+
+    @PostMapping("/exitStore/{id_sensor}")
+    public Store exitStore(@PathVariable(value = "id_sensor") int id_sensor) {
+        SensorStore sensor = SensorStoreServices.getSensorStoreById(id_sensor);
+        Store store = storeService.getStoreById(sensor.getStore().getId());
+
+        store.setCapacity(store.getCapacity()-1);
+
+        return store;
+    }
+
     @GetMapping("/SensorStores/{pid}")
     public List<Sensor> findSensorByStore(@PathVariable(value = "pid") int pid) {
         List<SensorStore> a = SensorStoreServices.getSensorStores();

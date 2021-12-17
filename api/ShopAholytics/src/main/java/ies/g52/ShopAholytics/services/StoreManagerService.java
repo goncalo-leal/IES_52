@@ -44,6 +44,8 @@ public class StoreManagerService {
 
     public StoreManager updateStoreManager(StoreManager StoreManager) {
         StoreManager existingStoreManager = repository.findById((int)StoreManager.getId()).orElse(null);
+        existingStoreManager.setStore(StoreManager.getStore());
+        existingStoreManager.setUser(StoreManager.getUser());
         return repository.save(existingStoreManager);
     }
 

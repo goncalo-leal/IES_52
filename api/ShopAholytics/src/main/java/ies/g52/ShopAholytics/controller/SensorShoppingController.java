@@ -39,6 +39,26 @@ public class SensorShoppingController {
          return null;
     }
 
+    @PostMapping("/entranceShopping/{id_sensor}")
+    public Shopping entranceStore(@PathVariable(value = "id_sensor") int id_sensor) {
+        SensorShopping sensor = SensorShoppingServices.getSensorShoppingById(id_sensor);
+        Shopping shop = shoppingServices.getShoppingById(sensor.getShopping().getId());
+
+        shop.setCapacity(shop.getCapacity()+1);
+
+        return shop;
+    }
+
+    @PostMapping("/exitShopping/{id_sensor}")
+    public Shopping exitShopping(@PathVariable(value = "id_sensor") int id_sensor) {
+        SensorShopping sensor = SensorShoppingServices.getSensorShoppingById(id_sensor);
+        Shopping shop = shoppingServices.getShoppingById(sensor.getShopping().getId());
+
+        shop.setCapacity(shop.getCapacity()-1);
+
+        return shop;
+    }
+
     @GetMapping("/SensorShoppings")
     public List<SensorShopping> findAllSensorShopping() {
         List<SensorShopping> a = SensorShoppingServices.getSensorShoppings();
