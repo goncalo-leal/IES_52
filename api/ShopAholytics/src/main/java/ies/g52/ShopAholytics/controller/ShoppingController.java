@@ -41,24 +41,7 @@ public class ShoppingController {
         return ret;
     }
 
-    @GetMapping("/StoreManagerShopping/{id}")
-    public List<StoreManager> findAllStoreManagersShopping(@PathVariable int id) {
-        Shopping s = shoppingService.getShoppingById(id);
-        
-        Set<Store> stores=s.getStores();
-        List<StoreManager> managers = StoreManagerServices.getStoreManagers();
-        List<StoreManager> ret= new ArrayList<>();
-
-        for (StoreManager a: managers){
-            if (stores.contains(a.getStore()) ){
-                ret.add(a);
-            }
-        }
-        
-        return ret;
-    }
-
-
+    
     @GetMapping("/parksShopping/{id}")
     public Set<Park> findAllParksShopping(@PathVariable int id) {
         Shopping s = shoppingService.getShoppingById(id);

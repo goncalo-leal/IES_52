@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import ies.g52.ShopAholytics.enumFolder.SensorEnum;
 import ies.g52.ShopAholytics.models.Park;
 import ies.g52.ShopAholytics.models.Sensor;
 import ies.g52.ShopAholytics.models.SensorPark;
@@ -47,8 +48,8 @@ public class SensorParkController {
         SensorPark sensor = SensorParkService.getSensorParkById(id_sensor);
         Park park = parkServices.getParkById(sensor.getPark().getId());
 
-        park.setCapacity(park.getCapacity()+1);
-
+        park.setCurrent_capacity(park.getCurrent_capacity()+1);
+        parkServices.updatePark(park);
         return park;
     }
 
@@ -57,14 +58,20 @@ public class SensorParkController {
         SensorPark sensor = SensorParkService.getSensorParkById(id_sensor);
         Park park = parkServices.getParkById(sensor.getPark().getId());
 
-        park.setCapacity(park.getCapacity()+1);
+        park.setCurrent_capacity(park.getCurrent_capacity()-1);
+        parkServices.updatePark(park);
 
         return park;
     }
     @PostMapping("/addSensorPark/{park}")
     public SensorPark newSensorParkWithNewSensor(@PathVariable(value = "park") int park, @RequestBody Sensor s1) {
+        
+        if (s1.getType().equals("entrace") || s1.getType().equals("exit")){}
+        else{
+            return null;
+        }
         Sensor s = new Sensor(s1.getType(), s1.getName());
-
+        
         sensorService.saveSensor(s);
         if (s.getSensorPark() == null && s.getSensorShopping()==null && s.getSensorStore()==null ){
             return SensorParkService.saveSensorPark(new SensorPark(parkServices.getParkById(park), s));

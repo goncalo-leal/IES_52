@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import ies.g52.ShopAholytics.enumFolder.SensorEnum;
 import ies.g52.ShopAholytics.models.Sensor;
 import ies.g52.ShopAholytics.models.Store;
 import ies.g52.ShopAholytics.models.SensorStore;
@@ -47,7 +48,8 @@ public class SensorStoreController {
         SensorStore sensor = SensorStoreServices.getSensorStoreById(id_sensor);
         Store store = storeService.getStoreById(sensor.getStore().getId());
 
-        store.setCapacity(store.getCapacity()+1);
+        store.setCurrent_capacity(store.getCurrent_capacity()+1);
+        storeService.updateStore(store);
 
         return store;
     }
@@ -57,18 +59,27 @@ public class SensorStoreController {
         SensorStore sensor = SensorStoreServices.getSensorStoreById(id_sensor);
         Store store = storeService.getStoreById(sensor.getStore().getId());
 
-        store.setCapacity(store.getCapacity()-1);
+        store.setCurrent_capacity(store.getCurrent_capacity()-1);
+        storeService.updateStore(store);
 
         return store;
     }
     @PostMapping("/addSensorStore/{store}")
     public SensorStore newSensorStoreWithNewSensor(@PathVariable(value = "store") int store, @RequestBody Sensor s1) {
+        
+        if (s1.getType().equals("entrace") || s1.getType().equals("exit")){}
+        else{
+            return null;
+        }
         Sensor s = new Sensor(s1.getType(), s1.getName());
 
+       
+        sensorService.saveSensor(s);
         if (s.getSensorPark() == null && s.getSensorShopping()==null && s.getSensorStore()==null ){
             return SensorStoreServices.saveSensorStore(new SensorStore (storeService.getStoreById(store),s));
 
         }
+        
         return null;
     }
 
