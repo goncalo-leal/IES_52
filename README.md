@@ -6,13 +6,13 @@ A shopping habits analysis service.
 
 Base URL: http://192.168.160.238/
 
-ports na VM:
-           - client: 8000
-           - api: 6868
-           - db: 3306
-           - rmq
-                        http -> 15672
-                        amqp -> 5672
+| Service | Port | Credentials |
+| :---: | :---: | :---: | :---: |
+| client | 5001 | *email*: admin@ua.pt *password*: admin |
+| spring api | 6868 | |
+| db | 3306 | *user*:user *password*:user |
+| rabbitmq HTTP | 15672 | *user*: guest *password*: guest |
+| rabbitmq AMQP | 5672 | | 
 
 
 ## Abstract
