@@ -8,9 +8,12 @@ A shopping habits analysis service.
 
 #### Remote (192.168.160.238)
 
+(We will leave the machine already running everything so there's probably no need to do this)
+
 ```$ cd ies_52```
 
 ```$ docker-compose up``` 
+
 
 #### Local (localhost)
 
@@ -22,7 +25,7 @@ A shopping habits analysis service.
 
 | Service | Port | Credentials |
 | :---: | :---: | :---: |
-| client | 5001 | *email*: admin@ua.pt<br /> *password*: admin |
+| client | 8000 | *email*: admin@ua.pt<br /> *password*: admin |
 | spring api | 6868 | |
 | db | 3307 | *user*: user<br /> *password*: user |
 | rabbitmq HTTP | 15672 | *user*: guest<br /> *password*: guest |
