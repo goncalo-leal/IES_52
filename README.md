@@ -7,7 +7,7 @@ A shopping habits analysis service.
 Base URL: http://192.168.160.238/
 
 | Service | Port | Credentials |
-| :---: | :---: | :---: | :---: |
+| :---: | :---: | :---: |
 | client | 5001 | *email*: admin@ua.pt *password*: admin |
 | spring api | 6868 | |
 | db | 3306 | *user*:user *password*:user |
