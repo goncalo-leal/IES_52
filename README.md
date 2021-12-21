@@ -4,7 +4,10 @@ A shopping habits analysis service.
 
 ## Services
 
-Base URL: http://192.168.160.238/
+### Deploy
+
+  - local: ```docker-compose up``` (URL: localhost )
+  - remote: ```docker-compose up``` (URL: 192.168.160.238 )
 
 | Service | Port | Credentials |
 | :---: | :---: | :---: |
@@ -13,6 +16,8 @@ Base URL: http://192.168.160.238/
 | db | 3306 | *user*:user<br /> *password*:user |
 | rabbitmq HTTP | 15672 | *user*: guest<br /> *password*: guest |
 | rabbitmq AMQP | 5672 | | 
+
+Os ports expostos podem ser configurados no ficheiro ```.env```
 
 
 ## Abstract
