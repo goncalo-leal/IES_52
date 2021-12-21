@@ -52,6 +52,9 @@ public class StoreManager {
         this.store = store;
     }
 
+    public void setUser(User u){
+        this.user=u;
+    }
 
     public int getId() {
         return this.id;

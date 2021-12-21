@@ -52,10 +52,10 @@ public class StoreManagerController {
     }
 
     // Os updates são feitos na no store e no user
-    //@PutMapping("/updateStoreManager")
-    //public StoreManager updateStoreManager(@RequestBody StoreManager user) {
-    //    return StoreManagerServices.updateStoreManager(user);
-    //}
+    @PutMapping("/updateStoreManager")
+    public StoreManager updateStoreManager(@RequestBody StoreManager user) {
+        return StoreManagerServices.updateStoreManager(user);
+    }
 
     @DeleteMapping("/deleteStoreManager/{id}")
     public String deleteStoreManager(@PathVariable int id) {
