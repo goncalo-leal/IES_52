@@ -8,37 +8,38 @@ import ies.g52.ShopAholytics.models.Product;
 import ies.g52.ShopAholytics.services.ProductService;
 import ies.g52.ShopAholytics.services.StoreService;
 
-import java.util.ArrayList;
 import java.util.List;
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/")
 public class ProductController {
     @Autowired
-    private ProductService serviceProduct;
+    private ProductService productService;
 
     
 
    @Autowired
-   private StoreService serviceStore;
+   private StoreService storeService;
 
     @PostMapping("/addProduct/{pid}")
     public Product newProduct( @RequestBody Product s,@PathVariable(value = "pid") int pid) {
-        return serviceProduct.saveProduct(new Product(s.getName(),s.getReference(),s.getStock(),s.getPrice(),s.getDescription(), serviceStore.getStoreById(pid)));
+        if (s.getPrice() > 0 && s.getStock() > 0 ){
+            return productService.saveProduct(new Product(s.getName(),s.getReference(),s.getStock(),s.getPrice(),s.getDescription(), storeService.getStoreById(pid)));
+        }
+        return null;
     }
 
     
     @GetMapping("/Products")
     public List<Product> findAllProducts() {
-        List<Product> a = serviceProduct.getProducts();
+        List<Product> a = productService.getProducts();
         return a;
     }
     
 
     @GetMapping("/Product")
     public Product findProductById(@RequestParam(value = "id")  int id) {
-        Product a = serviceProduct.getProductById(id);
+        Product a = productService.getProductById(id);
         return a;
         
     }
@@ -47,11 +48,11 @@ public class ProductController {
 
     @PutMapping("/updateProduct")
     public Product updateProduct(@RequestBody Product Product) {
-        return serviceProduct.updateProduct(Product);
+        return productService.updateProduct(Product);
     }
 
     @DeleteMapping("/deleteProduct/{id}")
     public String deleteProduct(@PathVariable int id) {
-        return serviceProduct.deleteProduct(id);
+        return productService.deleteProduct(id);
     }
 }

@@ -25,6 +25,10 @@ public class ShoppingServices {
         return repository.findAll();
     }
 
+    public Shopping getShoppingByName(String name) {
+        return repository.findByName(name);
+    }
+
     public Shopping getShoppingById(int id) {
         return repository.findById((int)id).orElse(null);
     }
@@ -38,6 +42,12 @@ public class ShoppingServices {
     public Shopping updateShopping(Shopping user) {
         //acho que este e o user esta incompleto mas preciso de testar para saber
         Shopping existingShopping = repository.findById((int)user.getId()).orElse(null);
+        existingShopping.setName(user.getName());
+        existingShopping.setLocation(user.getLocation());
+        existingShopping.setCapacity(user.getCapacity());
+        existingShopping.setOpening(user.getOpening());
+        existingShopping.setClosing(user.getClosing());
+        
         return repository.save(existingShopping);
     }
 

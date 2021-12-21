@@ -2,7 +2,6 @@ package ies.g52.ShopAholytics.models;
 
 
 import java.time.LocalTime;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,12 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "Park")
@@ -37,6 +34,9 @@ public class Park {
     private String location;
 
 
+    @Column(name = "current_capacity")
+    private int current_capacity;
+
     @Column(name = "capacity")
     private int capacity;
 
@@ -46,31 +46,29 @@ public class Park {
     @Column(name = "closing")
     private LocalTime closing;
     
-
-    @ManyToOne(optional = false)
+    @JsonIgnoreProperties("parks")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_shopping", nullable = false)
-    private Shopping shopping;
+    private Shopping id_shopping;
 
-
-    @OneToMany(mappedBy = "park")
-    @JsonIgnore
-    private Set<SensorPark> sensorPark;
 
     public Park() {
     }
 
     
+
     public Park(String name, String location, int capacity, LocalTime opening, LocalTime closing,
-            Shopping shopping) {
+            Shopping id_shopping) {
         this.name = name;
         this.location = location;
         this.capacity = capacity;
         this.opening = opening;
         this.closing = closing;
-        this.shopping = shopping;
+        this.id_shopping = id_shopping;
+        this.current_capacity=0;
     }
 
-
+    
 
     public int getId() {
         return id;
@@ -128,15 +126,16 @@ public class Park {
     }
 
 
-    public Shopping getId_shopping() {
-        return shopping;
+
+    public int getCurrent_capacity() {
+        return current_capacity;
     }
 
 
-    public void setId_shopping(Shopping shopping) {
-        this.shopping = shopping;
-    }
 
+    public void setCurrent_capacity(int current_capacity) {
+        this.current_capacity = current_capacity;
+    }
     
     
 }

@@ -1,11 +1,10 @@
 package ies.g52.ShopAholytics.controller;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import ies.g52.ShopAholytics.models.Shopping;
 import ies.g52.ShopAholytics.models.Store;
 import ies.g52.ShopAholytics.services.ShoppingServices;
 import ies.g52.ShopAholytics.services.StoreService;
@@ -15,42 +14,42 @@ import ies.g52.ShopAholytics.services.StoreService;
 @RequestMapping("/api/")
 public class StoreController {
     @Autowired
-    private StoreService StoreServices;
+    private StoreService storeService;
 
     @Autowired
-    private ShoppingServices shoppingServices;
+    private ShoppingServices shoppingService;
+
 
 
     @PostMapping("/addStore/{pid}")
     public Store newStore( @RequestBody Store s,  @PathVariable(value = "pid") int pid) {
-        return StoreServices.saveStore(new Store (s.getLocation(),s.getName(),s.getCapacity(),s.getOpening(),s.getClosing(),shoppingServices.getShoppingById(pid)));
+        Shopping shopping = shoppingService.getShoppingById(pid);
+        int var = shopping.getSum_shops_capacity() + s.getCapacity();
+        if (s.getCapacity() > 0 && var < shopping.getCapacity()){
+            shopping.setSum_shops_capacity(var);
+            return storeService.saveStore(new Store (s.getLocation(),s.getName(),s.getCapacity(),s.getOpening(),s.getClosing(),shoppingService.getShoppingById(pid)));
+        }
+        return null;
     }
 
     @GetMapping("/Stores")
     public List<Store> findAllStore() {
-        List<Store> a = StoreServices.getStore();
+        List<Store> a = storeService.getStore();
         return a;
     }
     @GetMapping("/Store")
     public Store findStoreById(@RequestParam(value = "id")  int id) {
-        List<Store> a = StoreServices.getStore();
-        
-        for (Store qu: a){
-            if (qu.getId() == id ){
-                return qu;
-            }
-        }
-        return null;
+        return storeService.getStoreById(id);
         
     }
 
     @PutMapping("/updateStore")
     public Store updateStore(@RequestBody Store user) {
-        return StoreServices.updateStore(user);
+        return storeService.updateStore(user);
     }
 
     @DeleteMapping("/deleteStore/{id}")
     public String deleteStore(@PathVariable int id) {
-        return StoreServices.deleteStore(id);
+        return storeService.deleteStore(id);
     }
 }

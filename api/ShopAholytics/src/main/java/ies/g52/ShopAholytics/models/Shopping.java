@@ -4,25 +4,19 @@ package ies.g52.ShopAholytics.models;
 import java.time.LocalTime;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Shopping")
 public class Shopping {
-
+    private int sum_shops_capacity;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -30,6 +24,9 @@ public class Shopping {
 
     @Column(name = "location")
     private String location;
+
+    @Column(name = "current_capacity")
+    private int current_capacity;
 
     @Column(name = "name")
     private String name;
@@ -43,23 +40,14 @@ public class Shopping {
     @Column(name = "closing")
     private LocalTime closing;
 
-    public Shopping() {
-    }
+    @OneToMany(cascade= CascadeType.ALL ,mappedBy = "id_shopping", orphanRemoval = true)
+    private Set<Park> parks;
 
-    @OneToMany(mappedBy = "shopping")
-    private Set<ShoppingManager> managers;
-
-    @OneToMany(mappedBy = "shopping")
-    @JsonIgnore
-    private Set<Park> park;
-
-    @OneToMany(mappedBy = "shopping")
-    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL ,mappedBy = "id_shopping", orphanRemoval = true)
     private Set<Store> stores;
 
-    @OneToMany(mappedBy = "shopping")
-    @JsonIgnore
-    private Set<SensorShopping> sensorShopping;
+    public Shopping() {
+    }
 
     public Shopping( String location, String name, int capacity, LocalTime opening, LocalTime closing) {
         
@@ -68,13 +56,24 @@ public class Shopping {
         this.capacity = capacity;
         this.opening = opening;
         this.closing = closing;
+        this.sum_shops_capacity=0;
+        this.current_capacity=0;
     }
+
 
     public int getId() {
         return id;
     }
 
-    
+
+    public int getSum_shops_capacity() {
+        return this.sum_shops_capacity;
+    }
+
+    public void setSum_shops_capacity(int sum_shops_capacity) {
+        this.sum_shops_capacity = sum_shops_capacity;
+    }
+
 
     public String getLocation() {
         return location;
@@ -116,5 +115,31 @@ public class Shopping {
         this.closing = closing;
     }
 
+    public Set<Park> getParks() {
+        return this.parks;
+    }
+
+    public void setParks(Set<Park> parks) {
+        this.parks = parks;
+    }
+
+    public Set<Store> getStores() {
+        return this.stores;
+    }
+
+    public void setStores(Set<Store> stores) {
+        this.stores = stores;
+    }
+
+    public int getCurrent_capacity() {
+        return current_capacity;
+    }
+
+
+
+    public void setCurrent_capacity(int current_capacity) {
+        this.current_capacity = current_capacity;
+    }
+    
     
 }
