@@ -1,6 +1,20 @@
 # ShopAholytics
 A shopping habits analysis service.
 
+
+## Services
+
+Base URL: http://192.168.160.238/
+
+ports na VM:
+           - client: 8000
+           - api: 6868
+           - db: 3306
+           - rmq
+                        http -> 15672
+                        amqp -> 5672
+
+
 ## Abstract
 
 ShopAholytics is a web app that studies everything related to client behaviour, providing useful info for managers and marketing teams. With our service, companies will be able to quickly analyze shopping tendencies during specific periods of time and tracks the shoppers' flow in realtime. Our main goal is to provide the necessary data to make smarter, more efective business choices.
