@@ -1,6 +1,10 @@
 import PySimpleGUI as sg
 
+from api_connector import ApiConnector
+
 sg.theme('Reddit')
+
+api = ApiConnector()
 
 def get_shoppings_list():
     # ecrã de loading
@@ -10,23 +14,20 @@ def get_shoppings_list():
 
     window = sg.Window("ShopAholytics", layout_loading, size=(300, 50), finalize=True)
 
-    # while !get_shoppings(): -> Qualquer coisa assim
-
+    shoppings = None
     while True:
+        shoppings = api.get_shoppings_list()
+
+        if shoppings != None:
+            break
+
         event, values = window.read()
 
         if event == sg.WIN_CLOSED:
             break
 
-    shoppings = {
-        1: 'Shopping1',
-        2: 'Shopping2',
-        3: 'Shopping3',
-        4: 'Shopping4',
-        5: 'Shopping5'
-    }
-
     window.close()
+    print(shoppings)
     return shoppings
 
 def show_shoppings_list(shoppings):

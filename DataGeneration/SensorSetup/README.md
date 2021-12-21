@@ -1,3 +1,5 @@
+Garanta que tem o python3 instalado
+
 ## Requirements:
     https://realpython.com/pysimplegui-python/
 
@@ -10,7 +12,7 @@ O PySimpleGUI tem vários port's, neste caso vamos usar o tkinter. As dependênc
     sudo apt install python3-tk
 
 ### PySimpleGUI
-    python -m pip install pysimplegui
+    python3 -m pip install pysimplegui
 
 #### Tutorial
     https://www.youtube.com/watch?v=UnfmxnFpfdM
@@ -20,7 +22,14 @@ O PySimpleGUI tem vários port's, neste caso vamos usar o tkinter. As dependênc
 Para o nosso message broker e message queue vamos usar RabbitMQ:
 
 ### RabbitMQ
-    python -m pip install pika --upgrade
+    python3 -m pip install pika --upgrade
 
 #### Tutorial
     https://www.rabbitmq.com/tutorials/tutorial-one-python.html
+
+<hr>
+
+Para connectar com a API em SpringBoot:
+
+### Requests
+    python3 -m pip install requests
