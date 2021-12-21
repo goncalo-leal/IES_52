@@ -6,18 +6,31 @@ A shopping habits analysis service.
 
 ### Deploy
 
-  - local: ```docker-compose up``` (URL: localhost )
-  - remote: ```docker-compose up``` (URL: 192.168.160.238 )
+#### Remote (192.168.160.238)
+
+```$ cd ies_52```
+
+```$ docker-compose up``` 
+
+#### Local (localhost)
+
+```$ run.sh -a```
+
+```run.sh``` is a script to help deploying the project easier. ```$ run.sh -h``` to see usage.
+
+#### Ports
 
 | Service | Port | Credentials |
 | :---: | :---: | :---: |
 | client | 5001 | *email*: admin@ua.pt<br /> *password*: admin |
 | spring api | 6868 | |
-| db | 3306 | *user*:user<br /> *password*:user |
+| db | 3306 | *user*: user<br /> *password*: user |
 | rabbitmq HTTP | 15672 | *user*: guest<br /> *password*: guest |
 | rabbitmq AMQP | 5672 | | 
 
-Os ports expostos podem ser configurados no ficheiro ```.env```
+Ports can be configured in the ```.env``` file.
+
+*Note*: if ```$SPRING_LOCAL_PORT``` is changed, the variable ```PORT``` on ```/FrontEnd/js/consts.js```  must be changed too (we will add it as an environmental variable soon).
 
 
 ## Abstract
