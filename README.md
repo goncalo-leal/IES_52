@@ -10,7 +10,7 @@ Base URL: http://192.168.160.238/
 | :---: | :---: | :---: |
 | client | 5001 | *email*: admin@ua.pt<br /> *password*: admin |
 | spring api | 6868 | |
-| db | 3306 | *user*:user *password*:user |
+| db | 3306 | *user*:user<br /> *password*:user |
 | rabbitmq HTTP | 15672 | *user*: guest<br /> *password*: guest |
 | rabbitmq AMQP | 5672 | | 
 
