@@ -8,10 +8,10 @@ Base URL: http://192.168.160.238/
 
 | Service | Port | Credentials |
 | :---: | :---: | :---: |
-| client | 5001 | *email*: admin@ua.pt \n *password*: admin |
+| client | 5001 | *email*: admin@ua.pt<br /> *password*: admin |
 | spring api | 6868 | |
 | db | 3306 | *user*:user *password*:user |
-| rabbitmq HTTP | 15672 | *user*: guest \n *password*: guest |
+| rabbitmq HTTP | 15672 | *user*: guest<br /> *password*: guest |
 | rabbitmq AMQP | 5672 | | 
 
 
