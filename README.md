@@ -25,7 +25,7 @@ A shopping habits analysis service.
 
 | Service | Port | Credentials |
 | :---: | :---: | :---: |
-| client | 5001 | *email*: admin@ua.pt<br /> *password*: admin |
+| client | 8000 | *email*: admin@ua.pt<br /> *password*: admin |
 | spring api | 6868 | |
 | db | 3306 | *user*: user<br /> *password*: user |
 | rabbitmq HTTP | 15672 | *user*: guest<br /> *password*: guest |
