@@ -2,8 +2,6 @@ package ies.g52.ShopAholytics.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,6 +71,11 @@ public class StoreManagerController {
     @DeleteMapping("/deleteStoreManager/{id}")
     public String deleteStoreManager(@PathVariable int id) {
         return StoreManagerServices.deleteStoreManager(id);
+    }
+
+    @GetMapping("/StoreManagerShopping/{id}")
+    public List<StoreManager> findAllStoreManagersShopping(@PathVariable int id) {
+        return StoreManagerServices.storeManagersOfShopping(id);
     }
 }
 

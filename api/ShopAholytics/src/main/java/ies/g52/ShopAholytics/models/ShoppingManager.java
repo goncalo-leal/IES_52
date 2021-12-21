@@ -21,7 +21,6 @@ import javax.persistence.InheritanceType;
 
 @Entity
 @Table(name = "shopping_manager")
-
 public class ShoppingManager {
 
     @Id
@@ -31,6 +30,8 @@ public class ShoppingManager {
     @ManyToOne
     @JoinColumn(name="id_shopping")
     private Shopping shopping;
+
+    public ShoppingManager(){}
 
     @OneToOne
     @MapsId
@@ -42,7 +43,6 @@ public class ShoppingManager {
         this.shopping = shopping;
     }
 
-    public ShoppingManager(){}
 
 
     public Shopping getShopping() {
@@ -53,9 +53,6 @@ public class ShoppingManager {
         this.shopping = shopping;
     }
 
-    public void setUser(User u){
-        this.user=u;
-    }
 
     public int getId() {
         return this.id;
@@ -63,10 +60,20 @@ public class ShoppingManager {
 
     public void setUser(User user){
         this.user=user;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public User getUser() {
         return this.user;
+    }
+
+  
+
+
+    @Override
+    public String toString() {
+        return "ShoppingManager [id=" + id + ", shopping= " + shopping + ", user=" + user + "]";
     }
 
 }

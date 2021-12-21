@@ -37,7 +37,7 @@ public class User {
     private String gender;
 
     //algumas duvidas se as dates é assim
-    @Column(name = "birtday")
+    @Column(name = "birthday")
     @Temporal(TemporalType.DATE)
     private Date birthday;
 

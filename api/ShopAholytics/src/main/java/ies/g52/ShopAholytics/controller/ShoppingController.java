@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import ies.g52.ShopAholytics.models.Park;
 import ies.g52.ShopAholytics.models.Shopping;
 import ies.g52.ShopAholytics.models.Store;
+import ies.g52.ShopAholytics.models.StoreManager;
 import ies.g52.ShopAholytics.services.ShoppingServices;
+import ies.g52.ShopAholytics.services.StoreManagerService;
 
 
 @RestController
@@ -19,6 +21,9 @@ public class ShoppingController {
     private ShoppingServices shoppingService;
 
 
+    @Autowired
+    private StoreManagerService StoreManagerServices;
+    
     @PostMapping("/addShopping")
     public Shopping newShopping( @RequestBody Shopping s) {
         if (s.getCapacity() >0  ){
@@ -36,6 +41,7 @@ public class ShoppingController {
         return ret;
     }
 
+    
     @GetMapping("/parksShopping/{id}")
     public Set<Park> findAllParksShopping(@PathVariable int id) {
         Shopping s = shoppingService.getShoppingById(id);
