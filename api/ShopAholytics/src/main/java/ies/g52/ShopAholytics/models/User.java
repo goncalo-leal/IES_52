@@ -1,5 +1,6 @@
 package ies.g52.ShopAholytics.models;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -38,8 +39,7 @@ public class User {
 
     //algumas duvidas se as dates é assim
     @Column(name = "birthday")
-    @Temporal(TemporalType.DATE)
-    private Date birthday;
+    private LocalDate birthday;
 
     // Vai ser estrangeiro aqui
     @ManyToOne(optional = false)
@@ -53,7 +53,7 @@ public class User {
 
     }
 
-    public User(String password, String email, String name, String gender, Date birthday, UserState state) {
+    public User(String password, String email, String name, String gender, LocalDate birthday, UserState state) {
         this.password = password;
         this.email = email;
         this.name = name;
@@ -99,11 +99,11 @@ public class User {
         this.gender = gender;
     }
 
-    public Date getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 
