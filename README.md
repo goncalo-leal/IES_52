@@ -8,9 +8,12 @@ A shopping habits analysis service.
 
 #### Remote (192.168.160.238)
 
+(We will leave the machine already running everything so there's probably no need to do this)
+
 ```$ cd ies_52```
 
 ```$ docker-compose up``` 
+
 
 #### Local (localhost)
 
