@@ -133,16 +133,18 @@ public class SensorDataController {
                 if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
                     int horas = data.getDate().getHour();               
                     int minutos= data.getDate().getMinute();
+                    int segundos =data.getDate().getSecond();
                     int horas_atuais= LocalTime.now().getHour();
                     int minutos_atuais= LocalTime.now().getMinute();
+                    int segundos_atuais=LocalTime.now().getSecond();
                     if (horas_atuais == 0 ){
                         horas_atuais=24;
                         if (horas == 0){
                             horas=24;
                         }
                     }
-                    long total= 3600* horas+ minutos*60;
-                    long total_limite= 3600*(horas_atuais-1)+ minutos_atuais*60;
+                    long total= 3600* horas+ minutos*60+segundos;
+                    long total_limite= 3600*(horas_atuais-1)+ minutos_atuais*60+segundos_atuais;
                     if(total >= total_limite){
                         counter++;
                     }
@@ -167,16 +169,18 @@ public class SensorDataController {
                 if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid ){
                     int horas = data.getDate().getHour();               
                     int minutos= data.getDate().getMinute();
+                    int segundos =data.getDate().getSecond();
                     int horas_atuais= LocalTime.now().getHour();
                     int minutos_atuais= LocalTime.now().getMinute();
+                    int segundos_atuais=LocalTime.now().getSecond();
                     if (horas_atuais == 0 ){
                         horas_atuais=24;
                         if (horas == 0){
                             horas=24;
                         }
                     }
-                    long total= 3600* horas+ minutos*60;
-                    long total_limite= 3600*(horas_atuais-1)+ minutos_atuais*60;
+                    long total= 3600* horas+ minutos*60+segundos;
+                    long total_limite= 3600*(horas_atuais-1)+ minutos_atuais*60+segundos_atuais;
                     if(total >= total_limite){
                         counter++;
                     }
@@ -200,16 +204,18 @@ public class SensorDataController {
                 if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==pid ){
                     int horas = data.getDate().getHour();               
                     int minutos= data.getDate().getMinute();
+                    int segundos =data.getDate().getSecond();
                     int horas_atuais= LocalTime.now().getHour();
                     int minutos_atuais= LocalTime.now().getMinute();
+                    int segundos_atuais=LocalTime.now().getSecond();
                     if (horas_atuais == 0 ){
                         horas_atuais=24;
                         if (horas == 0){
                             horas=24;
                         }
                     }
-                    long total= 3600* horas+ minutos*60;
-                    long total_limite= 3600*(horas_atuais-1)+ minutos_atuais*60;
+                    long total= 3600* horas+ minutos*60+segundos;
+                    long total_limite= 3600*(horas_atuais-1)+ minutos_atuais*60+segundos_atuais;
                     if(total >= total_limite){
                         counter++;
                     }
