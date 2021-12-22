@@ -1,6 +1,8 @@
 package ies.g52.ShopAholytics.models;
 
 import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -33,7 +35,11 @@ public class ShoppingManager {
 
     public ShoppingManager(){}
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER,
+    cascade = {
+            CascadeType.MERGE,
+            CascadeType.REFRESH
+        })
     @MapsId
     @JoinColumn(name="id_user")
     private User user;
