@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.event.spi.SaveOrUpdateEventListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -51,26 +53,17 @@ public class ShopAholyticsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ShopAholyticsApplication.class, args);
 	}
-
+		@Transactional
 		@Bean
 		public CommandLineRunner demo(StoreService storeService,ShoppingManagerService ShoppingManagerServices,UserService userService,UserStateService repository,ShoppingServices shoppingService) {
 		  return (args) -> {
-			List<UserState> a = repository.getUserState();
-			List<String>  estados = new ArrayList<>();
-			for (UserState user : a){
-				if(! estados.contains(user.getDescription())){
-					estados.add(user.getDescription());
-				}
-			}
-			if (! estados.contains("Waiting approvement")){
+			if (repository.getUserState().size() == 0){
 				repository.saveUserState(new UserState("Waiting approvement"));
-			}
-			if (! estados.contains("Approved")){
 				repository.saveUserState(new UserState("Approved"));
-			}if (! estados.contains("Blocked")){
+
 				repository.saveUserState(new UserState("Blocked"));
+
 			}
-			
 			List<Shopping> shoppings = shoppingService.getShopping();
 			
 
@@ -79,12 +72,7 @@ public class ShopAholyticsApplication {
 				LocalTime fecho = LocalTime.of(00,00,00);  
 				Shopping new_shopping= new Shopping("Aveiro","Glicinias",10000,abertura,fecho);
 				shoppingService.saveShopping(new_shopping);
-				LocalDate data=LocalDate.parse("1988-07-28");
 				
-				User user = new User("admin", "admin@ua.pt" ,"Administrador","male",data,repository.getUserStateById(2));
-				userService.saveUser(user);
-
-				ShoppingManagerServices.saveShoppingManager(new ShoppingManager(user,new_shopping));
 				LocalTime aberturav2 = LocalTime.of(9,00,00);  
 				LocalTime fechov2 = LocalTime.of(22,00,00);  
 
@@ -93,6 +81,24 @@ public class ShopAholyticsApplication {
 				storeService.saveStore(new Store ("Piso 0, lado esquerdo","Jumbo",2500,abertura,fecho,new_shopping));
 				storeService.saveStore(new Store ("Piso 1","H&M",125,aberturav2,fechov2,new_shopping));
 
+				User user = new User("admin", "admin@ua.pt" ,"Administrador","male","1988-07-28",repository.getUserStateById(2));
+				userService.saveUser(user);
+				/*
+				ShoppingManager manager=new ShoppingManager();
+				System.out.println("1");
+				manager.setUser(user);
+				System.out.println("12");
+
+				manager.setShopping(new_shopping);
+				System.out.println("13");
+
+				
+				ShoppingManagerServices.saveShoppingManager(manager);*/
+				//NÃO CONSIGO PERCEBER PORQUE QUE ISTO NÃO FUNCIONA
+				//ShoppingManagerServices.saveShoppingManager(new ShoppingManager(userService.getUserById(1),new_shopping));
+
+
+			
 
 
 			}

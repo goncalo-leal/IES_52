@@ -39,7 +39,7 @@ public class User {
 
     //algumas duvidas se as dates é assim
     @Column(name = "birthday")
-    private LocalDate birthday;
+    private String birthday;
 
     // Vai ser estrangeiro aqui
     @ManyToOne(optional = false)
@@ -53,7 +53,7 @@ public class User {
 
     }
 
-    public User(String password, String email, String name, String gender, LocalDate birthday, UserState state) {
+    public User(String password, String email, String name, String gender, String birthday, UserState state) {
         this.password = password;
         this.email = email;
         this.name = name;
@@ -99,11 +99,11 @@ public class User {
         this.gender = gender;
     }
 
-    public LocalDate getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(LocalDate birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
