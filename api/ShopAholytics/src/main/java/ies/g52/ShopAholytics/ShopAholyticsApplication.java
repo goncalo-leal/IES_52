@@ -48,7 +48,7 @@ public class ShopAholyticsApplication {
     private StoreService storeService;
 
 	@Autowired
-    private ShoppingManagerService ShoppingManagerServices;
+    private ShoppingManagerService shoppingManagerServices;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ShopAholyticsApplication.class, args);
@@ -82,6 +82,7 @@ public class ShopAholyticsApplication {
 				storeService.saveStore(new Store ("Piso 1","H&M",125,aberturav2,fechov2,new_shopping));
 
 				User user = new User("admin", "admin@ua.pt" ,"Administrador","male","1988-07-28",repository.getUserStateById(2));
+				shoppingManagerServices.saveShoppingManager(new ShoppingManager(user, shoppingService.getShoppingById(1)));
 				userService.saveUser(user);
 				/*
 				ShoppingManager manager=new ShoppingManager();
@@ -95,16 +96,9 @@ public class ShopAholyticsApplication {
 				
 				ShoppingManagerServices.saveShoppingManager(manager);*/
 				//NÃO CONSIGO PERCEBER PORQUE QUE ISTO NÃO FUNCIONA
-				//ShoppingManagerServices.saveShoppingManager(new ShoppingManager(userService.getUserById(1),new_shopping));
-
-
-			
-
+				//ShoppingManagerServices.saveShoppingManager(new ShoppingManager(userService.getUserById(1),new_shopping))
 
 			}
-
-
-
 		  };
 	
 	}
