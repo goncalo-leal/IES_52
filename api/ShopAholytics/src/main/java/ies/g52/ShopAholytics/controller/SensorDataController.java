@@ -19,8 +19,21 @@ public class SensorDataController {
     @Autowired
     private SensorService sensorService;
 
+    //Todos os dados dos sensores de uma loja/shopping ou parque
+    
     @PostMapping("/addSensorData/{pid}")
     public SensorData newSensorData(@PathVariable(value = "pid") int pid, @RequestBody SensorData s) {
+
+        /*
+            Neste local , para ter a current_capacity sempre atualizada, o que vou fazer é
+            ir buscar ver a que local o sensor está associado e consoante o local, vou buscar o objeto desse
+            sitio e atualizo-lhe a variável
+            e só depois é gerado o sensorData
+
+            Caso o sensor não se encontre em nenhuma das 3 listas possiveis então este data não vai ser criado
+            visto que não existe
+        */
+
         return sensorDataService.saveSensorData(new SensorData(s.getData(),sensorService.getSensorById(pid)));
     }
 
@@ -43,11 +56,7 @@ public class SensorDataController {
         
     }
 
-    // Não faz sentido dar update dos dados
-    //@PutMapping("/updateSensorData")
-    //public SensorData updateSensorData(@RequestBody SensorData sensor) {
-    //    return sensorDataService.updateSensorData(sensor);
-    //}
+  
 
     @DeleteMapping("/deleteSensorData/{id}")
     public String deleteSensorData(@PathVariable int id) {
