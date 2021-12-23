@@ -63,9 +63,20 @@ public class StoreManagerController {
     }
 
     // Os updates são feitos na no store e no user
-    @PutMapping("/updateStoreManager")
-    public StoreManager updateStoreManager(@RequestBody StoreManager user) {
-        return StoreManagerServices.updateStoreManager(user);
+    @PutMapping("/updateAcceptStoreManager/{user}")
+    public User updateAcceptStoreManager(@PathVariable(value = "user") StoreManager user) {
+        StoreManager a = StoreManagerServices.getStoreManagerById(user.getId());
+        User u= a.getUser();
+        u.setState(userStateService.getUserStateById(2));
+        return serviceUser.updateUser(u);
+    }
+
+    @PutMapping("/updateBlockStoreManager/{user}")
+    public User updateBlockStoreManager( @PathVariable(value = "user") StoreManager user) {
+        StoreManager a = StoreManagerServices.getStoreManagerById(user.getId());
+        User u= a.getUser();
+        u.setState(userStateService.getUserStateById(3));
+        return serviceUser.updateUser(u);
     }
 
     @DeleteMapping("/deleteStoreManager/{id}")
