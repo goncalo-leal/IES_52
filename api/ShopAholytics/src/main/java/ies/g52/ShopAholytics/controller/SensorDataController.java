@@ -2,10 +2,14 @@ package ies.g52.ShopAholytics.controller;
 
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -221,6 +225,137 @@ public class SensorDataController {
         }
         return counter;
     }
+    //Até as horas e minutos atuais
+    @GetMapping("/PeopleInShoppingTodayCompareWithLaskWeek/{pid}")
+    public Map<String,Integer> peopleInSHoppingComparingWithLaskWeek(@PathVariable(value = "pid") int pid){
+        List<SensorData> a = sensorDataService.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        int counter2=0;
+        int dia_atual=LocalDateTime.now().getDayOfYear();
+        int ano_atual=LocalDateTime.now().getYear();
+        boolean end=false;
+        LocalDate d = LocalDate.parse(ano_atual-1+"-12-31");                   // import Java.time.LocalDate;
+        int dia_last_week=LocalDateTime.now().getDayOfYear() -7;
+        int ano_last_week= LocalDateTime.now().getYear();
+        int hora_atual=LocalDateTime.now().getHour();
+        int minutos_atual=LocalDateTime.now().getMinute();
+
+        if (dia_last_week < 1){
+            if (d.lengthOfYear() == 365){
+                dia_last_week=dia_last_week+365;
+                ano_last_week--;
+            }
+            else{
+                dia_last_week=dia_last_week+366;
+                ano_last_week--;
+            }
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int minutos = data.getDate().getMinute();
+                    int horas = data.getDate().getHour();
+
+
+                    if(dia ==dia_atual && ano_atual == ano){
+                        counter++;
+                    }
+                    else if (dia_last_week ==dia && ano_last_week==ano   ){
+                        if (horas < hora_atual){
+                            counter2++;
+                            end=false;
+                        }
+                        else if (horas == hora_atual && minutos <= minutos_atual){
+                            counter2++;
+                            end=false;
+                        }
+                        else{
+                            end =true;
+                        }
+                    }
+                    else{
+                        end=true;
+                    }
+
+                    if (counter2 != 0 && end){
+                        break;
+                    }
+                    
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        Map<String,Integer> map = new HashMap<>();
+        map.put("Today", counter);
+        map.put("LastWeek", counter2);
+        return map;
+    }
+
+
+    @GetMapping("/PeopleInShoppingTodayCompareWithLaskWeek/{pid}/{hours}")
+    public Map<String,Integer> peopleInSHoppingComparingWithLaskWeekHours(@PathVariable(value = "pid") int pid,@PathVariable(value = "hours") int hours){
+        List<SensorData> a = sensorDataService.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        int counter2=0;
+        int dia_atual=LocalDateTime.now().getDayOfYear();
+        int ano_atual=LocalDateTime.now().getYear();
+        boolean end=false;
+        LocalDate d = LocalDate.parse(ano_atual-1+"-12-31");                   // import Java.time.LocalDate;
+        int dia_last_week=LocalDateTime.now().getDayOfYear() -7;
+        int ano_last_week= LocalDateTime.now().getYear();
+
+        if (dia_last_week < 1){
+            if (d.lengthOfYear() == 365){
+                dia_last_week=dia_last_week+365;
+                ano_last_week--;
+            }
+            else{
+                dia_last_week=dia_last_week+366;
+                ano_last_week--;
+            }
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int minutos = data.getDate().getMinute();
+                    int horas = data.getDate().getHour();
+
+
+                    if(dia ==dia_atual && ano_atual == ano && horas <= hours){
+                        counter++;
+                    }
+                    else if (dia_last_week ==dia && ano_last_week==ano && horas <= hours  ){
+                     
+                        counter2++;
+                        end=false;
+                        
+                       
+                    }
+                    else{
+                        end=true;
+                    }
+
+                    if (counter2 != 0 && end){
+                        break;
+                    }
+                    
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        Map<String,Integer> map = new HashMap<>();
+        map.put("Today", counter);
+        map.put("LastWeek", counter2);
+        return map;
+    }
 
     @GetMapping("/PeopleInShoppingLast7Days/{pid}")
     public OccupationInLast7Days peopleInShoppingInLast7days(@PathVariable(value = "pid") int pid){
@@ -247,8 +382,6 @@ public class SensorDataController {
                         ret.getMapa().put(week_day.toString(), counter);
                         counter=1;
                         week_day=week_day_data;
-                        System.out.println(week_day);
-                        System.out.println(ret.getMapa());
                     
                         if(ret.getMapa().containsKey(week_day.toString())){
                             break;
@@ -327,6 +460,139 @@ public class SensorDataController {
         return counter;
     }
 
+
+    //Até as horas e minutos atuais
+    @GetMapping("/PeopleInStoreTodayCompareWithLaskWeek/{pid}")
+    public Map<String,Integer> peopleInStoreComparingWithLaskWeek(@PathVariable(value = "pid") int pid){
+        List<SensorData> a = sensorDataService.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        int counter2=0;
+        int dia_atual=LocalDateTime.now().getDayOfYear();
+        int ano_atual=LocalDateTime.now().getYear();
+        boolean end=false;
+        LocalDate d = LocalDate.parse(ano_atual-1+"-12-31");                   // import Java.time.LocalDate;
+        int dia_last_week=LocalDateTime.now().getDayOfYear() -7;
+        int ano_last_week= LocalDateTime.now().getYear();
+        int hora_atual=LocalDateTime.now().getHour();
+        int minutos_atual=LocalDateTime.now().getMinute();
+
+        if (dia_last_week < 1){
+            if (d.lengthOfYear() == 365){
+                dia_last_week=dia_last_week+365;
+                ano_last_week--;
+            }
+            else{
+                dia_last_week=dia_last_week+366;
+                ano_last_week--;
+            }
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int minutos = data.getDate().getMinute();
+                    int horas = data.getDate().getHour();
+
+
+                    if(dia ==dia_atual && ano_atual == ano){
+                        counter++;
+                    }
+                    else if (dia_last_week ==dia && ano_last_week==ano   ){
+                        if (horas < hora_atual){
+                            counter2++;
+                            end=false;
+                        }
+                        else if (horas == hora_atual && minutos <= minutos_atual){
+                            counter2++;
+                            end=false;
+                        }
+                        else{
+                            end =true;
+                        }
+                    }
+                    else{
+                        end=true;
+                    }
+
+                    if (counter2 != 0 && end){
+                        break;
+                    }
+                    
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        Map<String,Integer> map = new HashMap<>();
+        map.put("Today", counter);
+        map.put("LastWeek", counter2);
+        return map;
+    }
+    
+
+    @GetMapping("/PeopleInStoreTodayCompareWithLaskWeek/{pid}/{hours}")
+    public Map<String,Integer> peopleInStoreComparingWithLaskWeekHours(@PathVariable(value = "pid") int pid,@PathVariable(value = "hours") int hours){
+        List<SensorData> a = sensorDataService.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        int counter2=0;
+        int dia_atual=LocalDateTime.now().getDayOfYear();
+        int ano_atual=LocalDateTime.now().getYear();
+        boolean end=false;
+        LocalDate d = LocalDate.parse(ano_atual-1+"-12-31");                   // import Java.time.LocalDate;
+        int dia_last_week=LocalDateTime.now().getDayOfYear() -7;
+        int ano_last_week= LocalDateTime.now().getYear();
+
+        if (dia_last_week < 1){
+            if (d.lengthOfYear() == 365){
+                dia_last_week=dia_last_week+365;
+                ano_last_week--;
+            }
+            else{
+                dia_last_week=dia_last_week+366;
+                ano_last_week--;
+            }
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int minutos = data.getDate().getMinute();
+                    int horas = data.getDate().getHour();
+
+
+                    if(dia ==dia_atual && ano_atual == ano && horas <= hours){
+                        counter++;
+                    }
+                    else if (dia_last_week ==dia && ano_last_week==ano && horas <= hours  ){
+                     
+                        counter2++;
+                        end=false;
+                        
+                       
+                    }
+                    else{
+                        end=true;
+                    }
+
+                    if (counter2 != 0 && end){
+                        break;
+                    }
+                    
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        Map<String,Integer> map = new HashMap<>();
+        map.put("Today", counter);
+        map.put("LastWeek", counter2);
+        return map;
+    }
+
     @GetMapping("/PeopleInStoreToday/{pid}")
     public int TodayPeopleInStore(@PathVariable(value = "pid") int pid){
         List<SensorData> a = sensorDataService.getSensorDatas();
@@ -380,8 +646,6 @@ public class SensorDataController {
                         ret.getMapa().put(week_day.toString(), counter);
                         counter=1;
                         week_day=week_day_data;
-                        System.out.println(week_day);
-                        System.out.println(ret.getMapa());
                     
                         if(ret.getMapa().containsKey(week_day.toString())){
                             break;
@@ -493,6 +757,137 @@ public class SensorDataController {
     }
 
 
+
+    @GetMapping("/PeopleInParkTodayCompareWithLaskWeek/{pid}/{hours}")
+    public Map<String,Integer> peopleInParkComparingWithLaskWeekHours(@PathVariable(value = "pid") int pid,@PathVariable(value = "hours") int hours){
+        List<SensorData> a = sensorDataService.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        int counter2=0;
+        int dia_atual=LocalDateTime.now().getDayOfYear();
+        int ano_atual=LocalDateTime.now().getYear();
+        boolean end=false;
+        LocalDate d = LocalDate.parse(ano_atual-1+"-12-31");                   // import Java.time.LocalDate;
+        int dia_last_week=LocalDateTime.now().getDayOfYear() -7;
+        int ano_last_week= LocalDateTime.now().getYear();
+
+        if (dia_last_week < 1){
+            if (d.lengthOfYear() == 365){
+                dia_last_week=dia_last_week+365;
+                ano_last_week--;
+            }
+            else{
+                dia_last_week=dia_last_week+366;
+                ano_last_week--;
+            }
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int minutos = data.getDate().getMinute();
+                    int horas = data.getDate().getHour();
+
+
+                    if(dia ==dia_atual && ano_atual == ano && horas <= hours){
+                        counter++;
+                    }
+                    else if (dia_last_week ==dia && ano_last_week==ano && horas <= hours  ){
+                     
+                        counter2++;
+                        end=false;
+                        
+                       
+                    }
+                    else{
+                        end=true;
+                    }
+
+                    if (counter2 != 0 && end){
+                        break;
+                    }
+                    
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        Map<String,Integer> map = new HashMap<>();
+        map.put("Today", counter);
+        map.put("LastWeek", counter2);
+        return map;
+    }
+
+    @GetMapping("/PeopleInParkTodayCompareWithLaskWeek/{pid}")
+    public Map<String,Integer> peopleInParkComparingWithLaskWeek(@PathVariable(value = "pid") int pid){
+        List<SensorData> a = sensorDataService.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        int counter2=0;
+        int dia_atual=LocalDateTime.now().getDayOfYear();
+        int ano_atual=LocalDateTime.now().getYear();
+        boolean end=false;
+        LocalDate d = LocalDate.parse(ano_atual-1+"-12-31");                   // import Java.time.LocalDate;
+        int dia_last_week=LocalDateTime.now().getDayOfYear() -7;
+        int ano_last_week= LocalDateTime.now().getYear();
+        int hora_atual=LocalDateTime.now().getHour();
+        int minutos_atual=LocalDateTime.now().getMinute();
+
+        if (dia_last_week < 1){
+            if (d.lengthOfYear() == 365){
+                dia_last_week=dia_last_week+365;
+                ano_last_week--;
+            }
+            else{
+                dia_last_week=dia_last_week+366;
+                ano_last_week--;
+            }
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int minutos = data.getDate().getMinute();
+                    int horas = data.getDate().getHour();
+
+
+                    if(dia ==dia_atual && ano_atual == ano){
+                        counter++;
+                    }
+                    else if (dia_last_week ==dia && ano_last_week==ano   ){
+                        if (horas < hora_atual){
+                            counter2++;
+                            end=false;
+                        }
+                        else if (horas == hora_atual && minutos <= minutos_atual){
+                            counter2++;
+                            end=false;
+                        }
+                        else{
+                            end =true;
+                        }
+                    }
+                    else{
+                        end=true;
+                    }
+
+                    if (counter2 != 0 && end){
+                        break;
+                    }
+                    
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        Map<String,Integer> map = new HashMap<>();
+        map.put("Today", counter);
+        map.put("LastWeek", counter2);
+        return map;
+    }
+
     @GetMapping("/PeopleInParkLast7Days/{pid}")
     public OccupationInLast7Days peopleInPeopleInParkLast7Days(@PathVariable(value = "pid") int pid){
         OccupationInLast7Days ret= new OccupationInLast7Days();
@@ -519,8 +914,6 @@ public class SensorDataController {
                         ret.getMapa().put(week_day.toString(), counter);
                         counter=1;
                         week_day=week_day_data;
-                        System.out.println(week_day);
-                        System.out.println(ret.getMapa());
                     
                         if(ret.getMapa().containsKey(week_day.toString())){
                             break;
