@@ -1,6 +1,7 @@
 package ies.g52.ShopAholytics.controller;
 
 import java.sql.Timestamp;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
@@ -16,6 +17,7 @@ import ies.g52.ShopAholytics.models.*;
 
 import ies.g52.ShopAholytics.services.SensorDataService;
 import ies.g52.ShopAholytics.services.SensorService;
+import ies.g52.ShopAholytics.views.OccupationInLast7Days;
 import net.bytebuddy.asm.Advice.Local;
 import ies.g52.ShopAholytics.services.SensorParkService;
 import ies.g52.ShopAholytics.services.*;
@@ -159,6 +161,39 @@ public class SensorDataController {
         return counter;
     }
 
+    @GetMapping("/PeopleInShoppingToday/{pid}/{hours}")
+    public int PeopleInShoppingAtXHours(@PathVariable(value = "pid") int pid,@PathVariable(value = "hours") int hours){
+        List<SensorData> a = sensorDataService.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        boolean control=false;
+        boolean stop =false;
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int hora = data.getDate().getHour();
+                    int dia_atual=LocalDateTime.now().getDayOfYear();
+                    int ano_atual=LocalDateTime.now().getYear();
+                    if(dia ==dia_atual && ano_atual == ano && hours==hora){
+                        counter++;
+                        control=true;
+                        stop =false;
+                    }
+                    else{
+                        stop =true;
+                    }
+                    if (control && stop){
+                        break;
+                    }
+                }
+            }  
+        }
+        return counter;
+    }
+
     @GetMapping("/PeopleInShoppingToday/{pid}")
     public int todayPeopleInShopping(@PathVariable(value = "pid") int pid){
         List<SensorData> a = sensorDataService.getSensorDatas();
@@ -185,6 +220,46 @@ public class SensorDataController {
             }  
         }
         return counter;
+    }
+
+    @GetMapping("/PeopleInShoppingLast7Days/{pid}")
+    public OccupationInLast7Days peopleInShoppingInLast7days(@PathVariable(value = "pid") int pid){
+        OccupationInLast7Days ret= new OccupationInLast7Days();
+        List<SensorData> a = sensorDataService.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        boolean control=false;
+        DayOfWeek week_day= null;
+        DayOfWeek week_day_data= null;
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
+                    week_day_data = data.getDate().getDayOfWeek();
+                    if (week_day==null){
+                        week_day=week_day_data;
+    
+                    }
+                    if (week_day_data == week_day){
+                        counter++;
+                    }
+                    else{ 
+                        ret.getMapa().put(week_day.toString(), counter);
+                        counter=1;
+                        week_day=week_day_data;
+                        System.out.println(week_day);
+                        System.out.println(ret.getMapa());
+                    
+                        if(ret.getMapa().containsKey(week_day.toString())){
+                            break;
+                        }
+                    }
+                    ret.getMapa().put(week_day.toString(), counter);
+                }
+
+            }  
+        }
+        return ret;
     }
 
     @GetMapping("/PeopleInShoppingWeek/{pid}")
@@ -279,6 +354,80 @@ public class SensorDataController {
         return counter;
     }
 
+
+    @GetMapping("/PeopleInStoreLast7Days/{pid}")
+    public OccupationInLast7Days peopleInPeopleInStoreLast7Days(@PathVariable(value = "pid") int pid){
+        OccupationInLast7Days ret= new OccupationInLast7Days();
+        List<SensorData> a = sensorDataService.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        boolean control=false;
+        DayOfWeek week_day= null;
+        DayOfWeek week_day_data= null;
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid ){
+                    week_day_data = data.getDate().getDayOfWeek();
+                    if (week_day==null){
+                        week_day=week_day_data;
+    
+                    }
+                    if (week_day_data == week_day){
+                        counter++;
+                    }
+                    else{ 
+                        ret.getMapa().put(week_day.toString(), counter);
+                        counter=1;
+                        week_day=week_day_data;
+                        System.out.println(week_day);
+                        System.out.println(ret.getMapa());
+                    
+                        if(ret.getMapa().containsKey(week_day.toString())){
+                            break;
+                        }
+                    }
+                    ret.getMapa().put(week_day.toString(), counter);
+                }
+
+            }  
+        }
+        return ret;
+    }
+
+    @GetMapping("/PeopleInStoreToday/{pid}/{hours}")
+    public int PeopleInStoreAtXHours(@PathVariable(value = "pid") int pid,@PathVariable(value = "hours") int hours){
+        List<SensorData> a = sensorDataService.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        boolean control=false;
+        boolean stop=false;
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int hora = data.getDate().getHour();
+                    int dia_atual=LocalDateTime.now().getDayOfYear();
+                    int ano_atual=LocalDateTime.now().getYear();
+                    if(dia ==dia_atual && ano_atual == ano && hours==hora){
+                        counter++;
+                        control=true;
+                        stop =false;
+                    }
+                    else{
+                        stop =true;
+                    }
+                    if (control && stop){
+                        break;
+                    }
+                }
+            }  
+        }
+        return counter;
+    }
+
     @GetMapping("/PeopleInStoreWeek/{pid}")
     public int WeekPeopleInStore(@PathVariable(value = "pid") int pid){
         List<SensorData> a = sensorDataService.getSensorDatas();
@@ -343,6 +492,47 @@ public class SensorDataController {
         return counter;
     }
 
+
+    @GetMapping("/PeopleInParkLast7Days/{pid}")
+    public OccupationInLast7Days peopleInPeopleInParkLast7Days(@PathVariable(value = "pid") int pid){
+        OccupationInLast7Days ret= new OccupationInLast7Days();
+        List<SensorData> a = sensorDataService.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        boolean control=false;
+        DayOfWeek week_day= null;
+        DayOfWeek week_day_data= null;
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==pid ){
+                    week_day_data = data.getDate().getDayOfWeek();
+                    if (week_day==null){
+                        week_day=week_day_data;
+    
+                    }
+                    if (week_day_data == week_day){
+                        counter++;
+                    }
+                    else{ 
+                        ret.getMapa().put(week_day.toString(), counter);
+                        counter=1;
+                        week_day=week_day_data;
+                        System.out.println(week_day);
+                        System.out.println(ret.getMapa());
+                    
+                        if(ret.getMapa().containsKey(week_day.toString())){
+                            break;
+                        }
+                    }
+                    ret.getMapa().put(week_day.toString(), counter);
+                }
+
+            }  
+        }
+        return ret;
+    }
+
     @GetMapping("/PeopleInParkToday/{pid}")
     public int TodayPeopleInPark(@PathVariable(value = "pid") int pid){
         List<SensorData> a = sensorDataService.getSensorDatas();
@@ -362,6 +552,39 @@ public class SensorDataController {
                     }
                     
                     else{
+                        break;
+                    }
+                }
+            }  
+        }
+        return counter;
+    }
+
+    @GetMapping("/PeopleInParkToday/{pid}/{hours}")
+    public int TodayAtPeopleInPark(@PathVariable(value = "pid") int pid,@PathVariable(value = "hours") int hours){
+        List<SensorData> a = sensorDataService.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        boolean control=false;
+        boolean stop=false;
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int hora = data.getDate().getHour();
+                    int dia_atual=LocalDateTime.now().getDayOfYear();
+                    int ano_atual=LocalDateTime.now().getYear();
+                    if(dia ==dia_atual && ano_atual == ano && hours==hora){
+                        counter++;
+                        control=true;
+                        stop =false;
+                    }
+                    else{
+                        stop =true;
+                    }
+                    if (control && stop){
                         break;
                     }
                 }
