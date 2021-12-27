@@ -234,7 +234,7 @@ public class SensorDataController {
         for (SensorData data : a){
             if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
                 Sensor x= data.getSensor();
-                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
+                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid && data.getDate().getDayOfYear() != LocalDateTime.now().getDayOfYear()){
                     week_day_data = data.getDate().getDayOfWeek();
                     if (week_day==null){
                         week_day=week_day_data;
@@ -367,7 +367,7 @@ public class SensorDataController {
         for (SensorData data : a){
             if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
                 Sensor x= data.getSensor();
-                if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid ){
+                if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid && data.getDate().getDayOfYear() != LocalDateTime.now().getDayOfYear() ){
                     week_day_data = data.getDate().getDayOfWeek();
                     if (week_day==null){
                         week_day=week_day_data;
@@ -501,11 +501,12 @@ public class SensorDataController {
         int counter=0;
         boolean control=false;
         DayOfWeek week_day= null;
+        DayOfWeek today= null;
         DayOfWeek week_day_data= null;
         for (SensorData data : a){
             if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
                 Sensor x= data.getSensor();
-                if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==pid ){
+                if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==pid && data.getDate().getDayOfYear() != LocalDateTime.now().getDayOfYear()){
                     week_day_data = data.getDate().getDayOfWeek();
                     if (week_day==null){
                         week_day=week_day_data;
