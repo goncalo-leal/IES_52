@@ -8,6 +8,7 @@ $(document).ready(function() {
     updateView();
     loadTable();
 
+
     $("#mySearchText").on('input', function() {
         search();
     })
@@ -84,11 +85,24 @@ const changeState = function(data){
     
     $('select').on('change',function (e) { 
         var optionSelected = $(this).find("option:selected");
-        var valueSelected  = optionSelected.val();
         var textSelected   = optionSelected.text();
-        var info = $(this).parent().parent().find(':last-child').text();
-        alert(info);
+        var idToUpdate = parseInt($(this).parent().parent().find('#userId').text());
 
+        console.log(textSelected, idToUpdate)
+        if (textSelected === 'Approved'){
+            $.ajax({
+                url: consts.BASE_URL + '/api/updateAcceptStoreManager/'+idToUpdate,
+                type: "PUT", 
+            })
+        }
+
+        if (textSelected === 'Blocked'){
+            $.ajax({
+                url: consts.BASE_URL + '/api/updateBlockStoreManager/'+idToUpdate,
+                type: "PUT", 
+            }).success(console.log("Success"))
+        }
+        
     });
 }
 
@@ -108,7 +122,7 @@ const trTemplate = function (name, email, shop, id ,i) {
             <select name="states${i}" class="browser-default custom-select" style="max-width:200px;">
             </select>
         </td>
-        <td style="display:none">
+        <td id="userId" style="display:none">
             ${id}
         </td>
     </tr>
