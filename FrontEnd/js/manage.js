@@ -13,7 +13,6 @@ $(document).ready(function() {
     })
 });
 
-
 const loadTable = function() {
     $.ajax({
         url: consts.BASE_URL + '/api/StoreManagerShopping/' + SessionManager.get("session").shopping.id,
@@ -35,11 +34,11 @@ const loadTable = function() {
     })
 }
 
-const loadUserStates = function() {
+const loadUserStates = function(number, description) {
     var estados='';
     var selectVal='';
     var selectInput='';
-
+    
     $.ajax({
         url: consts.BASE_URL + '/api/UserStates/',
         type: "GET", 
@@ -50,8 +49,13 @@ const loadUserStates = function() {
                 estados = data;
                 for (var i=0; i< estados.length; i++){
                     selectVal = estados[i].description;
-                    selectInput  = '<option value='+ selectVal +'>'+ selectVal +'</option>';
-                    $('select[name="states"]').append(selectInput);
+                    if (selectVal == description){
+                        selectInput  = '<option value='+ i +' selected>'+ selectVal +'</option>';
+                    }
+                    else{
+                        selectInput  = '<option value='+ i +'>'+ selectVal +'</option>';
+                    }
+                    $("select[name='states"+number+"']").append(selectInput);
                 }
             } else {
                 console.log("No store managers for this shopping");
@@ -64,16 +68,31 @@ const loadUserStates = function() {
 }
 
 
+
 const renderTable = function (data) {
+    var number=0;
     $("#managers_body").empty();
     data.forEach(function(e, i) {
-        $("#managers_body").append(trTemplate(e.user.name, e.user.email, e.store.name, e.user.state.description));
+        $("#managers_body").append(trTemplate(e.user.name, e.user.email, e.store.name, e.user.id, i));
+        loadUserStates(number++, e.user.state.description);
     })
-    loadUserStates();
+    changeState(data)
 }
 
 
-const trTemplate = function (name, email, shop, description) {
+const changeState = function(data){
+    
+    $('select').on('change',function (e) { 
+        var optionSelected = $(this).find("option:selected");
+        var valueSelected  = optionSelected.val();
+        var textSelected   = optionSelected.text();
+        var info = $(this).parent().parent().find(':last-child').text();
+        alert(info);
+
+    });
+}
+
+const trTemplate = function (name, email, shop, id ,i) {
     return `
     <tr>
         <td>
@@ -86,9 +105,11 @@ const trTemplate = function (name, email, shop, description) {
             ${shop}
         </td>
         <td class="text-center">
-            <select name="states" class="browser-default custom-select" style="max-width:200px;">
-                <option selected="${description}">${description}</option>
+            <select name="states${i}" class="browser-default custom-select" style="max-width:200px;">
             </select>
+        </td>
+        <td style="display:none">
+            ${id}
         </td>
     </tr>
     `
