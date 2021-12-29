@@ -40,12 +40,10 @@ SensorData controller -> This class has the most points for data performed with 
   -> Parameters: pid -> interger, which is the  shopping id; hours ->  interger, which is the  hours we want to see 
   -> return  Map<String,Integer>,  "today":  number of people who entered in shopping today within the given hours ; "laskWeek":number of people who entered in shopping 7 days ago within the given hours
  
- //esta deve estar mal vi agora 
 @GetMapping("/PeopleInShoppingLast7Days/{pid}")
   -> Parameters: pid -> interger, which is the  shopping id
   -> return : Map<String,integer> , which is the number of people who entered in shopping in the last 7 days, in every single day like {"monday":1000, ...}
 
-//este tambem tem 1 mini erro 
 @GetMapping("/PeopleInShoppingWeek/{pid}")
   -> Parameters: pid -> interger, which is the  shopping id
   -> return : integer , which is the number of people who entered in shopping in the last 7 days 
