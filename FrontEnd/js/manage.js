@@ -35,6 +35,7 @@ const loadTable = function() {
     })
 }
 
+
 const loadUserStates = function(number, description) {
     var estados='';
     var selectVal='';
@@ -77,11 +78,11 @@ const renderTable = function (data) {
         $("#managers_body").append(trTemplate(e.user.name, e.user.email, e.store.name, e.user.id, i));
         loadUserStates(number++, e.user.state.description);
     })
-    changeState(data)
+    changeState()
 }
 
 
-const changeState = function(data){
+const changeState = function(){
     
     $('select').on('change',function (e) { 
         var optionSelected = $(this).find("option:selected");
@@ -100,7 +101,7 @@ const changeState = function(data){
             $.ajax({
                 url: consts.BASE_URL + '/api/updateBlockStoreManager/'+idToUpdate,
                 type: "PUT", 
-            }).success(console.log("Success"))
+            })
         }
         
     });
