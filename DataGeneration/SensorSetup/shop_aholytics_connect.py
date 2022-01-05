@@ -1,6 +1,10 @@
 import PySimpleGUI as sg
 
+from api_connector import ApiConnector
+
 sg.theme('Reddit')
+
+api = ApiConnector()
 
 def get_shoppings_list():
     # ecrã de loading
@@ -10,29 +14,29 @@ def get_shoppings_list():
 
     window = sg.Window("ShopAholytics", layout_loading, size=(300, 50), finalize=True)
 
-    # while !get_shoppings(): -> Qualquer coisa assim
-
+    shoppings = None
     while True:
+        shoppings = api.get_shoppings_list()
+
+        if shoppings != None:
+            break
+
         event, values = window.read()
 
         if event == sg.WIN_CLOSED:
             break
-
-    shoppings = {
-        1: 'Shopping1',
-        2: 'Shopping2',
-        3: 'Shopping3',
-        4: 'Shopping4',
-        5: 'Shopping5'
-    }
 
     window.close()
     return shoppings
 
 def show_shoppings_list(shoppings):
     shoppings_menu = []
-    for key in shoppings.keys():
-        shoppings_menu.append(""+shoppings.get(key))
+    shoppings_id = {}
+    counter = 0
+    for shopping in shoppings:
+        shoppings_menu.append(""+shopping.get("name"))
+        shoppings_id[""+shopping.get("name")] = counter
+        counter += 1
 
     layout = [
         [sg.Text("Choose a shopping:", font=14)],
@@ -59,67 +63,47 @@ def show_shoppings_list(shoppings):
                 break
 
     window.close()
-    return shopping
+    
+    if shopping == "":
+        return None
+    return shoppings[shoppings_id[shopping]]
 
 def get_sensors_list(shopping_id):
-    # ecrã de loading
     layout_loading = [
         [sg.Column([[sg.Text("Loading...", justification="center", font=(14))]], justification="center", vertical_alignment="center")]
     ]
 
     window = sg.Window("ShopAholytics", layout_loading, size=(300, 50), finalize=True)
 
-    # while !get_sensors(): -> Qualquer coisa assim
-
+    sensors = None
     while True:
+        sensors = api.get_shopping_sensors(shopping_id)
+
+        if sensors != None:
+            break
+
         event, values = window.read()
 
         if event == sg.WIN_CLOSED:
             break
-    
-    shopping_sensors = {
-        1: 'Entrada Norte #1',
-        2: 'Entrada Norte #2',
-        3: 'Saída Norte #1',
-        4: 'Entrada Norte #3',
-        5: 'Entrada Sul #1',
-        6: 'Entrada SUL #2',
-    }
-
-    park_sensors = {
-        1: 'Entrada esquerda',
-        2: 'Entrada direita',
-        3: 'Saída direita',
-        4: 'Saída esquerda',
-    }
-
-    store_sensors = {
-        1: 'Entrada NIKE',
-        2: 'Entrada SportZone',
-        3: 'Entrada Continente',
-        4: 'Saída Adidas',
-        5: 'Sáida NIKE',
-        6: 'Saída Continente',
-        7: 'Entrada Worten',
-    }
 
     window.close()
-    return [shopping_sensors, park_sensors, store_sensors]
+    return sensors
 
 def show_sensors_list(shopping, sensors_list):
-    titles = ["Shopping Sensors: ", "Park Sensors: ", "Shop Sensors: "]
-    helpers = ["shopping", "park", "shop"]
+    titles = ["Shopping Sensors: ", "Park Sensors: ", "Store Sensors: "]
+    helpers = ["shopping", "park", "store"]
 
-    layout = [[sg.Text("Sensors from "+shopping)]]
+    layout = [[sg.Text("Sensors from "+shopping["name"], font=(34))]]
     sensors = []
 
     for i in range(len(sensors_list)):
         sensors.append([sg.Text("- "+titles[i], font=14)])
-        for key in sensors_list[i]:
+        for key in sensors_list[helpers[i]]:
             sensors.append([
                 sg.Column(
                     [
-                        [sg.Text(""+sensors_list[i].get(key), justification="left")]
+                        [sg.Text(""+sensors_list[helpers[i]].get(key), justification="left")]
                     ], justification="left"
                 ), 
                 sg.Column(
@@ -166,6 +150,7 @@ def show_sensors_list(shopping, sensors_list):
                     else:
                         try:
                             number = int(text)
+                            # mostrar ecrã de generating e fazer pedido à api
                             break
                         except:
                             sg.popup('You must write a number!', title="Error!", font=14)
@@ -175,12 +160,9 @@ def show_sensors_list(shopping, sensors_list):
 shoppings = get_shoppings_list()
 shopping = show_shoppings_list(shoppings)
 
-k = None
-for key in shoppings.keys():
-    if shoppings.get(key) == shopping:
-        k = key
-        break
+if shopping == None:
+    exit(1)
 
-if k != None:
-    sensors = get_sensors_list(k)
-    show_sensors_list(shopping, sensors)
+k = shopping["id"]
+sensors = get_sensors_list(k)
+show_sensors_list(shopping, sensors)
