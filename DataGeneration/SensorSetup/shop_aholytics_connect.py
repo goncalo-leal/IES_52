@@ -1,5 +1,7 @@
 import PySimpleGUI as sg
+import datetime
 
+from sender import Sender
 from api_connector import ApiConnector
 
 sg.theme('Reddit')
@@ -99,23 +101,24 @@ def show_sensors_list(shopping, sensors_list):
 
     for i in range(len(sensors_list)):
         sensors.append([sg.Text("- "+titles[i], font=14)])
-        for key in sensors_list[helpers[i]]:
+        for s in sensors_list[helpers[i]]:
+            sensor = s["sensor"]
             sensors.append([
                 sg.Column(
                     [
-                        [sg.Text(""+sensors_list[helpers[i]].get(key), justification="left")]
+                        [sg.Text(""+sensor["name"], justification="left")]
                     ], justification="left"
                 ), 
                 sg.Column(
                     [
-                        [sg.Button('Generate', key=helpers[i]+"_"+str(key))]
+                        [sg.Button('Generate', key=str(sensor["id"]))]
                     ], justification="right"
                 )
             ])
 
-    layout.append([sg.Column(sensors, scrollable=True, size=(600, 450))])
+    layout.append([sg.Column(sensors, scrollable=True, size=(800, 550))])
 
-    window = sg.Window("ShopAholytics", layout, size=(600, 500), finalize=True)
+    window = sg.Window("ShopAholytics", layout, size=(800, 600), finalize=True)
 
     while True:
         event, values = window.read()
@@ -124,7 +127,8 @@ def show_sensors_list(shopping, sensors_list):
             break
 
         elif window[event].get_text() == 'Generate':
-            print("generate")
+            sensor_id = event
+
             layout_loading = [
                 [sg.Column(
                     [
@@ -134,12 +138,12 @@ def show_sensors_list(shopping, sensors_list):
                 justification="center", vertical_alignment="center")]
             ]
 
-            window_generating = sg.Window("ShopAholytics", layout_loading, size=(500, 100), finalize=True)
+            window_generate = sg.Window("ShopAholytics", layout_loading, size=(500, 100), finalize=True)
 
             number = None
             close = False
             while True:
-                event, values = window_generating.read()
+                event, values = window_generate.read()
 
                 if event == sg.WIN_CLOSED or close:
                     break
@@ -150,11 +154,33 @@ def show_sensors_list(shopping, sensors_list):
                     else:
                         try:
                             number = int(text)
-                            # mostrar ecrã de generating e fazer pedido à api
+                            # mostrar ecrã de generating e mandar mensagens pelo sender
+
+                            layout_loading = [
+                                [sg.Column([[sg.Text("Generating...", justification="center", font=(14))]], justification="center", vertical_alignment="center")]
+                            ]
+
+                            window_generating = sg.Window("ShopAholytics", layout_loading, size=(300, 50), finalize=True)
+                            
+                            sender = Sender()
+                            while True:
+                                
+                                for i in range(number):
+                                    ct = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+                                    print(ct)
+
+                                    msg = {"sensor_id": sensor_id, "data": ct}
+                                    sender.send(msg)
+
+                                break
+
+                            sender.close_connection()
+                            window_generating.close()
+
                             break
                         except:
                             sg.popup('You must write a number!', title="Error!", font=14)
-            window_generating.close()
+            window_generate.close()
 
 # primeiro passo, carregar os shoppings e mostrar a lista
 shoppings = get_shoppings_list()
