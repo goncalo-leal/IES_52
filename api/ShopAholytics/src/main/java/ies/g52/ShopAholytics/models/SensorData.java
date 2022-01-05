@@ -37,16 +37,16 @@ public class SensorData {
     private String data;
 
     @Column(name="timestamp")
-    @CreationTimestamp
     private LocalDateTime date;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_sensor", nullable = false)
     private Sensor sensor;
 
-    public SensorData(String data, Sensor sensor){
+    public SensorData(String data, Sensor sensor, LocalDateTime date ){
         this.data=data;
         this.sensor=sensor;
+        this.date =date;
     }
     public SensorData(){}
 

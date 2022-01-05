@@ -72,6 +72,10 @@ public class SensorDataController {
 
             DEPOIS TEMOS DE VER SE O SENSOR ATUAL É DE ENTRADA OU DE SAIDA 
         */
+        String s_data=s.getData();
+        String [] partida = s_data.split("-");
+        LocalDateTime ts = LocalDateTime.of(Integer.parseInt(partida[0]), Integer.parseInt(partida[1]), Integer.parseInt(partida[2]), Integer.parseInt(partida[3]), Integer.parseInt(partida[4]),Integer.parseInt( partida[5]));
+        
         Sensor sensor= sensorService.getSensorById(pid);
         SensorPark sensor_park= SensorParkService.getSensorParkById(pid);
         if (sensor_park != null){
@@ -86,7 +90,7 @@ public class SensorDataController {
                 park.setCurrent_capacity(park.getCurrent_capacity()+1); 
             }
             parkServices.updatePark(park);
-            return sensorDataService.saveSensorData(new SensorData(s.getData(),sensor));
+            return sensorDataService.saveSensorData(new SensorData(s.getData(),sensor,ts));
         }
         SensorShopping sensor_shopping =SensorShoppingServices.getSensorShoppingById(pid);
         if (sensor_shopping != null){
@@ -100,7 +104,7 @@ public class SensorDataController {
 
             }
             shoppingServices.updateShopping(shopping);
-            return sensorDataService.saveSensorData(new SensorData(s.getData(),sensor));
+            return sensorDataService.saveSensorData(new SensorData(s.getData(),sensor,ts));
         }
         SensorStore sensor_store =SensorStoreServices.getSensorStoreById(pid);
         if (sensor_store != null){
@@ -112,7 +116,7 @@ public class SensorDataController {
                 store.setCurrent_capacity(store.getCurrent_capacity()+1);
             }
             storeService.updateStore(store);
-            return sensorDataService.saveSensorData(new SensorData(s.getData(),sensor));
+            return sensorDataService.saveSensorData(new SensorData(s.getData(),sensor,ts));
 
         }
         return null;
