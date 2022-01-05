@@ -3,9 +3,12 @@ import SessionManager from "./session.js";
 import updateView from "./common.js"
 
 var users;
+var states=[];
 
 $(document).ready(function() {
     updateView();
+    userStates();
+
     loadTable();
 
 
@@ -13,6 +16,27 @@ $(document).ready(function() {
         search();
     })
 });
+
+const userStates = function() {
+    var estados='';
+    $.ajax({
+        url: consts.BASE_URL + '/api/UserStates/',
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                estados = data;
+                for (var i=0; i< estados.length; i++){
+                    states.push(estados[i].description);
+                }
+            }
+        },
+        error: function() {
+            console.log("erro na call");
+        }
+    })
+}
 
 const loadTable = function() {
     $.ajax({
@@ -37,36 +61,19 @@ const loadTable = function() {
 
 
 const loadUserStates = function(number, description) {
-    var estados='';
     var selectVal='';
     var selectInput='';
     
-    $.ajax({
-        url: consts.BASE_URL + '/api/UserStates/',
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                estados = data;
-                for (var i=0; i< estados.length; i++){
-                    selectVal = estados[i].description;
-                    if (selectVal == description){
-                        selectInput  = '<option value='+ i +' selected>'+ selectVal +'</option>';
-                    }
-                    else{
-                        selectInput  = '<option value='+ i +'>'+ selectVal +'</option>';
-                    }
-                    $("select[name='states"+number+"']").append(selectInput);
-                }
-            } else {
-                console.log("No store managers for this shopping");
-            }
-        },
-        error: function() {
-            console.log("erro na call");
+    for (var i=0; i< states.length; i++){
+        selectVal = states[i];
+        if (selectVal == description){
+            selectInput  = '<option value='+ i +' selected>'+ selectVal +'</option>';
         }
-    })
+        else{
+            selectInput  = '<option value='+ i +'>'+ selectVal +'</option>';
+        }
+        $("select[name='states"+number+"']").append(selectInput);
+    }
 }
 
 
