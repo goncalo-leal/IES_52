@@ -148,6 +148,10 @@ public class SensorDataController {
                     int segundos =data.getDate().getSecond();
                     int horas_atuais= LocalTime.now().getHour();
                     int minutos_atuais= LocalTime.now().getMinute();
+                    int dia= data.getDate().getDayOfYear();
+                    int dia_atuais= LocalDateTime.now().getDayOfYear();
+                    int ano= data.getDate().getYear();
+                    int ano_atual= LocalDateTime.now().getYear();
                     int segundos_atuais=LocalTime.now().getSecond();
                     if (horas_atuais == 0 ){
                         horas_atuais=24;
@@ -157,13 +161,10 @@ public class SensorDataController {
                     }
                     long total= 3600* horas+ minutos*60+segundos;
                     long total_limite= 3600*(horas_atuais-1)+ minutos_atuais*60+segundos_atuais;
-                    if(total >= total_limite){
+                    if(total >= total_limite && dia == dia_atuais && ano == ano_atual){
                         counter++;
                     }
-                    else{
-                        break;
-                    }
-                    //ver se esta solução da 
+                   
                 }
             }  
         }
@@ -191,12 +192,7 @@ public class SensorDataController {
                         control=true;
                         stop =false;
                     }
-                    else{
-                        stop =true;
-                    }
-                    if (control && stop){
-                        break;
-                    }
+                   
                 }
             }  
         }
@@ -221,9 +217,7 @@ public class SensorDataController {
 
                     }
                     
-                    else{
-                        break;
-                    }
+                    
                     //ver se esta solução da 
                 }
             }  
@@ -257,9 +251,7 @@ public class SensorDataController {
                     }
                     
                 
-                    else{
-                        break;
-                    }
+                   
 
                     
                     //ver se esta solução da 
@@ -302,9 +294,7 @@ public class SensorDataController {
                         }
                     }
                     
-                    else if (map.keySet().size() >0){
-                        break;
-                    }
+                   
 
                     
                     //ver se esta solução da 
@@ -368,13 +358,7 @@ public class SensorDataController {
                             end =true;
                         }
                     }
-                    else{
-                        end=true;
-                    }
-
-                    if (counter2 != 0 && end){
-                        break;
-                    }
+                   
                     
                     //ver se esta solução da 
                 }
@@ -430,13 +414,7 @@ public class SensorDataController {
                         
                        
                     }
-                    else{
-                        end=true;
-                    }
-
-                    if (counter2 != 0 && end){
-                        break;
-                    }
+                   
                     
                     //ver se esta solução da 
                 }
@@ -451,43 +429,6 @@ public class SensorDataController {
     @GetMapping("/PeopleInShoppingLast7Days/{pid}")
     public OccupationInLast7Days peopleInShoppingInLast7days(@PathVariable(value = "pid") int pid){
         OccupationInLast7Days ret= new OccupationInLast7Days();
-        List<SensorData> a = sensorDataService.getSensorDatas();
-        Collections.reverse(a);
-        int counter=0;
-        boolean control=false;
-        DayOfWeek week_day= null;
-        DayOfWeek week_day_data= null;
-        for (SensorData data : a){
-            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
-                Sensor x= data.getSensor();
-                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid && data.getDate().getDayOfYear() != LocalDateTime.now().getDayOfYear()){
-                    week_day_data = data.getDate().getDayOfWeek();
-                    if (week_day==null){
-                        week_day=week_day_data;
-    
-                    }
-                    if (week_day_data == week_day){
-                        counter++;
-                    }
-                    else{ 
-                        ret.getMapa().put(week_day.toString(), counter);
-                        counter=1;
-                        week_day=week_day_data;
-                    
-                        if(ret.getMapa().containsKey(week_day.toString())){
-                            break;
-                        }
-                    }
-                    ret.getMapa().put(week_day.toString(), counter);
-                }
-
-            }  
-        }
-        return ret;
-    }
-
-    @GetMapping("/PeopleInShoppingWeek/{pid}")
-    public int weekPeopleInShopping(@PathVariable(value = "pid") int pid){
         List<SensorData> a = sensorDataService.getSensorDatas();
         Collections.reverse(a);
         int counter=0;
@@ -516,21 +457,65 @@ public class SensorDataController {
                 if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
                     int dia =data.getDate().getDayOfYear();
                     int ano = data.getDate().getYear();
+                    String semana_dia=data.getDate().getDayOfWeek().toString();
+                    if(dias.contains(dia)){
+                        if (ret.getMapa().containsKey(semana_dia)){
+                            ret.getMapa().put(semana_dia, ret.getMapa().get(semana_dia)+1);
+                        }
+                        else{
+                            ret.getMapa().put(semana_dia, 1);
+                        }
+
+                    }
+                    
+                 
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        return ret;
+    }
+
+    @GetMapping("/PeopleInShoppingWeek/{pid}")
+    public int weekPeopleInShopping(@PathVariable(value = "pid") int pid){
+        List<SensorData> a = sensorDataService.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        int dia_atual=LocalDateTime.now().getDayOfYear();
+
+        int ano_atual=LocalDateTime.now().getYear();
+        LocalDate d = LocalDate.parse(ano_atual-1+"-12-31"); 
+        List<Integer> dias = new ArrayList<>();
+        for (int i =1; i <=7 ; i++){
+            int tmep=dia_atual-i;
+            if (tmep < 1){
+                if (d.lengthOfYear() == 365){
+                    tmep=tmep+365;
+                }
+                else{
+                    tmep=tmep+366;
+                }
+            }
+
+            dias.add(tmep);
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
                       
-                   
                     /*
                         Problemas com as trocas de anos
                      */
                     if(dias.contains(dia)){
                         counter++;
+                        
 
                     }
-                    else if ( dia_atual == dia){
-                        continue;
-                    }
-                    else{
-                        break;
-                    }
+                  
+                  
                     //ver se esta solução da 
                 }
             }  
@@ -538,6 +523,7 @@ public class SensorDataController {
         return counter;
     }
 
+    
     @GetMapping("/PeopleInStoreInLastHour/{pid}")
     public int lastHourPeopleInStore(@PathVariable(value = "pid") int pid){
         List<SensorData> a = sensorDataService.getSensorDatas();
@@ -552,6 +538,10 @@ public class SensorDataController {
                     int segundos =data.getDate().getSecond();
                     int horas_atuais= LocalTime.now().getHour();
                     int minutos_atuais= LocalTime.now().getMinute();
+                    int dia= data.getDate().getDayOfYear();
+                    int dia_atuais= LocalDateTime.now().getDayOfYear();
+                    int ano= data.getDate().getYear();
+                    int ano_atual= LocalDateTime.now().getYear();
                     int segundos_atuais=LocalTime.now().getSecond();
                     if (horas_atuais == 0 ){
                         horas_atuais=24;
@@ -561,11 +551,8 @@ public class SensorDataController {
                     }
                     long total= 3600* horas+ minutos*60+segundos;
                     long total_limite= 3600*(horas_atuais-1)+ minutos_atuais*60+segundos_atuais;
-                    if(total >= total_limite){
+                    if(total >= total_limite && dia == dia_atuais && ano == ano_atual){
                         counter++;
-                    }
-                    else{
-                        break;
                     }
                 }
             }  
@@ -599,9 +586,7 @@ public class SensorDataController {
                     }
                     
                 
-                    else{
-                        break;
-                    }
+                   
 
                     
                     //ver se esta solução da 
@@ -643,9 +628,7 @@ public class SensorDataController {
                         }
                     }
                     
-                    else if (map.keySet().size() >0){
-                        break;
-                    }
+                  
 
                     
                     //ver se esta solução da 
@@ -709,13 +692,7 @@ public class SensorDataController {
                             end =true;
                         }
                     }
-                    else{
-                        end=true;
-                    }
-
-                    if (counter2 != 0 && end){
-                        break;
-                    }
+                
                     
                     //ver se esta solução da 
                 }
@@ -771,13 +748,7 @@ public class SensorDataController {
                         
                        
                     }
-                    else{
-                        end=true;
-                    }
-
-                    if (counter2 != 0 && end){
-                        break;
-                    }
+                  
                     
                     //ver se esta solução da 
                 }
@@ -807,9 +778,7 @@ public class SensorDataController {
 
                     }
                     
-                    else{
-                        break;
-                    }
+                    
                 }
             }  
         }
@@ -823,33 +792,45 @@ public class SensorDataController {
         List<SensorData> a = sensorDataService.getSensorDatas();
         Collections.reverse(a);
         int counter=0;
-        boolean control=false;
-        DayOfWeek week_day= null;
-        DayOfWeek week_day_data= null;
+        int dia_atual=LocalDateTime.now().getDayOfYear();
+
+        int ano_atual=LocalDateTime.now().getYear();
+        LocalDate d = LocalDate.parse(ano_atual-1+"-12-31"); 
+        List<Integer> dias = new ArrayList<>();
+        for (int i =1; i <=7 ; i++){
+            int tmep=dia_atual-i;
+            if (tmep < 1){
+                if (d.lengthOfYear() == 365){
+                    tmep=tmep+365;
+                }
+                else{
+                    tmep=tmep+366;
+                }
+            }
+
+            dias.add(tmep);
+            System.out.println(tmep);
+        }
         for (SensorData data : a){
             if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
                 Sensor x= data.getSensor();
-                if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid && data.getDate().getDayOfYear() != LocalDateTime.now().getDayOfYear() ){
-                    week_day_data = data.getDate().getDayOfWeek();
-                    if (week_day==null){
-                        week_day=week_day_data;
-    
-                    }
-                    if (week_day_data == week_day){
-                        counter++;
-                    }
-                    else{ 
-                        ret.getMapa().put(week_day.toString(), counter);
-                        counter=1;
-                        week_day=week_day_data;
-                    
-                        if(ret.getMapa().containsKey(week_day.toString())){
-                            break;
+                if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    String semana_dia=data.getDate().getDayOfWeek().toString();
+                    if(dias.contains(dia)){
+                        if (ret.getMapa().containsKey(semana_dia)){
+                            ret.getMapa().put(semana_dia, ret.getMapa().get(semana_dia)+1);
                         }
-                    }
-                    ret.getMapa().put(week_day.toString(), counter);
-                }
+                        else{
+                            ret.getMapa().put(semana_dia, 1);
+                        }
 
+                    }
+                    
+                 
+                    //ver se esta solução da 
+                }
             }  
         }
         return ret;
@@ -876,12 +857,7 @@ public class SensorDataController {
                         control=true;
                         stop =false;
                     }
-                    else{
-                        stop =true;
-                    }
-                    if (control && stop){
-                        break;
-                    }
+                    
                 }
             }  
         }
@@ -930,9 +906,7 @@ public class SensorDataController {
                         else if ( dia_atual == dia){
                             continue;
                         }
-                        else{
-                            break;
-                        }
+                      
                         //ver se esta solução da 
                     }
                 }  
@@ -954,6 +928,10 @@ public class SensorDataController {
                     int segundos =data.getDate().getSecond();
                     int horas_atuais= LocalTime.now().getHour();
                     int minutos_atuais= LocalTime.now().getMinute();
+                    int dia= data.getDate().getDayOfYear();
+                    int dia_atuais= LocalDateTime.now().getDayOfYear();
+                    int ano= data.getDate().getYear();
+                    int ano_atual= LocalDateTime.now().getYear();
                     int segundos_atuais=LocalTime.now().getSecond();
                     if (horas_atuais == 0 ){
                         horas_atuais=24;
@@ -963,11 +941,8 @@ public class SensorDataController {
                     }
                     long total= 3600* horas+ minutos*60+segundos;
                     long total_limite= 3600*(horas_atuais-1)+ minutos_atuais*60+segundos_atuais;
-                    if(total >= total_limite){
+                    if(total >= total_limite && dia == dia_atuais && ano == ano_atual){
                         counter++;
-                    }
-                    else{
-                        break;
                     }
                 }
             }  
@@ -1020,13 +995,7 @@ public class SensorDataController {
                         
                        
                     }
-                    else{
-                        end=true;
-                    }
-
-                    if (counter2 != 0 && end){
-                        break;
-                    }
+                   
                     
                     //ver se esta solução da 
                 }
@@ -1070,10 +1039,7 @@ public class SensorDataController {
                         }
                     }
                     
-                    else if (map.keySet().size() >0){
-                        break;
-                    }
-
+                    
                     
                     //ver se esta solução da 
                 }
@@ -1109,9 +1075,7 @@ public class SensorDataController {
                     }
                     
                 
-                    else{
-                        break;
-                    }
+                    
 
                     
                     //ver se esta solução da 
@@ -1172,13 +1136,7 @@ public class SensorDataController {
                             end =true;
                         }
                     }
-                    else{
-                        end=true;
-                    }
-
-                    if (counter2 != 0 && end){
-                        break;
-                    }
+                  
                     
                     //ver se esta solução da 
                 }
@@ -1196,34 +1154,45 @@ public class SensorDataController {
         List<SensorData> a = sensorDataService.getSensorDatas();
         Collections.reverse(a);
         int counter=0;
-        boolean control=false;
-        DayOfWeek week_day= null;
-        DayOfWeek today= null;
-        DayOfWeek week_day_data= null;
+        int dia_atual=LocalDateTime.now().getDayOfYear();
+
+        int ano_atual=LocalDateTime.now().getYear();
+        LocalDate d = LocalDate.parse(ano_atual-1+"-12-31"); 
+        List<Integer> dias = new ArrayList<>();
+        for (int i =1; i <=7 ; i++){
+            int tmep=dia_atual-i;
+            if (tmep < 1){
+                if (d.lengthOfYear() == 365){
+                    tmep=tmep+365;
+                }
+                else{
+                    tmep=tmep+366;
+                }
+            }
+
+            dias.add(tmep);
+            System.out.println(tmep);
+        }
         for (SensorData data : a){
             if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
                 Sensor x= data.getSensor();
-                if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==pid && data.getDate().getDayOfYear() != LocalDateTime.now().getDayOfYear()){
-                    week_day_data = data.getDate().getDayOfWeek();
-                    if (week_day==null){
-                        week_day=week_day_data;
-    
-                    }
-                    if (week_day_data == week_day){
-                        counter++;
-                    }
-                    else{ 
-                        ret.getMapa().put(week_day.toString(), counter);
-                        counter=1;
-                        week_day=week_day_data;
-                    
-                        if(ret.getMapa().containsKey(week_day.toString())){
-                            break;
+                if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    String semana_dia=data.getDate().getDayOfWeek().toString();
+                    if(dias.contains(dia)){
+                        if (ret.getMapa().containsKey(semana_dia)){
+                            ret.getMapa().put(semana_dia, ret.getMapa().get(semana_dia)+1);
                         }
-                    }
-                    ret.getMapa().put(week_day.toString(), counter);
-                }
+                        else{
+                            ret.getMapa().put(semana_dia, 1);
+                        }
 
+                    }
+                    
+                 
+                    //ver se esta solução da 
+                }
             }  
         }
         return ret;
@@ -1247,9 +1216,7 @@ public class SensorDataController {
 
                     }
                     
-                    else{
-                        break;
-                    }
+                   
                 }
             }  
         }
@@ -1277,12 +1244,7 @@ public class SensorDataController {
                         control=true;
                         stop =false;
                     }
-                    else{
-                        stop =true;
-                    }
-                    if (control && stop){
-                        break;
-                    }
+                   
                 }
             }  
         }
@@ -1331,9 +1293,7 @@ public class SensorDataController {
                         else if ( dia_atual == dia){
                             continue;
                         }
-                        else{
-                            break;
-                        }
+                      
                         //ver se esta solução da 
                     }
                 }  
