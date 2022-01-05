@@ -4,14 +4,15 @@ import json
 
 class Sender:
     def __init__(self) -> None:
-        self.host = "https://192.168.160.238/"
+        credentials = pika.PlainCredentials('guest', 'guest')
+        self.host = "localhost" # "192.168.160.238" -> ip da vm
         self.port = "5672"
         self.queue = "QUEUE"
         self.exchange = "EN"
         self.routing_key = ""
 
         self.connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host=self.host, port=self.port)
+            pika.ConnectionParameters(host=self.host, port=self.port, credentials=credentials)
         )
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue=self.queue, durable=True)
