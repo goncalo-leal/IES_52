@@ -345,12 +345,10 @@ public class SensorDataController {
                     else if (dia_last_week ==dia && ano_last_week==ano   ){
                         if (horas < hora_atual){
                             counter2++;
-                            System.out.println("OK");
                             end=false;
                         }
                         else if (horas == hora_atual && minutos <= minutos_atual){
                             counter2++;
-                            System.out.println("OK");
 
                             end=false;
                         }
@@ -431,12 +429,11 @@ public class SensorDataController {
         OccupationInLast7Days ret= new OccupationInLast7Days();
         List<SensorData> a = sensorDataService.getSensorDatas();
         Collections.reverse(a);
-        int counter=0;
         int dia_atual=LocalDateTime.now().getDayOfYear();
-
         int ano_atual=LocalDateTime.now().getYear();
         LocalDate d = LocalDate.parse(ano_atual-1+"-12-31"); 
         List<Integer> dias = new ArrayList<>();
+        List<Integer> dias_passada = new ArrayList<>();
         for (int i =1; i <=7 ; i++){
             int tmep=dia_atual-i;
             if (tmep < 1){
@@ -449,7 +446,22 @@ public class SensorDataController {
             }
 
             dias.add(tmep);
-            System.out.println(tmep);
+
+        }
+        
+        for (int i =8; i <=14 ; i++){
+            int tmep=dia_atual-i;
+            if (tmep < 1){
+                if (d.lengthOfYear() == 365){
+                    tmep=tmep+365;
+                }
+                else{
+                    tmep=tmep+366;
+                }
+            }
+
+            dias_passada.add(tmep);
+
         }
         for (SensorData data : a){
             if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
@@ -467,6 +479,17 @@ public class SensorDataController {
                         }
 
                     }
+                    if(dias_passada.contains(dia)){
+                        if (ret.getMapa().containsKey("LAST_"+semana_dia)){
+                            ret.getMapa().put("LAST_"+semana_dia, ret.getMapa().get("LAST_"+semana_dia)+1);
+                        }
+                        else{
+                            ret.getMapa().put("LAST_"+semana_dia, 1);
+                        }
+
+                    }
+
+                   
                     
                  
                     //ver se esta solução da 
@@ -793,10 +816,13 @@ public class SensorDataController {
         Collections.reverse(a);
         int counter=0;
         int dia_atual=LocalDateTime.now().getDayOfYear();
+        
 
         int ano_atual=LocalDateTime.now().getYear();
         LocalDate d = LocalDate.parse(ano_atual-1+"-12-31"); 
         List<Integer> dias = new ArrayList<>();
+        List<Integer> dias_passada = new ArrayList<>();
+
         for (int i =1; i <=7 ; i++){
             int tmep=dia_atual-i;
             if (tmep < 1){
@@ -809,7 +835,20 @@ public class SensorDataController {
             }
 
             dias.add(tmep);
-            System.out.println(tmep);
+
+        }
+        for (int i =8; i <=14 ; i++){
+            int tmep=dia_atual-i;
+            if (tmep < 1){
+                if (d.lengthOfYear() == 365){
+                    tmep=tmep+365;
+                }
+                else{
+                    tmep=tmep+366;
+                }
+            }
+
+            dias_passada.add(tmep);
         }
         for (SensorData data : a){
             if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
@@ -824,6 +863,16 @@ public class SensorDataController {
                         }
                         else{
                             ret.getMapa().put(semana_dia, 1);
+                        }
+
+                    }
+
+                    if(dias_passada.contains(dia)){
+                        if (ret.getMapa().containsKey("LAST_"+semana_dia)){
+                            ret.getMapa().put("LAST_"+semana_dia, ret.getMapa().get("LAST_"+semana_dia)+1);
+                        }
+                        else{
+                            ret.getMapa().put("LAST_"+semana_dia, 1);
                         }
 
                     }
@@ -886,7 +935,6 @@ public class SensorDataController {
                 }
     
                 dias.add(tmep);
-                System.out.println(tmep);
             }
             for (SensorData data : a){
                 if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
@@ -1155,10 +1203,13 @@ public class SensorDataController {
         Collections.reverse(a);
         int counter=0;
         int dia_atual=LocalDateTime.now().getDayOfYear();
+        
 
         int ano_atual=LocalDateTime.now().getYear();
         LocalDate d = LocalDate.parse(ano_atual-1+"-12-31"); 
         List<Integer> dias = new ArrayList<>();
+        List<Integer> dias_passada = new ArrayList<>();
+
         for (int i =1; i <=7 ; i++){
             int tmep=dia_atual-i;
             if (tmep < 1){
@@ -1171,7 +1222,19 @@ public class SensorDataController {
             }
 
             dias.add(tmep);
-            System.out.println(tmep);
+        }
+        for (int i =8; i <=14 ; i++){
+            int tmep=dia_atual-i;
+            if (tmep < 1){
+                if (d.lengthOfYear() == 365){
+                    tmep=tmep+365;
+                }
+                else{
+                    tmep=tmep+366;
+                }
+            }
+
+            dias_passada.add(tmep);
         }
         for (SensorData data : a){
             if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
@@ -1186,6 +1249,16 @@ public class SensorDataController {
                         }
                         else{
                             ret.getMapa().put(semana_dia, 1);
+                        }
+
+                    }
+
+                    if(dias_passada.contains(dia)){
+                        if (ret.getMapa().containsKey("LAST_"+semana_dia)){
+                            ret.getMapa().put("LAST_"+semana_dia, ret.getMapa().get("LAST_"+semana_dia)+1);
+                        }
+                        else{
+                            ret.getMapa().put("LAST_"+semana_dia, 1);
                         }
 
                     }
@@ -1273,7 +1346,6 @@ public class SensorDataController {
                 }
     
                 dias.add(tmep);
-                System.out.println(tmep);
             }
             for (SensorData data : a){
                 if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
