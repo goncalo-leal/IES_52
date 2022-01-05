@@ -72,54 +72,9 @@ public class SensorDataController {
 
             DEPOIS TEMOS DE VER SE O SENSOR ATUAL É DE ENTRADA OU DE SAIDA 
         */
-        String s_data=s.getData();
-        String [] partida = s_data.split("-");
-        LocalDateTime ts = LocalDateTime.of(Integer.parseInt(partida[0]), Integer.parseInt(partida[1]), Integer.parseInt(partida[2]), Integer.parseInt(partida[3]), Integer.parseInt(partida[4]),Integer.parseInt( partida[5]));
         
-        Sensor sensor= sensorService.getSensorById(pid);
-        SensorPark sensor_park= SensorParkService.getSensorParkById(pid);
-        if (sensor_park != null){
-            Park park =parkServices.getParkById(sensor_park.getPark().getId());
-            //IF AQUI
+        return sensorDataService.saveSensorData(s.getData(),pid);
 
-            if (sensor.getType().equals(SensorEnum.EXIT.toString())){
-                park.setCurrent_capacity(park.getCurrent_capacity()-1); 
-
-            }
-            else{
-                park.setCurrent_capacity(park.getCurrent_capacity()+1); 
-            }
-            parkServices.updatePark(park);
-            return sensorDataService.saveSensorData(new SensorData(s.getData(),sensor,ts));
-        }
-        SensorShopping sensor_shopping =SensorShoppingServices.getSensorShoppingById(pid);
-        if (sensor_shopping != null){
-            Shopping shopping = shoppingServices.getShoppingById(sensor_shopping.getShopping().getId());
-            if (sensor.getType().equals(SensorEnum.EXIT.toString())){
-            shopping.setCurrent_capacity(shopping.getCurrent_capacity()-1);
-
-            }
-            else{
-            shopping.setCurrent_capacity(shopping.getCurrent_capacity()+1);
-
-            }
-            shoppingServices.updateShopping(shopping);
-            return sensorDataService.saveSensorData(new SensorData(s.getData(),sensor,ts));
-        }
-        SensorStore sensor_store =SensorStoreServices.getSensorStoreById(pid);
-        if (sensor_store != null){
-            Store store = storeService.getStoreById(sensor_store.getStore().getId());
-            if (sensor.getType().equals(SensorEnum.EXIT.toString())){
-                store.setCurrent_capacity(store.getCurrent_capacity()-1);
-            }
-            else{
-                store.setCurrent_capacity(store.getCurrent_capacity()+1);
-            }
-            storeService.updateStore(store);
-            return sensorDataService.saveSensorData(new SensorData(s.getData(),sensor,ts));
-
-        }
-        return null;
     }
 
     @GetMapping("/PeopleInShopping/{pid}")
