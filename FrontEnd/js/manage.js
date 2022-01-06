@@ -11,7 +11,6 @@ $(document).ready(function() {
 
     loadTable();
 
-
     $("#mySearchText").on('input', function() {
         search();
     })
@@ -70,7 +69,9 @@ const loadUserStates = function(number, description) {
             selectInput  = '<option value='+ i +' selected>'+ selectVal +'</option>';
         }
         else{
-            selectInput  = '<option value='+ i +'>'+ selectVal +'</option>';
+            if (selectVal != "Waiting approvement"){
+                selectInput  = '<option value='+ i +'>'+ selectVal +'</option>';
+            }
         }
         $("select[name='states"+number+"']").append(selectInput);
     }
