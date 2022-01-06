@@ -6,6 +6,8 @@ $(document).ready(function() {
     updateView();
     loadShoppingInfo();
     loadPeopleByWeek();
+    loadShoppingsPark();
+
     $("#mySearchText").on('input', function() {
         search();
     })
@@ -27,10 +29,11 @@ const loadShoppingInfo = function() {
             if (data) {
                 var cur_capacity = 0;
                 stores = data.stores;
+                
                 $("#shopcurcap").text(data.current_capacity);
                 $("#shopmaxcap").text(data.capacity);
                 parks = data.parks;
-
+                renderDonutShopping(data.current_capacity, data.capacity);
                 if (parks.length > 0) {
                     console.log("calculate parks...");
                 } else {
@@ -49,8 +52,31 @@ const loadShoppingInfo = function() {
     })
 }
 
+const loadShoppingsPark = function(){
+    $.ajax({
+        url: consts.BASE_URL + '/api/Park?id=' + SessionManager.get("session").shopping.id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                $("#parkcurcap").html(data.current_capacity);
+                $("#parkmaxcap").html(data.capacity);    
+                renderDonut(data);
+            } else {
+                console.log("No data");
+            }
+
+        },
+
+        error: function() {
+            console.log("erro na call");
+        }
+    })
+}
 
 const renderTable = function (data) {
+    
     $("#stores_body").empty();
     data.forEach(function(e, i) {
         $("#stores_body").append(trTemplate(e.name, e.current_capacity, 10));
@@ -59,6 +85,7 @@ const renderTable = function (data) {
 
 
 const trTemplate = function (name, ocupation, growth) {
+    
     return `
     <tr>
         <td>
@@ -106,6 +133,12 @@ const loadPeopleByWeek = function() {
         dataType: "json",
         success: function(data) {
             if (data) {
+                var number = [data.mapa["MONDAY"], data.mapa["TUESDAY"], data.mapa["WEDNESDAY"], data.mapa["THURSDAY"], data.mapa["FRIDAY"], data.mapa["SATURDAY"], data.mapa["SUNDAY"]];
+                var total_visitors = 0;
+                for (var i=0; i<number.length; i++){
+                    total_visitors =total_visitors + number[i];
+                }
+                $("#shopping_capacity").html(total_visitors);
                 renderGraphic(data.mapa);
             } else {
                 console.log("No data");
@@ -117,6 +150,70 @@ const loadPeopleByWeek = function() {
             console.log("erro na call");
         }
     })
+}
+
+const renderDonutShopping = function (curr, total){
+    
+
+    var donutChartCanvas = $('#donutChart2').get(0).getContext('2d')
+    var donutData        = {
+      labels: [
+          'Occuped',
+          'Free',
+      ],
+      datasets: [
+        {
+          data: [curr,total-curr],
+          backgroundColor : ['#f56954', '#f39c12'],
+        }
+      ]
+    }
+    var donutOptions     = {
+      maintainAspectRatio : false,
+      responsive : true,
+    }
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    new Chart(donutChartCanvas, {
+      type: 'doughnut',
+      data: donutData,
+      options: donutOptions
+    })
+
+   
+    return;
+}
+
+const renderDonut = function (data){
+    var occuped = data.current_capacity;
+    var free = data.capacity - occuped;
+
+    var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+    var donutData        = {
+      labels: [
+          'Occuped',
+          'Free',
+      ],
+      datasets: [
+        {
+          data: [occuped,free],
+          backgroundColor : ['#f56954', '#00a65a'],
+        }
+      ]
+    }
+    var donutOptions     = {
+      maintainAspectRatio : false,
+      responsive : true,
+    }
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    new Chart(donutChartCanvas, {
+      type: 'doughnut',
+      data: donutData,
+      options: donutOptions
+    })
+    return;
+
 }
 
 
