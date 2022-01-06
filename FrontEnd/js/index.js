@@ -4,9 +4,10 @@ import updateView from "./common.js"
 
 $(document).ready(function() {
     updateView();
-    loadShoppingInfo();
-    loadPeopleByWeek();
     loadShoppingsPark();
+    loadShoppingInfo();
+    loadShoppingStores();
+    loadPeopleByWeek();
 
     $("#mySearchText").on('input', function() {
         search();
@@ -17,6 +18,44 @@ $(document).ready(function() {
 
 var stores;
 var parks;
+
+const loadShoppingStores = function(){
+    $.ajax({
+        url: consts.BASE_URL + '/api/Shopping?id=' + SessionManager.get("session").shopping.id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                for (var i=0; i<data.stores.length; i++){
+                    $('<li data-target="#carouselExampleIndicators" data-slide-to="'+i+'" class=""></li>').appendTo('.carousel-indicators')
+                    $('<div class="carousel-item"><canvas id="d'+i+'" height="200"></canvas></div>').appendTo('.carousel-inner');
+                    //<canvas id="visitors-chart" height="200"></canvas>
+                }
+                renderallGraphics(data.stores);
+            } else {
+                console.log("No data");
+            }
+
+        },
+
+        error: function() {
+            console.log("erro na call");
+        }
+    })
+    return;
+}
+
+const renderallGraphics = function(data){
+    data.forEach(function(e, i) {
+        renderDonut(e.current_capacity, e.capacity, "d"+i)
+    })
+
+    return;
+}
+
+
+
 const loadShoppingInfo = function() {
     $("#s_name").text(SessionManager.get("session").shopping.name);
 
@@ -33,7 +72,7 @@ const loadShoppingInfo = function() {
                 $("#shopcurcap").text(data.current_capacity);
                 $("#shopmaxcap").text(data.capacity);
                 parks = data.parks;
-                renderDonutShopping(data.current_capacity, data.capacity);
+                renderDonut(data.current_capacity, data.capacity, "donutShopping");
                 if (parks.length > 0) {
                     console.log("calculate parks...");
                 } else {
@@ -62,7 +101,7 @@ const loadShoppingsPark = function(){
             if (data) {
                 $("#parkcurcap").html(data.current_capacity);
                 $("#parkmaxcap").html(data.capacity);    
-                renderDonut(data);
+                renderDonut(data.current_capacity, data.capacity, "donutPark");
             } else {
                 console.log("No data");
             }
@@ -152,10 +191,10 @@ const loadPeopleByWeek = function() {
     })
 }
 
-const renderDonutShopping = function (curr, total){
-    
 
-    var donutChartCanvas = $('#donutChart2').get(0).getContext('2d')
+const renderDonut = function (curr, total, id){
+    var donutChartCanvas = $('#'+id).get(0).getContext('2d')
+    
     var donutData        = {
       labels: [
           'Occuped',
@@ -164,39 +203,6 @@ const renderDonutShopping = function (curr, total){
       datasets: [
         {
           data: [curr,total-curr],
-          backgroundColor : ['#f56954', '#f39c12'],
-        }
-      ]
-    }
-    var donutOptions     = {
-      maintainAspectRatio : false,
-      responsive : true,
-    }
-    //Create pie or douhnut chart
-    // You can switch between pie and douhnut using the method below.
-    new Chart(donutChartCanvas, {
-      type: 'doughnut',
-      data: donutData,
-      options: donutOptions
-    })
-
-   
-    return;
-}
-
-const renderDonut = function (data){
-    var occuped = data.current_capacity;
-    var free = data.capacity - occuped;
-
-    var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
-    var donutData        = {
-      labels: [
-          'Occuped',
-          'Free',
-      ],
-      datasets: [
-        {
-          data: [occuped,free],
           backgroundColor : ['#f56954', '#00a65a'],
         }
       ]
@@ -212,6 +218,7 @@ const renderDonut = function (data){
       data: donutData,
       options: donutOptions
     })
+    
     return;
 
 }
