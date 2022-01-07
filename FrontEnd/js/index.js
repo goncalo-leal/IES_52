@@ -28,8 +28,16 @@ const loadShoppingStores = function(){
         success: function(data) {
             if (data) {
                 for (var i=0; i<data.stores.length; i++){
-                    $('<li data-target="#carouselExampleIndicators" data-slide-to="'+i+'" class=""></li>').appendTo('.carousel-indicators')
-                    $('<div class="carousel-item"><canvas id="d'+i+'" height="200"></canvas></div>').appendTo('.carousel-inner');
+                    if (i==0){
+                        $('<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>').appendTo('.carousel-indicators')
+                        $('<div class="carousel-item active"><canvas class="d-block w-100" heigh="200" id="donut0" ></canvas></div>').appendTo('.carousel-inner');
+                        $( "#to_remove1" ).remove();
+                        $( "#to_remove2" ).remove();
+                    }
+                    else{
+                        $('<li data-target="#carouselExampleIndicators" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators')
+                        $('<div class="carousel-item"><canvas class="d-block w-100" heigh="200" id="donut'+i+'" ></canvas></div>').appendTo('.carousel-inner');
+                    }
                     //<canvas id="visitors-chart" height="200"></canvas>
                 }
                 renderallGraphics(data.stores);
@@ -48,7 +56,7 @@ const loadShoppingStores = function(){
 
 const renderallGraphics = function(data){
     data.forEach(function(e, i) {
-        renderDonut(e.current_capacity, e.capacity, "d"+i)
+        renderDonut(e.current_capacity, e.capacity, 'donut'+i, e.name)
     })
 
     return;
@@ -192,10 +200,14 @@ const loadPeopleByWeek = function() {
 }
 
 
-const renderDonut = function (curr, total, id){
+const renderDonut = function (curr, total, id, title=""){
     var donutChartCanvas = $('#'+id).get(0).getContext('2d')
+    //var donutChartCanvas = $('#donut1').get(0).getContext('2d')
+
+
     
     var donutData        = {
+        
       labels: [
           'Occuped',
           'Free',
@@ -208,19 +220,19 @@ const renderDonut = function (curr, total, id){
       ]
     }
     var donutOptions     = {
+        
       maintainAspectRatio : false,
       responsive : true,
     }
     //Create pie or douhnut chart
     // You can switch between pie and douhnut using the method below.
-    new Chart(donutChartCanvas, {
+    
+    return new Chart(donutChartCanvas, {
       type: 'doughnut',
       data: donutData,
       options: donutOptions
     })
     
-    return;
-
 }
 
 
@@ -255,6 +267,7 @@ const renderGraphic = function (mapa) {
         ]
 }
     var barChartCanvas = $('#barChart').get(0).getContext('2d')
+
     var barChartData = $.extend(true, {}, areaChartData)
     var temp0 = areaChartData.datasets[0]
     var temp1 = areaChartData.datasets[1]
