@@ -12,12 +12,20 @@ $(document).ready(function() {
     $("#mySearchText").on('input', function() {
         search();
     })
+    $('#carouselExampleIndicators').on('slid.bs.carousel', function () {
+        var currentIndex = $('div.active').index();
+        var curr, cap, id, nome;
+        [curr, cap, id, nome] = storesData[currentIndex];
+        $("#storeName"+currentIndex).html(nome);
+        renderDonut(curr, cap, id, nome);
+    })
 })
 
 
 
 var stores;
 var parks;
+var storesData={};
 
 const loadShoppingStores = function(){
     $.ajax({
@@ -30,17 +38,26 @@ const loadShoppingStores = function(){
                 for (var i=0; i<data.stores.length; i++){
                     if (i==0){
                         $('<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>').appendTo('.carousel-indicators')
-                        $('<div class="carousel-item active"><canvas class="d-block w-100" heigh="200" id="donut0" ></canvas></div>').appendTo('.carousel-inner');
+                        $('<div class="carousel-item active"><canvas class="d-block w-100" heigh="200" id="donut0" ></canvas><div class="carousel-caption d-none d-md-block">\
+                        <h5 style="color:black;" id="storeName0"></h5>\
+                        </div>\
+                        </div>').appendTo('.carousel-inner');
                         $( "#to_remove1" ).remove();
                         $( "#to_remove2" ).remove();
                     }
                     else{
                         $('<li data-target="#carouselExampleIndicators" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators')
-                        $('<div class="carousel-item"><canvas class="d-block w-100" heigh="200" id="donut'+i+'" ></canvas></div>').appendTo('.carousel-inner');
+                        $('<div class="carousel-item"><canvas class="d-block w-100" heigh="200" id="donut'+i+'" ></canvas><div class="carousel-caption d-none d-md-block">\
+                        <h5 style="color:black;" id="storeName'+i+'"></h5>\
+                        </div>\</div>').appendTo('.carousel-inner');
                     }
                     //<canvas id="visitors-chart" height="200"></canvas>
                 }
-                renderallGraphics(data.stores);
+                storeInformation(data.stores);
+                var curr, cap, id, nome;
+                [curr, cap, id, nome] = storesData[0]
+                renderDonut(curr, cap, id, nome);
+                $("#storeName0").html(nome);
             } else {
                 console.log("No data");
             }
@@ -54,11 +71,10 @@ const loadShoppingStores = function(){
     return;
 }
 
-const renderallGraphics = function(data){
+const storeInformation = function(data){
     data.forEach(function(e, i) {
-        renderDonut(e.current_capacity, e.capacity, 'donut'+i, e.name)
+        storesData[i]=[e.current_capacity, e.capacity, 'donut'+i, e.name];
     })
-
     return;
 }
 
