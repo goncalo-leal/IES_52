@@ -13,16 +13,19 @@ $(document).ready(function() {
         search();
     })
     $('#carouselExampleIndicators').on('slid.bs.carousel', function () {
-        var currentIndex = $('div.active').index();
-        var curr, cap, id, nome;
-        [curr, cap, id, nome] = storesData[currentIndex];
-        $("#storeName"+currentIndex).html(nome);
-        renderDonut(curr, cap, id, nome);
+        if (contador<=stores.length-1){
+            var currentIndex = $('div.active').index();
+            var curr, cap, id, nome;
+            [curr, cap, id, nome] = storesData[currentIndex];
+            var donutChartCanvas = $('#'+id).get(0).getContext('2d')
+            $("#storeName"+currentIndex).html(nome);
+            renderDonut(curr, cap, id, nome);
+            contador++;
+        }
     })
 })
 
-
-
+var contador=0;
 var stores;
 var parks;
 var storesData={};
@@ -58,6 +61,7 @@ const loadShoppingStores = function(){
                 [curr, cap, id, nome] = storesData[0]
                 renderDonut(curr, cap, id, nome);
                 $("#storeName0").html(nome);
+                contador++;
             } else {
                 console.log("No data");
             }
