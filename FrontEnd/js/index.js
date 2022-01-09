@@ -2,7 +2,31 @@ import consts from "./consts.js";
 import SessionManager from "./session.js";
 import updateView from "./common.js"
 
+var table;
 $(document).ready(function() {
+    table = $("#stores").DataTable({
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "autoWidth": false,
+        "responsive": true,
+        "paging": false,
+        "lengthChange": false,
+        "info": false,
+        "columnDefs": [
+            { "searchable": true, "targets": 0 },
+            { "searchable": false, "targets": 1 },
+            { "searchable": false, "targets": 2 },
+            { "searchable": false, orderable: false, "targets": 3 },
+        ],
+        "dom": '<"top"i>rt<"bottom"><"clear">'
+    });
+    
+    $('#mySearchButton').on( 'keyup click', function () {
+        table.search($('#mySearchText').val()).draw();
+
+    } );
+
     updateView();
     loadShoppingInfo();
     loadPeopleByWeek();
@@ -51,10 +75,13 @@ const loadShoppingInfo = function() {
 
 
 const renderTable = function (data) {
-    $("#stores_body").empty();
+    var table_data = []
     data.forEach(function(e, i) {
-        $("#stores_body").append(trTemplate(e.name, e.current_capacity, 10));
+        table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center">'+10+'</p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
     })
+   
+    table.clear();
+    table.rows.add( table_data ).draw();
 }
 
 

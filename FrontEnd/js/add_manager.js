@@ -9,6 +9,11 @@ $(document).ready(function() {
     $("#add_manager").click(function() {
         add_manager();
     })
+
+    //Date picker
+    $('#reservationdate').datetimepicker({
+        format: 'L'
+    });
 });
 
 const add_manager = function() {

@@ -53,8 +53,8 @@ public class SensorDataService {
     }
 
     public SensorData saveSensorData(String data,int pid) {
-        Sensor sensor= sensorService.getSensorById(pid);
-        SensorPark sensor_park= SensorParkService.getSensorParkById(pid);
+        Sensor sensor = sensorService.getSensorById(pid);
+        SensorPark sensor_park = SensorParkService.getSensorParkById(pid);
         String [] partida = data.split("-");
         LocalDateTime ts = LocalDateTime.of(Integer.parseInt(partida[0]), Integer.parseInt(partida[1]), Integer.parseInt(partida[2]), Integer.parseInt(partida[3]), Integer.parseInt(partida[4]),Integer.parseInt( partida[5]));
         if (sensor_park != null){

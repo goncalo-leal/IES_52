@@ -11,12 +11,16 @@
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/fontawesome-free/css/all.min.css">
   <!-- IonIcons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- daterange picker -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/daterangepicker/daterangepicker.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="./AdminLTE-3.1.0/dist/css/adminlte.min.css">
   <!-- DataTables -->
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 </head>
 <!--
 `body` tag options:
@@ -190,7 +194,16 @@
                         </div>
                         <!-- /.col -->
                         <div class="col-4">
-                            TODO: BIRTHDAY (DATE PICKER)
+                            <!-- Date -->
+                            <div class="form-group">
+                                <label>Date:</label>
+                                <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate"/>
+                                    <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!-- /.col -->
                     </div>
@@ -243,6 +256,11 @@
 <script src="./AdminLTE-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE -->
 <script src="./AdminLTE-3.1.0/dist/js/adminlte.js"></script>
+<!-- Bootstrap 4 -->
+<script src="./AdminLTE-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/moment/moment.min.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 
 <!-- OPTIONAL SCRIPTS -->
 <script src="./AdminLTE-3.1.0/plugins/chart.js/Chart.js"></script>
