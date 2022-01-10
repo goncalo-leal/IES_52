@@ -20,7 +20,8 @@ const add_manager = function() {
     var email = $("#email").val();
     var username = $("#username").val()
     var gender = $('input[type="radio"][name="gender"]:checked').val()
-    var birthday = null
+    var birthday = $("#birthdaydate input").val().split("/").reverse().join("-")
+
     var store = $("#store :selected").val()
 
     var data = {
