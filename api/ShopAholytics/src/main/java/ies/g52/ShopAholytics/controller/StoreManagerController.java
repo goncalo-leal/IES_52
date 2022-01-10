@@ -3,8 +3,10 @@ package ies.g52.ShopAholytics.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import ies.g52.ShopAholytics.auth.AuthConsts;
 import ies.g52.ShopAholytics.models.StoreManager;
 import ies.g52.ShopAholytics.models.User;
 import ies.g52.ShopAholytics.services.StoreManagerService;
@@ -15,8 +17,11 @@ import ies.g52.ShopAholytics.services.UserStateService;
 
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/storemanagers")
 public class StoreManagerController {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private StoreManagerService StoreManagerServices;
 
@@ -37,7 +42,7 @@ public class StoreManagerController {
     @PostMapping("/addStoreManager/{store}")
     public StoreManager newShoppingManagerWithNewUser( @PathVariable(value = "store") int store,@RequestBody User m) {
 
-        User user = new User(m.getPassword(),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1));
+        User user = new User(passwordEncoder.encode(m.getPassword()),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1), AuthConsts.STORE_MANAGER);
         serviceUser.saveUser(user);
 
         return StoreManagerServices.saveStoreManager(new StoreManager (user,StoreServices.getStoreById(store)));

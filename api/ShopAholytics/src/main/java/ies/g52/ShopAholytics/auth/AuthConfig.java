@@ -43,23 +43,40 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST, AuthConsts.LOG_IN_URL).permitAll()
+                .antMatchers(AuthConsts.SHOPPING_MANAGER_PROTECTED_ENDPOINTS).hasAuthority("ROLE_SHOPPING_MANAGER")
+                .anyRequest().authenticated()
+                .and()
+
                 .exceptionHandling()
                 .authenticationEntryPoint(
                     (req, res, ex) -> {
                         Map<String, Object> body = new HashMap<>();
                         body.put("message", "Access denied");
                         body.put("timestamp", new Date().toString());
-                
+                        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
+
                         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
                         res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         new ObjectMapper().writeValue(res.getWriter(), body);
                     } 
                 )
+                .accessDeniedHandler(
+                    (req, res, ex) -> {
+                        Map<String, Object> body = new HashMap<>();
+                        body.put("message", "Forbidden resource");
+                        body.put("timestamp", new Date().toString());
+                        body.put("status", HttpServletResponse.SC_FORBIDDEN);
+                                        
+                        res.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                        res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                        new ObjectMapper().writeValue(res.getWriter(), body);
+                    }
+                )
                 .and()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST, AuthConsts.LOG_IN_URL).permitAll()
-                .anyRequest().authenticated()
-                .and()
+
+
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(), this.userRepository))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

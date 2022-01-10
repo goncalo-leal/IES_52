@@ -47,19 +47,21 @@ public class User {
     private UserState state;
     
 
-
+    @Column(name = "authority")
+    private String authority;
     
     public User(){
 
     }
 
-    public User(String password, String email, String name, String gender, String birthday, UserState state) {
+    public User(String password, String email, String name, String gender, String birthday, UserState state, String authority) {
         this.password = password;
         this.email = email;
         this.name = name;
         this.gender = gender;
         this.birthday = birthday;
         this.state = state;
+        this.authority = authority;
     }
 
     public int getId() {
@@ -115,10 +117,18 @@ public class User {
         this.state = state;
     }
 
+    public String getAuthority() {
+        return this.authority;
+    }
+
+    public void setAuthrority(String authority) {
+        this.authority = authority;
+    }
+
     @Override
     public String toString() {
         return "User [birthday=" + birthday + ", email=" + email + ", gender=" + gender + ", id=" + id + ", name="
-                + name + ", password=" + password + ", state=" + state + "]";
+                + name + ", password=" + password + ", state=" + state + ", authority" + authority + "]";
     }
 
     

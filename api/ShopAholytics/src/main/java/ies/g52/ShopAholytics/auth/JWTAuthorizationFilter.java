@@ -10,9 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -35,13 +37,17 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getToken(String header) {
-        String email = JWT.require(Algorithm.HMAC512(AuthConsts.SECRET.getBytes()))
+        DecodedJWT token = JWT.require(Algorithm.HMAC512(AuthConsts.SECRET.getBytes()))
                         .build()
-                        .verify(header.replace(AuthConsts.TOKEN_PREFIX, ""))
-                        .getSubject();
+                        .verify(header.replace(AuthConsts.TOKEN_PREFIX, ""));
+
+        String email = token.getSubject();
+        String role = token.getClaim(AuthConsts.JWT_ROLE_CLAIM).as(String.class);
+        ArrayList<SimpleGrantedAuthority> roles = new ArrayList<>();
+        roles.add(new SimpleGrantedAuthority(role));
 
         if (email != null) {
-            return new UsernamePasswordAuthenticationToken(email, null, new ArrayList<>());
+            return new UsernamePasswordAuthenticationToken(email, token.getSignature(), roles);
         }
 
         return null;

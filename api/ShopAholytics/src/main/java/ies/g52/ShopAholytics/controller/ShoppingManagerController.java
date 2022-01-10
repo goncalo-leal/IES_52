@@ -6,8 +6,10 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import ies.g52.ShopAholytics.auth.AuthConsts;
 import ies.g52.ShopAholytics.models.ShoppingManager;
 import ies.g52.ShopAholytics.models.User;
 import ies.g52.ShopAholytics.services.ShoppingManagerService;
@@ -17,8 +19,11 @@ import ies.g52.ShopAholytics.services.UserService;
 import ies.g52.ShopAholytics.services.UserStateService;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/shoppingmanagers")
 public class ShoppingManagerController {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private ShoppingManagerService ShoppingManagerServices;
 
@@ -39,7 +44,7 @@ public class ShoppingManagerController {
     @PostMapping("/addShoppingManager/{shopping}")
     public ShoppingManager newShoppingManagerWithNewUser(@PathVariable(value = "shopping") int shopping, @RequestBody User m) {
 
-        User user = new User(m.getPassword(),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1));
+        User user = new User(passwordEncoder.encode(m.getPassword()),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1), AuthConsts.SHOPPING_MANAGER);
         serviceUser.saveUser(user);
 
         return ShoppingManagerServices.saveShoppingManager(new ShoppingManager(user,shoppingServices.getShoppingById(shopping)));

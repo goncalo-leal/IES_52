@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import ies.g52.ShopAholytics.auth.AuthConsts;
 import ies.g52.ShopAholytics.enumFolder.SensorEnum;
 import ies.g52.ShopAholytics.models.Shopping;
 import ies.g52.ShopAholytics.models.Park;
@@ -77,7 +78,7 @@ public class ShopAholyticsApplication {
 				storeService.saveStore(jumbo);
 				storeService.saveStore(hm);
 
-				User user = new User(new BCryptPasswordEncoder().encode("admin"), "admin@ua.pt" ,"Administrador","male","1988-07-28",repository.getUserStateById(2));
+				User user = new User(new BCryptPasswordEncoder().encode("admin"), "admin@ua.pt" ,"Administrador","male","1988-07-28",repository.getUserStateById(2), AuthConsts.SHOPPING_MANAGER);
 				ShoppingManagerServices.saveShoppingManager(new ShoppingManager(user, shoppingService.getShoppingById(1)));
 				userService.saveUser(user);
 

@@ -12,7 +12,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/users")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -20,11 +20,12 @@ public class UserController {
     @Autowired
     private UserStateService userStateService;
 
-    
+    /*
     @PostMapping("/addUser/{pid}")
     public User newUser( @PathVariable(value = "pid") int pid, @Valid  @RequestBody User m) {
         return userService.saveUser(new User (m.getPassword(),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(pid)));
     }
+    */
 
     @PostMapping("/addUserState")
     public UserState newUserState( @RequestBody UserState s) {
