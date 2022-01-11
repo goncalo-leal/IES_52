@@ -9,13 +9,20 @@ $(document).ready(function() {
     $("#add_manager").click(function() {
         add_manager();
     })
+
+    //Date picker
+    $('#birthdaydate').datetimepicker({
+        format: 'L'
+    });
 });
 
 const add_manager = function() {
     var email = $("#email").val();
     var username = $("#username").val()
     var gender = $('input[type="radio"][name="gender"]:checked').val()
-    var birthday = null
+    var birthday = $("#birthdaydate input").val().split("/").reverse().join("-")
+    console.log(birthday);
+
     var store = $("#store :selected").val()
 
     var data = {

@@ -60,7 +60,7 @@ public class UserController {
     }
 
 
-
+    @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping("/updateUser")
     public User updateUser(@RequestBody User user) {
         return userService.updateUser(user);

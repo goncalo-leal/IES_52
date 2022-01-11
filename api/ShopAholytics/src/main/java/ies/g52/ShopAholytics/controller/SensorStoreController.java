@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import ies.g52.ShopAholytics.enumFolder.SensorEnum;
 import ies.g52.ShopAholytics.models.Sensor;
 import ies.g52.ShopAholytics.models.Store;
 import ies.g52.ShopAholytics.models.SensorStore;
