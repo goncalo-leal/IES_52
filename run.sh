@@ -63,3 +63,7 @@ fi
 
 printf "[+] RUNNING CONTAINERS...\n"
 docker-compose up
+
+
+
+
