@@ -85,14 +85,15 @@ const loadTable = function() {
     })
 }
 
+/*
 
 const renderTable = function (data) {
-    /*
+    
     $("#managers_body").empty();
     data.forEach(function(e, i) {
         $("#managers_body").append(trTemplate(e.user.name, e.user.email, e.store.name, true));
     })
-    */
+    
 
     var table_data = []
     data.forEach(function(e, i) {
@@ -102,6 +103,7 @@ const renderTable = function (data) {
     table.clear();
     table.rows.add( table_data ).draw();
 }
+*/
 
 const loadUserStates = function(number, description) {
     var selectVal='';

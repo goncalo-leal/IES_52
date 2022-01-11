@@ -385,33 +385,5 @@
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <script type="module" src="./js/index.js"></script>
-<script>
-    $(function () {
-        var table = $("#stores").DataTable({
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "autoWidth": false,
-            "responsive": true,
-            "paging": false,
-            "lengthChange": false,
-            "info": false,
-            "columnDefs": [
-                { "searchable": true, "targets": 0 },
-                { "searchable": false, "targets": 1 },
-                { "searchable": false, "targets": 2 },
-                { "searchable": false, orderable: false, "targets": 3 },
-            ],
-            "dom": '<"top"i>rt<"bottom"><"clear">'
-        });
-        
-        $('#mySearchButton').on( 'keyup click', function () {
-            table.search($('#mySearchText').val()).draw();
-
-        } );
-    })
-
-        
-</script>
 </body>
 </html>

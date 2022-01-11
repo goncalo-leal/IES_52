@@ -30,7 +30,7 @@
   * sidebar-collapse
   * sidebar-mini
 -->
-<body class="hold-transition sidebar-mini" style="display: none">
+<body class="hold-transition sidebar-mini">
 <div class="wrapper">
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -236,34 +236,5 @@
 <!-- Bootstrap Switch -->
 <script src="./AdminLTE-3.1.0/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 <script type="module" src="js/manage.js"></script>
-
-<script>
-    $(function () {
-        var table = $("#managers").DataTable({
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "autoWidth": false,
-            "responsive": true,
-            "paging": false,
-            "lengthChange": false,
-            "info": false,
-            "columnDefs": [
-                { "searchable": true, "targets": 0 },
-                { "searchable": true, "targets": 1 },
-                { "searchable": true, "targets": 2 },
-                { "searchable": false, orderable: false, "targets": 3 },
-            ],
-            "dom": '<"top"i>rt<"bottom"><"clear">'
-        });
-        
-        $('#mySearchButton').on( 'keyup click', function () {
-            table.search($('#mySearchText').val()).draw();
-        } );
-        $("input[data-bootstrap-switch]").each(function(){
-            $(this).bootstrapSwitch();
-        })
-    });
-</script>
 </body>
 </html>
