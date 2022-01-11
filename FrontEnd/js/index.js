@@ -20,6 +20,7 @@ $(document).ready(function() {
             { "searchable": false, orderable: false, "targets": 3 },
         ],
         "dom": '<"top"i>rt<"bottom"><"clear">'
+        
     });
     
     $('#mySearchButton').on( 'keyup click', function () {
@@ -32,6 +33,8 @@ $(document).ready(function() {
     loadShoppingInfo();
     loadShoppingStores();
     loadPeopleByWeek();
+    loadShoppingEntrancesLastHour();
+    loadParkEntrancesLastHour();
 
     $("#mySearchText").on('input', function() {
         search();
@@ -166,6 +169,87 @@ const loadShoppingsPark = function(){
     })
 }
 
+const loadShoppingEntrancesLastHour= function(){
+    $.ajax({
+        url: consts.BASE_URL + '/api/PeopleInShoppingInLastHour/' + SessionManager.get("session").shopping.id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                let horas_atrs=data["2_hours_ago"];
+                let horas_atual=data["last_hour"];
+                console.log(horas_atrs)
+                let diferença=0
+                if (horas_atrs ==0 ){
+                    diferença=(horas_atual- horas_atrs)*100
+               
+                }
+                else{
+                    diferença=(( horas_atual- horas_atrs)/horas_atrs)*100
+                    
+                }
+                console.log(diferença)
+                if (diferença >0){
+                    $("#shopping_capacity_percentagem").after($("<i class='ion ion-android-arrow-up text-success' ></i>").text(diferença+ "% in last hour")  )
+                }
+                else{
+                    $("#shopping_capacity_percentagem").after($("<i class='ion ion-android-arrow-down text-warning' ></i>").text(diferença+ "% in last hour")  )
+
+                }
+            } else {
+                console.log("No data");
+            }
+
+        },
+
+        error: function() {
+            console.log("SERRAS erro na call");
+        }
+    })
+}
+
+const loadParkEntrancesLastHour= function(){
+    $.ajax({
+        url: consts.BASE_URL + '/api/PeopleInParkInLastHour/' + SessionManager.get("session").shopping.id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                let horas_atrs=data["2_hours_ago"];
+                let horas_atual=data["last_hour"];
+                console.log(horas_atrs)
+                let diferença=0
+                if (horas_atrs ==0 ){
+                    diferença=(horas_atual- horas_atrs)*100
+               
+                }
+                else{
+                    diferença=(( horas_atual- horas_atrs)/horas_atrs)*100
+                    
+                }
+                console.log(diferença)
+                if (diferença >0){
+                    $("#park_capacity_percentagem").after($("<i class='ion ion-android-arrow-up text-success' ></i>").text(diferença+ "% in last hour")  )
+                }
+                else{
+                    $("#park_capacity_percentagem").after($("<i class='ion ion-android-arrow-down text-warning' ></i>").text(diferença+ "% in last hour")  )
+
+                }
+            } else {
+                console.log("No data");
+            }
+
+        },
+
+        error: function() {
+            console.log("SERRAS erro na call");
+        }
+    })
+}
+
+
 const renderTable = function (data) {
     var table_data = []
     
@@ -233,7 +317,29 @@ const loadPeopleByWeek = function() {
                 for (var i=0; i<number.length; i++){
                     total_visitors =total_visitors + number[i];
                 }
+                var numbers = [data.mapa["LAST_MONDAY"], data.mapa["LAST_TUESDAY"], data.mapa["LAST_WEDNESDAY"], data.mapa["LAST_THURSDAY"], data.mapa["LAST_FRIDAY"], data.mapa["LAST_SATURDAY"], data.mapa["LAST_SUNDAY"]];
+                var total_visitors_last = 0;
+                for (var x=0; x<numbers.length; x++){
+                    total_visitors_last = total_visitors_last + numbers[x];
+                }
                 $("#shopping_capacity").html(total_visitors);
+                let diferença=0
+                if (total_visitors_last ==0 ){
+                    diferença=(total_visitors- total_visitors_last)*100
+               
+                }
+                else{
+                    diferença=(( total_visitors- total_visitors_last)/total_visitors_last)*100
+                    
+                }
+                diferença=diferença.toFixed(2)
+                if (diferença >0){
+                    $("#Total_diferença_semanas").after($("<i class='ion ion-android-arrow-up text-success' ></i>").text(diferença+ "% Since last week")  )
+                }
+                else{
+                    $("#Total_diferença_semanas").after($("<i class='ion ion-android-arrow-down text-warning' ></i>").text(diferença+ "% Since last week")  )
+
+                }
                 renderGraphic(data.mapa);
             } else {
                 console.log("No data");
