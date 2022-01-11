@@ -2,9 +2,16 @@ import consts from "./consts.js";
 import SessionManager from "./session.js";
 import updateView from "./common.js"
 
-var table;
+var stores_table;
+var parks_table;
+var past_info_stores;
+var past_info_parks;
+
 $(document).ready(function() {
-    table = $("#stores").DataTable({
+    getAllStoresLastHourEntrance();
+    getAllParksLastHourEntrance();
+
+    stores_table = $("#stores").DataTable({
         "lengthChange": false,
         "searching": true,
         "ordering": true,
@@ -22,21 +29,40 @@ $(document).ready(function() {
         "dom": '<"top"i>rt<"bottom"><"clear">'
         
     });
-    
-    $('#mySearchButton').on( 'keyup click', function () {
-        table.search($('#mySearchText').val()).draw();
 
-    } );
+    parks_table = $("#parks").DataTable({
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "autoWidth": false,
+        "responsive": true,
+        "paging": false,
+        "lengthChange": false,
+        "info": false,
+        "columnDefs": [
+            { "searchable": true, "targets": 0 },
+            { "searchable": false, "targets": 1 },
+            { "searchable": false, "targets": 2 },
+            { "searchable": false, orderable: false, "targets": 3 },
+        ],
+        "dom": '<"top"i>rt<"bottom"><"clear">'
+    });
+
     updateView();
-    loadShoppingsPark();
     loadShoppingInfo();
+    loadShoppingsParks();
     loadShoppingStores();
     loadPeopleByWeek();
     loadShoppingEntrancesLastHour();
 
-    $("#mySearchText").on('input', function() {
-        search();
-    })
+    $("#stores_search_txt").on('input', function() {
+        stores_table.search($('#stores_search_txt').val()).draw();
+    });
+
+    $("#parks_search_txt").on('input', function() {
+        parks_table.search($('#parks_search_txt').val()).draw();
+    });
+
     $('#carouselExampleIndicators').on('slid.bs.carousel', function () {
         if (contador<=stores.length-1){
             var currentIndex = $('div.active').index();
@@ -47,8 +73,8 @@ $(document).ready(function() {
             renderDonut(curr, cap, id, nome);
             contador++;
         }
-    })
-})
+    });
+});
 
 var contador=0;
 var stores;
@@ -107,8 +133,6 @@ const storeInformation = function(data){
     return;
 }
 
-
-
 const loadShoppingInfo = function() {
     $("#s_name").text(SessionManager.get("session").shopping.name);
 
@@ -132,7 +156,8 @@ const loadShoppingInfo = function() {
                     $("#parkingTab").empty();
                 }
 
-                renderTable(stores);
+                renderStoresTable(stores);
+                renderParksTable(parks);
             } else {
                 console.log("No store for this shopping");
             }
@@ -144,7 +169,8 @@ const loadShoppingInfo = function() {
     })
 }
 
-const loadShoppingsPark = function(){
+const loadShoppingsParks = function(){
+    console.log(parks)
     $.ajax({
         url: consts.BASE_URL + '/api/Park?id=' + SessionManager.get("session").shopping.id,
         type: "GET", 
@@ -167,7 +193,6 @@ const loadShoppingsPark = function(){
     })
 }
 
-var ret_pedirApiStores
 const getAllStoresLastHourEntrance= function(){
     $.ajax({
         url: consts.BASE_URL + '/api/CountLastHoursForStores/' + SessionManager.get("session").shopping.id,
@@ -176,8 +201,28 @@ const getAllStoresLastHourEntrance= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                ret_pedirApiStores=data
-                console.log("OLAAAAAAA",ret_pedirApiStores)
+                past_info_stores=data
+            } else {
+                console.log("No data");
+            }
+
+        },
+
+        error: function() {
+            console.log(" erro na call");
+        }
+    })
+}
+
+const getAllParksLastHourEntrance= function(){
+    $.ajax({
+        url: consts.BASE_URL + '/api/CountLastHoursForParks/' + SessionManager.get("session").shopping.id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                past_info_parks = data
             } else {
                 console.log("No data");
             }
@@ -228,78 +273,61 @@ const loadShoppingEntrancesLastHour= function(){
     })
 }
 
-
-
-const renderTable = function (data) {
+const renderStoresTable = function (data) {
     var table_data = []
-    getAllStoresLastHourEntrance()
+
     $("#stores_body").empty();
-    console.log(ret_pedirApiStores)
     data.forEach(function(e, i) {
-            let horas_atrs=ret_pedirApiStores[e.id]["2_hours_ago"];
-            let horas_atual=ret_pedirApiStores[e.id]["last_hour"];
-            let diferença=0
-            if (horas_atrs ==0 ){
-                diferença=(horas_atual- horas_atrs)*100
-        
-            }
-            else{
-                diferença=(( horas_atual- horas_atrs)/horas_atrs)*100
-                
-            }
-            if (diferença >0){
-                table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><small class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i>'+diferença+"%"+'</small></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
-            }
-            else{
-                table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><small class="text-success mr-1"><i class="ion ion-android-arrow-up text-warning"></i>'+diferença+"%"+'</small></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
-            }
-        })
-   
-    table.clear();
-    table.rows.add( table_data ).draw();
-}
+        let horas_atrs = past_info_stores[e.id]["2_hours_ago"];
+        let horas_atual = past_info_stores[e.id]["last_hour"];
+        let difference = 0
 
-
-const trTemplate = function (name, ocupation, growth) {
-    
-    return `
-    <tr>
-        <td>
-            ${name}
-        </td>
-        <td class="text-center">
-            ${ocupation}
-        </td>
-        <td class="text-center">
-            <small class="text-success mr-1">
-                <i class="fas fa-arrow-up"></i>
-                ${growth}%
-            </small>
-        </td>
-        <td class="text-right">
-            <a href="#" class="text-muted">
-                <i class="fas fa-search"></i>
-            </a>
-        </td>
-    </tr>
-    `
-}
-
-
-const search = function () {
-    var input = $("#mySearchText").val().toLowerCase();
-    var temp = [];
-
-    stores.forEach(function(e, i) {
-        var name = e.name.toLowerCase();
-        if (name != null && name.includes(input)) {
-            temp.push(e);
+        if (horas_atrs == 0) {
+            difference = (horas_atual- horas_atrs) * 100        
         }
-    })
+        else {
+            difference = ((horas_atual - horas_atrs) / horas_atrs) * 100           
+        }
 
-    renderTable(temp);
+        if (difference >0){
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i>' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+        }
+        else{
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-warning mr-1"><i class="ion ion-android-arrow-up text-warning"></i>' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+        }
+    });
+   
+    stores_table.clear();
+    stores_table.rows.add( table_data ).draw();
 }
 
+const renderParksTable = function (data) {
+    var table_data = []
+
+    $("#parks_body").empty();
+    data.forEach(function(e, i) {
+        let two_hours_ago = past_info_parks[e.id]["2_hours_ago"];
+        let last_hour = past_info_parks[e.id]["last_hour"];
+        let difference = 0
+
+        if (two_hours_ago == 0) {
+            difference = (last_hour- two_hours_ago) * 100        
+        }
+        else {
+            difference = ((last_hour - two_hours_ago) / two_hours_ago) * 100
+        }
+
+        if (difference > 0){
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i>' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+        }
+        else{
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-warning mr-1"><i class="ion ion-android-arrow-up text-warning"></i>' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+        }
+    });
+   
+    parks_table.clear();
+    parks_table.rows.add( table_data ).draw();
+}
 
 const loadPeopleByWeek = function() {
     $.ajax({
@@ -354,38 +382,33 @@ const loadPeopleByWeek = function() {
 const renderDonut = function (curr, total, id, title=""){
     var donutChartCanvas = $('#'+id).get(0).getContext('2d')
     //var donutChartCanvas = $('#donut1').get(0).getContext('2d')
-
-
     
-    var donutData        = {
-        
-      labels: [
-          'Occuped',
-          'Free',
-      ],
-      datasets: [
-        {
-          data: [curr,total-curr],
-          backgroundColor : ['#f56954', '#00a65a'],
-        }
-      ]
+    var donutData = {        
+        labels: [
+            'Occuped',
+            'Free',
+        ],
+        datasets: [
+            {
+            data: [curr,total-curr],
+            backgroundColor : ['#f56954', '#00a65a'],
+            }
+        ]
     }
-    var donutOptions     = {
-        
-      maintainAspectRatio : false,
-      responsive : true,
+
+    var donutOptions = {        
+        maintainAspectRatio : false,
+        responsive : true,
     }
+
     //Create pie or douhnut chart
     // You can switch between pie and douhnut using the method below.
-    
     return new Chart(donutChartCanvas, {
-      type: 'doughnut',
-      data: donutData,
-      options: donutOptions
-    })
-    
+        type: 'doughnut',
+        data: donutData,
+        options: donutOptions
+    })    
 }
-
 
 const renderGraphic = function (mapa) {
     console.log(mapa);
@@ -416,8 +439,9 @@ const renderGraphic = function (mapa) {
             data                : [mapa["LAST_MONDAY"], mapa["LAST_TUESDAY"], mapa["LAST_WEDNESDAY"], mapa["LAST_THURSDAY"], mapa["LAST_FRIDAY"], mapa["LAST_SATURDAY"], mapa["LAST_SUNDAY"]]
             },
         ]
-}
-    var barChartCanvas = $('#barChart').get(0).getContext('2d')
+    }
+
+    var barChartCanvas = $('#barChart').get(0).getContext('2d');
 
     var barChartData = $.extend(true, {}, areaChartData)
     var temp0 = areaChartData.datasets[0]
@@ -436,5 +460,4 @@ const renderGraphic = function (mapa) {
         data: barChartData,
         options: barChartOptions
     })
-
 }
