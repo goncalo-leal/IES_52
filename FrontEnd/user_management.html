@@ -168,24 +168,11 @@
                                         <th>Name</th>
                                         <th class="text-center">Email</th>
                                         <th class="text-center">Shop</th>
-                                        <th class="text-right">Active</th>
+                                        <th class="text-center">State</th>
                                     </tr>
                                 </thead>
                                 <tbody id="managers_body">
-                                    <tr>
-                                        <td>
-                                            Name 1
-                                        </td>
-                                        <td class="text-center">
-                                            email@email.com
-                                        </td>
-                                        <td class="text-center">
-                                            shop 1
-                                        </td>
-                                        <td class="text-right">
-                                            <input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger">
-                                        </td>
-                                    </tr>
+                                    
                                 </tbody>
                             </table>
                         </div>
@@ -249,5 +236,34 @@
 <!-- Bootstrap Switch -->
 <script src="./AdminLTE-3.1.0/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 <script type="module" src="js/manage.js"></script>
+
+<script>
+    $(function () {
+        var table = $("#managers").DataTable({
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "autoWidth": false,
+            "responsive": true,
+            "paging": false,
+            "lengthChange": false,
+            "info": false,
+            "columnDefs": [
+                { "searchable": true, "targets": 0 },
+                { "searchable": true, "targets": 1 },
+                { "searchable": true, "targets": 2 },
+                { "searchable": false, orderable: false, "targets": 3 },
+            ],
+            "dom": '<"top"i>rt<"bottom"><"clear">'
+        });
+        
+        $('#mySearchButton').on( 'keyup click', function () {
+            table.search($('#mySearchText').val()).draw();
+        } );
+        $("input[data-bootstrap-switch]").each(function(){
+            $(this).bootstrapSwitch();
+        })
+    });
+</script>
 </body>
 </html>
