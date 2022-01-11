@@ -1,6 +1,9 @@
 package ies.g52.ShopAholytics.services;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,7 +122,211 @@ public class SensorDataService {
         repository.deleteById(id);
         return "SensorData removed !! " + id;
     }
+    public HashMap<String,Integer> lastHourCountsStore(int id){
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        int counter2=0;
+        HashMap<String,Integer> map = new HashMap<>();
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==id ){
+                    int horas = data.getDate().getHour();               
+                    int minutos= data.getDate().getMinute();
+                    int segundos =data.getDate().getSecond();
+                    int horas_atuais= LocalTime.now().getHour();
+                    int minutos_atuais= LocalTime.now().getMinute();
+                    int dia= data.getDate().getDayOfYear();
+                    int dia_atuais= LocalDateTime.now().getDayOfYear();
+                    int ano= data.getDate().getYear();
+                    int ano_atual= LocalDateTime.now().getYear();
+                    int segundos_atuais=LocalTime.now().getSecond();
+                    
+                    if (horas_atuais > 0){
+                        long total= 3600* horas+ minutos*60+segundos;
+                        long total_limite= 3600*(horas_atuais-1)+ minutos_atuais*60+segundos_atuais;
+                        if(total >= total_limite && dia == dia_atuais && ano == ano_atual){
+                            counter++;
+                            continue;
+                        }
+                    }
+                    else if (horas_atuais == 0  && horas==0){
+                        long total= minutos*60+segundos;
+                        long total_meia_noite=minutos_atuais*60+segundos;
+                        if(total <= total_meia_noite && dia == dia_atuais && ano == ano_atual){
+                            counter++;
+                            continue;
+                        }
+                    }
+                    else if (horas_atuais-1 == -1  && horas==23){
+                        long total= 3600* horas+ minutos*60+segundos;
+                        long total_meia_noite=(23)*3600+ minutos_atuais*60+segundos_atuais;
+                        if(total >= total_meia_noite && dia == dia_atuais-1 && ano == ano_atual){
+                            counter++;
+                            continue;
+                        }
+                    }
+                    if (horas_atuais > 1){
+                        long total= 3600*(horas_atuais-1)+ minutos_atuais*60+segundos_atuais;
+                        long atual= 3600*(horas)+ minutos*60+segundos;
+                        long total_limite= 3600*(horas_atuais-2)+ minutos_atuais*60+segundos_atuais;
+                        
 
+                        if(total >=  atual && atual >=total_limite && dia == dia_atuais && ano == ano_atual){
+                            counter2++; continue;
+                        }
+                    }
+                    else if (horas_atuais-2 == 0  && horas==0){
+                        long total_maximo=3600+minutos_atuais*60+segundos_atuais;
+                        long total= minutos*60+segundos;
+                        long total_meia_noite=minutos_atuais*60+segundos_atuais;
+                        if(total_maximo >= total && total >= total_meia_noite && dia == dia_atuais && ano == ano_atual){
+                            counter2++;
+                            continue;
+                        }
+                    }
+                    else if (horas_atuais-2 == -1  && horas==23){
+                        long total=horas*3600+ minutos*60+segundos;
+                        long total_meia_noite=23*3600+minutos_atuais*60+segundos_atuais;
+                        if( total >= total_meia_noite && dia == dia_atuais-1 && ano == ano_atual){
+                            counter2++;
+                            continue;
+                        }
+                    }
+                    else if (horas_atuais-2 == -1  && horas==0){
+                        long total_maximo=minutos_atuais*60+segundos_atuais;
+                        long total= minutos*60+segundos;
+                        if(total_maximo >= total && dia == dia_atuais && ano == ano_atual){
+                            counter2++;
+                            continue;
+                        }
+                    }
+                    else if (horas_atuais-2 == -2  ){
+                        long total_maximo=23*3600+minutos_atuais*60+segundos_atuais;
+                        long total=horas*3600+ minutos*60+segundos;
+                        long total_meia_noite=22*3600+minutos_atuais*60+segundos_atuais;
+                        if(total_maximo >= total && total >= total_meia_noite && dia == dia_atuais-1 && ano == ano_atual){
+                            counter2++;
+                            continue;
+                        }
+                    }
+                 
+                    
+                    
+                    
+
+                   
+                }
+            }  
+        }
+        map.put("last_hour", counter);
+        map.put("2_hours_ago", counter2);
+        return map;
+    } 
+
+    public HashMap<String,Integer> lastHourCountsPark(int id){
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        int counter2=0;
+        HashMap<String,Integer> map = new HashMap<>();
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==id ){
+                    int horas = data.getDate().getHour();               
+                    int minutos= data.getDate().getMinute();
+                    int segundos =data.getDate().getSecond();
+                    int horas_atuais= LocalTime.now().getHour();
+                    int minutos_atuais= LocalTime.now().getMinute();
+                    int dia= data.getDate().getDayOfYear();
+                    int dia_atuais= LocalDateTime.now().getDayOfYear();
+                    int ano= data.getDate().getYear();
+                    int ano_atual= LocalDateTime.now().getYear();
+                    int segundos_atuais=LocalTime.now().getSecond();
+                    
+                    if (horas_atuais > 0){
+                        long total= 3600* horas+ minutos*60+segundos;
+                        long total_limite= 3600*(horas_atuais-1)+ minutos_atuais*60+segundos_atuais;
+                        if(total >= total_limite && dia == dia_atuais && ano == ano_atual){
+                            counter++;
+                            continue;
+                        }
+                    }
+                    else if (horas_atuais == 0  && horas==0){
+                        long total= minutos*60+segundos;
+                        long total_meia_noite=minutos_atuais*60+segundos;
+                        if(total <= total_meia_noite && dia == dia_atuais && ano == ano_atual){
+                            counter++;
+                            continue;
+                        }
+                    }
+                    else if (horas_atuais-1 == -1  && horas==23){
+                        long total= 3600* horas+ minutos*60+segundos;
+                        long total_meia_noite=(23)*3600+ minutos_atuais*60+segundos_atuais;
+                        if(total >= total_meia_noite && dia == dia_atuais-1 && ano == ano_atual){
+                            counter++;
+                            continue;
+                        }
+                    }
+                    if (horas_atuais > 1){
+                        long total= 3600*(horas_atuais-1)+ minutos_atuais*60+segundos_atuais;
+                        long atual= 3600*(horas)+ minutos*60+segundos;
+                        long total_limite= 3600*(horas_atuais-2)+ minutos_atuais*60+segundos_atuais;
+                        
+
+                        if(total >=  atual && atual >=total_limite && dia == dia_atuais && ano == ano_atual){
+                            counter2++; continue;
+                        }
+                    }
+                    else if (horas_atuais-2 == 0  && horas==0){
+                        long total_maximo=3600+minutos_atuais*60+segundos_atuais;
+                        long total= minutos*60+segundos;
+                        long total_meia_noite=minutos_atuais*60+segundos_atuais;
+                        if(total_maximo >= total && total >= total_meia_noite && dia == dia_atuais && ano == ano_atual){
+                            counter2++;
+                            continue;
+                        }
+                    }
+                    else if (horas_atuais-2 == -1  && horas==23){
+                        long total=horas*3600+ minutos*60+segundos;
+                        long total_meia_noite=23*3600+minutos_atuais*60+segundos_atuais;
+                        if( total >= total_meia_noite && dia == dia_atuais-1 && ano == ano_atual){
+                            counter2++;
+                            continue;
+                        }
+                    }
+                    else if (horas_atuais-2 == -1  && horas==0){
+                        long total_maximo=minutos_atuais*60+segundos_atuais;
+                        long total= minutos*60+segundos;
+                        if(total_maximo >= total && dia == dia_atuais && ano == ano_atual){
+                            counter2++;
+                            continue;
+                        }
+                    }
+                    else if (horas_atuais-2 == -2  ){
+                        long total_maximo=23*3600+minutos_atuais*60+segundos_atuais;
+                        long total=horas*3600+ minutos*60+segundos;
+                        long total_meia_noite=22*3600+minutos_atuais*60+segundos_atuais;
+                        if(total_maximo >= total && total >= total_meia_noite && dia == dia_atuais-1 && ano == ano_atual){
+                            counter2++;
+                            continue;
+                        }
+                    }
+                 
+                    
+                    
+                    
+
+                   
+                }
+            }  
+        }
+        map.put("last_hour", counter);
+        map.put("2_hours_ago", counter2);
+        return map;
+    } 
     // Não faz sentido alterar nem sequer os dados
     //public SensorData updateSensorData(SensorData sensorData) {
     //    SensorData existingShoppingManager = repository.findById((int)sensorData.getId()).orElse(null);

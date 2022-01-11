@@ -27,14 +27,12 @@ $(document).ready(function() {
         table.search($('#mySearchText').val()).draw();
 
     } );
-
     updateView();
     loadShoppingsPark();
     loadShoppingInfo();
     loadShoppingStores();
     loadPeopleByWeek();
     loadShoppingEntrancesLastHour();
-    loadParkEntrancesLastHour();
 
     $("#mySearchText").on('input', function() {
         search();
@@ -169,6 +167,29 @@ const loadShoppingsPark = function(){
     })
 }
 
+var ret_pedirApiStores
+const getAllStoresLastHourEntrance= function(){
+    $.ajax({
+        url: consts.BASE_URL + '/api/CountLastHoursForStores/' + SessionManager.get("session").shopping.id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                ret_pedirApiStores=data
+                console.log("OLAAAAAAA",ret_pedirApiStores)
+            } else {
+                console.log("No data");
+            }
+
+        },
+
+        error: function() {
+            console.log(" erro na call");
+        }
+    })
+}
+
 const loadShoppingEntrancesLastHour= function(){
     $.ajax({
         url: consts.BASE_URL + '/api/PeopleInShoppingInLastHour/' + SessionManager.get("session").shopping.id,
@@ -179,7 +200,6 @@ const loadShoppingEntrancesLastHour= function(){
             if (data) {
                 let horas_atrs=data["2_hours_ago"];
                 let horas_atual=data["last_hour"];
-                console.log(horas_atrs)
                 let diferença=0
                 if (horas_atrs ==0 ){
                     diferença=(horas_atual- horas_atrs)*100
@@ -189,7 +209,6 @@ const loadShoppingEntrancesLastHour= function(){
                     diferença=(( horas_atual- horas_atrs)/horas_atrs)*100
                     
                 }
-                console.log(diferença)
                 if (diferença >0){
                     $("#shopping_capacity_percentagem").after($("<i class='ion ion-android-arrow-up text-success' ></i>").text(diferença+ "% in last hour")  )
                 }
@@ -204,59 +223,37 @@ const loadShoppingEntrancesLastHour= function(){
         },
 
         error: function() {
-            console.log("SERRAS erro na call");
+            console.log(" erro na call");
         }
     })
 }
 
-const loadParkEntrancesLastHour= function(){
-    $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInParkInLastHour/' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                let horas_atrs=data["2_hours_ago"];
-                let horas_atual=data["last_hour"];
-                console.log(horas_atrs)
-                let diferença=0
-                if (horas_atrs ==0 ){
-                    diferença=(horas_atual- horas_atrs)*100
-               
-                }
-                else{
-                    diferença=(( horas_atual- horas_atrs)/horas_atrs)*100
-                    
-                }
-                console.log(diferença)
-                if (diferença >0){
-                    $("#park_capacity_percentagem").after($("<i class='ion ion-android-arrow-up text-success' ></i>").text(diferença+ "% in last hour")  )
-                }
-                else{
-                    $("#park_capacity_percentagem").after($("<i class='ion ion-android-arrow-down text-warning' ></i>").text(diferença+ "% in last hour")  )
-
-                }
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log("SERRAS erro na call");
-        }
-    })
-}
 
 
 const renderTable = function (data) {
     var table_data = []
-    
+    getAllStoresLastHourEntrance()
     $("#stores_body").empty();
+    console.log(ret_pedirApiStores)
     data.forEach(function(e, i) {
-        table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><small class="text-success mr-1"><i class="fas fa-arrow-up"></i>'+10+'</small></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
-    })
+            let horas_atrs=ret_pedirApiStores[e.id]["2_hours_ago"];
+            let horas_atual=ret_pedirApiStores[e.id]["last_hour"];
+            let diferença=0
+            if (horas_atrs ==0 ){
+                diferença=(horas_atual- horas_atrs)*100
+        
+            }
+            else{
+                diferença=(( horas_atual- horas_atrs)/horas_atrs)*100
+                
+            }
+            if (diferença >0){
+                table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><small class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i>'+diferença+"%"+'</small></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+            }
+            else{
+                table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><small class="text-success mr-1"><i class="ion ion-android-arrow-up text-warning"></i>'+diferença+"%"+'</small></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+            }
+        })
    
     table.clear();
     table.rows.add( table_data ).draw();

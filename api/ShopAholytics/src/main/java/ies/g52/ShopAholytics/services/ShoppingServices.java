@@ -1,11 +1,14 @@
 package ies.g52.ShopAholytics.services;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ies.g52.ShopAholytics.models.Park;
 import ies.g52.ShopAholytics.models.Shopping;
+import ies.g52.ShopAholytics.models.Store;
 import ies.g52.ShopAholytics.repository.ShoppingRepository;
 
 @Service
@@ -20,6 +23,21 @@ public class ShoppingServices {
     public List<Shopping> saveShopping(List<Shopping> Shopping) {
         return repository.saveAll(Shopping);
     }
+
+    public Set<Park> getAllParks(int id) {
+       
+        Set<Park> ret=this.getShoppingById(id).getParks();
+        
+        return ret;
+    }
+
+    public Set<Store> getAllStores(int id) {
+       
+        Set<Store> ret=this.getShoppingById(id).getStores();
+        
+        return ret;
+    }
+
 
     public List<Shopping> getShopping() {
         return repository.findAll();

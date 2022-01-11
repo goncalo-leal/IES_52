@@ -10,12 +10,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import ies.g52.ShopAholytics.models.SensorData;
-import ies.g52.ShopAholytics.models.Sensor;
 import ies.g52.ShopAholytics.enumFolder.SensorEnum;
 import ies.g52.ShopAholytics.models.*;
 
@@ -1555,4 +1554,29 @@ public class SensorDataController {
     public String deleteSensorData(@PathVariable int id) {
         return sensorDataService.deleteSensorData(id);
     }
+
+    @GetMapping("/CountLastHoursForParks/{id}")
+    public HashMap<Integer, HashMap<String,Integer>> findAllSensorsDatas(@PathVariable int id) {
+        Shopping shopping = shoppingServices.getShoppingById(id);
+        Set<Park> a = shopping.getParks();
+        HashMap<Integer, HashMap<String,Integer>>  map = new HashMap<>();
+        for (Park parque : a){
+            HashMap<String, Integer> ret = sensorDataService.lastHourCountsPark(parque.getId());
+            map.put(parque.getId(), ret);
+        }
+        return map;
+    }
+
+    @GetMapping("/CountLastHoursForStores/{id}")
+    public HashMap<Integer, HashMap<String,Integer>> findAllSensorsDatasadsa(@PathVariable int id) {
+        Shopping shopping = shoppingServices.getShoppingById(id);
+        Set<Store> a = shopping.getStores();
+        HashMap<Integer, HashMap<String,Integer>>  map = new HashMap<>();
+        for (Store parque : a){
+            HashMap<String, Integer> ret = sensorDataService.lastHourCountsStore(parque.getId());
+            map.put(parque.getId(), ret);
+        }
+        return map;
+    }
+
 }
