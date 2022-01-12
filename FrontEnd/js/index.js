@@ -7,6 +7,8 @@ var parks_table;
 var past_info_stores;
 var past_info_parks;
 var contador = 0;
+var p_contador = 0;
+
 var stores = [];
 var parks = [];
 var storesData={};
@@ -68,13 +70,25 @@ $(document).ready(function() {
 
     $('#carouselExampleIndicators').on('slid.bs.carousel', function () {
         if (contador <= stores.length-1){
-            var currentIndex = $('div.active').index();
+            var currentIndex = $('#carouselExampleIndicators div.active').index();
             var curr, cap, id, nome;
             [curr, cap, id, nome] = storesData[currentIndex];
             var donutChartCanvas = $('#'+id).get(0).getContext('2d')
             $("#storeName"+currentIndex).html(nome);
             renderDonut(curr, cap, id, nome);
             contador++;
+        }
+    });
+
+    $('#carouselParks').on('slid.bs.carousel', function () {
+        if (p_contador <= parks.length-1){
+            var p_currentIndex = $('#carouselParks div.active').index();
+            var p_curr, p_cap, p_id, p_nome;
+            [p_curr, p_cap, p_id, p_nome] = [parks[p_currentIndex].current_capacity, parks[p_currentIndex].capacity, "parkDonut"+p_currentIndex, parks[p_currentIndex].name];
+            var donutChartCanvas = $('#'+p_id).get(0).getContext('2d')
+            $("#parkName"+p_currentIndex).html(p_nome);
+            renderDonut(p_curr, p_cap, p_id, p_nome);
+            p_contador++;
         }
     });
 });
@@ -92,6 +106,7 @@ const loadShoppingInfo = function() {
                 var cur_capacity = 0;
                 stores = data.stores;
                 parks = data.parks;
+                
                 
                 $("#shopcurcap").text(data.current_capacity);
                 $("#shopmaxcap").text(data.capacity);
@@ -122,27 +137,55 @@ const loadShoppingInfo = function() {
 const loadShoppingStores = function() {
     for (var i = 0; i < stores.length; i++){
         if (i == 0){
-            $('<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>').appendTo('.carousel-indicators')
+            $('<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>').appendTo('#to_remove2')
             $('<div class="carousel-item active"><canvas class="d-block w-100" heigh="200" id="donut0" ></canvas><div class="carousel-caption d-none d-md-block">\
             <h5 style="color:black;" id="storeName0"></h5>\
             </div>\
-            </div>').appendTo('.carousel-inner');
+            </div>').appendTo('#itemsStores');
             $( "#to_remove1" ).remove();
             $( "#to_remove2" ).remove();
         }
         else{
-            $('<li data-target="#carouselExampleIndicators" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators')
+            $('<li data-target="#carouselExampleIndicators" data-slide-to="'+i+'"></li>').appendTo('#to_remove2')
             $('<div class="carousel-item"><canvas class="d-block w-100" heigh="200" id="donut'+i+'" ></canvas><div class="carousel-caption d-none d-md-block">\
             <h5 style="color:black;" id="storeName'+i+'"></h5>\
-            </div>\</div>').appendTo('.carousel-inner');
+            </div>\</div>').appendTo('#itemsStores');
         }
-        //<canvas id="visitors-chart" height="200"></canvas>
     }
+    for (var j=0; j< parks.length; j++){
+        if (j == 0){
+            $('<li data-target="#carouselParks" data-slide-to="0" class="active"></li>').appendTo('#arrow_parks')
+            $('<div class="carousel-item active"><canvas class="d-block w-100" heigh="200" id="parkDonut0" ></canvas><div class="carousel-caption d-none d-md-block">\
+            <h5 style="color:black;" id="parkName0"></h5>\
+            </div>\
+            </div>').appendTo('#itemsParks');
+            $( "#arrow_parks" ).remove();
+            $( "#carousel_item" ).remove();
+        }
+        else{
+            $('<li data-target="#carouselParks" data-slide-to="'+i+'"></li>').appendTo('#arrow_parks')
+            $('<div class="carousel-item"><canvas class="d-block w-100" heigh="200" id="parkDonut'+j+'" ></canvas><div class="carousel-caption d-none d-md-block">\
+            <h5 style="color:black;" id="parkName'+j+'"></h5>\
+            </div>\</div>').appendTo('#itemsParks');
+        }
+    }
+
+    var p_curr, p_cap, p_id, p_nome 
+    
+    [p_curr, p_cap, p_id, p_nome]= [parks[0].current_capacity, parks[0].capacity, "parkDonut0", parks[0].name];
+    renderDonut(p_curr, p_cap, p_id, p_nome);
+    $("#parkName0").html(p_nome);
+    p_contador++;
+    
+
+
+
     storeInformation(stores);
     var curr, cap, id, nome;
     [curr, cap, id, nome] = storesData[0]
     renderDonut(curr, cap, id, nome);
     $("#storeName0").html(nome);
+    
     contador++;
     return;
 }
