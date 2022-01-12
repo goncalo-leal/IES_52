@@ -12,6 +12,7 @@ $(document).ready(function() {
         format: 'HH:mm',
         use24hours: true,
     });
+    
     $('#closing_timepicker').datetimepicker({
         format: 'HH:mm',
         use24hours: true,
