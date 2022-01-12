@@ -116,5 +116,13 @@ public class Store {
     public void setCurrent_capacity(int current_capacity) {
         this.current_capacity = current_capacity;
     }
+
+    @Override
+    public String toString() {
+        return "Store [capacity=" + capacity + ", closing=" + closing + ", current_capacity=" + current_capacity
+                + ", id=" + id +  ", location=" + location + ", name=" + name
+                + ", opening=" + opening + "]";
+    }
+    
     
 }
