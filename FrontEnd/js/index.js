@@ -8,6 +8,7 @@ var past_info_stores;
 var past_info_parks;
 
 $(document).ready(function() {
+    updateView();
     getAllStoresLastHourEntrance();
     getAllParksLastHourEntrance();
 
@@ -48,7 +49,6 @@ $(document).ready(function() {
         "dom": '<"top"i>rt<"bottom"><"clear">'
     });
 
-    updateView();
     loadShoppingInfo();
     loadShoppingsParks();
     loadShoppingStores();
