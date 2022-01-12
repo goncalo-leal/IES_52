@@ -157,7 +157,59 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <h3 class="card-title">Occupation Overview</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-12 border-right">
+                                    <div class="position-relative mb-4">
+                                        <canvas id="donutPark" height="300"></canvas>
+                                    </div>
+                                    <div id="parkingTab" class="d-flex justify-content-between align-items-center">
+                                        <p class="text-success text-xl">
+                                            <i class="fas fa-car"></i>
+                                            <span class="text-muted">Parking Capacity</span>
+                                        </p>
+                                        
+
+                                        <p class="d-flex flex-column text-right">
+                                            <span class="font-weight-bold">
+                                                <span id="parkcurcap">0</span>/<span id="parkmaxcap">0</span> spots occupied
+                                            </span>
+                                            <span class="font-weight-bold" id ="park_capacity_percentagem"></span>
+                                        </p>
+                                    </div>
+                                    <!-- /.d-flex -->
+                                </div>
+                                <div class="col-lg-6 col-sm-12 border-left">
+                                    <div class="position-relative mb-4">
+                                        <canvas id="donutShopping" height="300"></canvas>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center">
+                                    <p class="text-warning text-xl">
+                                        <i class="fas fa-shopping-bag"></i>
+                                        <span class="text-muted">Shopping Capacity</span>
+                                    </p>
+                                    <p class="d-flex flex-column text-right">
+                                        <span class="font-weight-bold">
+                                            <span id="shopcurcap">0</span>/<span id="shopmaxcap">0</span> People
+                                        </span>
+                                        <span class="font-weight-bold" id="shopping_capacity_percentagem">
+                                        </span>
+                                    </p>
+                                    </div>
+                                    <!-- /.d-flex -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header border-0">
                             <div class="d-flex justify-content-between">
@@ -166,39 +218,35 @@
                             </div>
                         </div>
 
-                        <div class="card card-success">
-                            <div class="card-header">
-                              <h3 class="card-title">Bar Chart</h3>
-              
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-tool" data-card-widget="remove">
-                                    <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body" style="display: block;">
-                              <div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 324px;" width="324" height="250" class="chartjs-render-monitor"></canvas>
-                              </div>
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-
                         <div class="card-body">
+                        
+                            <div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                <canvas id="barChart" style="min-height: 250px; height: 350px; max-height: 350px; max-width: 100%; display: block; width: 324px;" width="324" height="250" class="chartjs-render-monitor"></canvas>
+                            </div>
+
                             <div class="d-flex">
                                 <p class="d-flex flex-column">
                                     <span class="text-bold text-lg" id="shopping_capacity">820</span>
                                     <span>Visitors This Week</span>
                                 </p>
                                 <p class="ml-auto d-flex flex-column text-right">
-                                    <span  class="text-success" id ="Total_diferença_semanas">
-                                    </span>
+                                    <span  class="text-success" id ="Total_diferença_semanas"></span>
                                 </p>
                             </div>
-                            <h3 class="card-title">Stores Occupation</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">Shops Occupation</h3>
+                                <!--<a href="javascript:void(0);">View Report</a>-->
+                            </div>
+                        </div>
+
+                        <div class="card-body">
                             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                                 <ol class="carousel-indicators" id="to_remove2">
                                   <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -227,109 +275,75 @@
                 <div class="col-lg-6">
                     <div class="card">
                         <div class="card-header border-0">
-                            <h3 class="card-title">Occupation Overview</h3>
+                            <h3 class="card-title">Parks Occupation</h3>
                         </div>
                         <div class="card-body">
-
-                            <div class="position-relative mb-4">
-                                <canvas id="donutPark" height="200"></canvas>
-                            </div>
-
-
-
-                            <div id="parkingTab" class="d-flex justify-content-between align-items-center border-bottom mb-3">
-                            <p class="text-success text-xl">
-                                <i class="fas fa-car"></i>
-                                <span class="text-muted">Parking Capacity</span>
-                            </p>
-                            
-
-                            <p class="d-flex flex-column text-right">
-                                <span class="font-weight-bold">
-                                    <span id="parkcurcap">0</span>/<span id="parkmaxcap">0</span> spots occupied
-                                </span>
-                                <span class="font-weight-bold" id ="park_capacity_percentagem">
-                                </span>
-                            </p>
-                            </div>
-                            <!-- /.d-flex -->
-
-                            <div class="position-relative mb-4">
-                                <canvas id="donutShopping" height="200"></canvas>
-                            </div>
-
-                            <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
-                            <p class="text-warning text-xl">
-                                <i class="fas fa-shopping-bag"></i>
-                                <span class="text-muted">Shopping Capacity</span>
-                            </p>
-                            <p class="d-flex flex-column text-right">
-                                <span class="font-weight-bold">
-                                    <span id="shopcurcap">0</span>/<span id="shopmaxcap">0</span> People
-                                </span>
-                                <span class="font-weight-bold" id="shopping_capacity_percentagem">
-                                </span>
-                            </p>
-                            </div>
-                            <!-- /.d-flex -->
+                            <h2>FAZER AQUI CARROSSEL DA OCUPAÇÃO DOS PARQUES</h2>                            
                         </div>
                     </div>
                 </div>
-            <!-- /.col-md-6 -->
-                </div>
-                <!-- /.row -->
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header border-0">
-                                <h3 class="card-title">Shops Occupation</h3>
-                            </div>
-                            <div class="card-body table-responsive">
-                                <div class="row">
-                                    <div class="pl-4 col-10">
-                                        <input type="text" id="mySearchText" class="form-control form-control-sm" width="90%" placeholder="Search...">
-                                    </div>
-                                    <div class="p-0 col-2 text-center">
-                                        <button id="mySearchButton" class="btn btn-sm btn-primary" >Search</button>
-                                    </div>
+                <!-- /.col-md-6 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <h3 class="card-title">Shops Occupation Extended</h3>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <div class="row">
+                                <div class="pl-4 pr-4 col-12">
+                                    <input type="text" id="stores_search_txt" class="form-control form-control-sm" width="90%" placeholder="Search...">
                                 </div>
-                                <table id="stores" class="table table-striped table-valign-middle">
-                                    <thead>
-                                        <tr>
-                                            <th>Shop</th>
-                                            <th class="text-center">Live Occupation</th>
-                                            <th class="text-center">Growth in the last hour</th>
-                                            <th class="text-right">More</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="stores_body">
-                                        <tr>
-                                            <td>
-                                                Shop 1
-                                            </td>
-                                            <td class="text-center">
-                                                1 customers
-                                            </td>
-                                            <td class="text-center">
-                                                <small class="text-success mr-1">
-                                                    <i class="fas fa-arrow-up"></i>
-                                                    12%
-                                                </small>
-                                            </td>
-                                            <td class="text-right">
-                                                <a href="#" class="text-muted">
-                                                    <i class="fas fa-search"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
                             </div>
+                            <table id="stores" class="table table-striped table-valign-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Shop</th>
+                                        <th class="text-center">Live Occupation</th>
+                                        <th class="text-center">Growth in the last hour</th>
+                                        <th class="text-right">More</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="stores_body">
+                                    
+                                </tbody>
+                            </table>
                         </div>
-                        <!-- /.card -->
                     </div>
+                    <!-- /.card -->
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <h3 class="card-title">Parks Occupation Extended</h3>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <div class="row">
+                                <div class="pl-4 pr-4 col-12">
+                                    <input type="text" id="parks_search_txt" class="form-control form-control-sm" width="90%" placeholder="Search...">
+                                </div>
+                            </div>
+                            <table id="parks" class="table table-striped table-valign-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Park</th>
+                                        <th class="text-center">Live Occupation</th>
+                                        <th class="text-center">Growth in the last hour</th>
+                                        <th class="text-right">More</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="parks_body">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.card -->
                 </div>
             </div>
+        </div>
         <!-- /.container-fluid -->
     </div>
     <!-- /.content -->

@@ -117,7 +117,7 @@ const renderTable = function (data) {
     $("#managers_body").empty();
     data.forEach(function(e, i) {
         var options = loadUserStates(number++, e.user.state.description);
-        table_data.push([e.user.name, '<p class="text-center">'+e.user.email+'</p>', '<p class="text-center">'+e.store.name+'</p>', '<p class="text-center" ><select id="user_'+ e.user.id +'" name="states'+ i +'" class="browser-default custom-select" style="max-width:200px;">'+ options +'</select></p>']); //onchange="changeState('+ e.user.id +')"
+        table_data.push(['<p>'+e.user.name+'</p>', '<p class="text-center">'+e.user.email+'</p>', '<p class="text-center">'+e.store.name+'</p>', '<p class="text-center" ><select id="user_'+ e.user.id +'" name="states'+ i +'" class="browser-default custom-select" style="max-width:200px;">'+ options +'</select></p>']); //onchange="changeState('+ e.user.id +')"
     })
    
     table.clear();
