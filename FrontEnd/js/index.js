@@ -6,11 +6,16 @@ var stores_table;
 var parks_table;
 var past_info_stores;
 var past_info_parks;
+var contador = 0;
+var stores = [];
+var parks = [];
+var storesData={};
 
 $(document).ready(function() {
     updateView();
-    getAllStoresLastHourEntrance();
-    getAllParksLastHourEntrance();
+    
+    past_info_stores = getAllStoresLastHourEntrance();
+    past_info_parks = getAllParksLastHourEntrance();
 
     stores_table = $("#stores").DataTable({
         "lengthChange": false,
@@ -50,8 +55,6 @@ $(document).ready(function() {
     });
 
     loadShoppingInfo();
-    loadShoppingsParks();
-    loadShoppingStores();
     loadPeopleByWeek();
     loadShoppingEntrancesLastHour();
 
@@ -64,7 +67,7 @@ $(document).ready(function() {
     });
 
     $('#carouselExampleIndicators').on('slid.bs.carousel', function () {
-        if (contador<=stores.length-1){
+        if (contador <= stores.length-1){
             var currentIndex = $('div.active').index();
             var curr, cap, id, nome;
             [curr, cap, id, nome] = storesData[currentIndex];
@@ -75,63 +78,6 @@ $(document).ready(function() {
         }
     });
 });
-
-var contador=0;
-var stores;
-var parks;
-var storesData={};
-
-const loadShoppingStores = function(){
-    $.ajax({
-        url: consts.BASE_URL + '/api/Shopping?id=' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                for (var i=0; i<data.stores.length; i++){
-                    if (i==0){
-                        $('<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>').appendTo('.carousel-indicators')
-                        $('<div class="carousel-item active"><canvas class="d-block w-100" heigh="200" id="donut0" ></canvas><div class="carousel-caption d-none d-md-block">\
-                        <h5 style="color:black;" id="storeName0"></h5>\
-                        </div>\
-                        </div>').appendTo('.carousel-inner');
-                        $( "#to_remove1" ).remove();
-                        $( "#to_remove2" ).remove();
-                    }
-                    else{
-                        $('<li data-target="#carouselExampleIndicators" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators')
-                        $('<div class="carousel-item"><canvas class="d-block w-100" heigh="200" id="donut'+i+'" ></canvas><div class="carousel-caption d-none d-md-block">\
-                        <h5 style="color:black;" id="storeName'+i+'"></h5>\
-                        </div>\</div>').appendTo('.carousel-inner');
-                    }
-                    //<canvas id="visitors-chart" height="200"></canvas>
-                }
-                storeInformation(data.stores);
-                var curr, cap, id, nome;
-                [curr, cap, id, nome] = storesData[0]
-                renderDonut(curr, cap, id, nome);
-                $("#storeName0").html(nome);
-                contador++;
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log("erro na call");
-        }
-    })
-    return;
-}
-
-const storeInformation = function(data){
-    data.forEach(function(e, i) {
-        storesData[i]=[e.current_capacity, e.capacity, 'donut'+i, e.name];
-    })
-    return;
-}
 
 const loadShoppingInfo = function() {
     $("#s_name").text(SessionManager.get("session").shopping.name);
@@ -145,10 +91,11 @@ const loadShoppingInfo = function() {
             if (data) {
                 var cur_capacity = 0;
                 stores = data.stores;
+                parks = data.parks;
                 
                 $("#shopcurcap").text(data.current_capacity);
                 $("#shopmaxcap").text(data.capacity);
-                parks = data.parks;
+                
                 renderDonut(data.current_capacity, data.capacity, "donutShopping");
                 if (parks.length > 0) {
                     console.log("calculate parks...");
@@ -158,6 +105,9 @@ const loadShoppingInfo = function() {
 
                 renderStoresTable(stores);
                 renderParksTable(parks);
+
+                loadShoppingsParks();
+                loadShoppingStores();
             } else {
                 console.log("No store for this shopping");
             }
@@ -169,31 +119,59 @@ const loadShoppingInfo = function() {
     })
 }
 
-const loadShoppingsParks = function(){
-    console.log(parks)
-    $.ajax({
-        url: consts.BASE_URL + '/api/Park?id=' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                $("#parkcurcap").html(data.current_capacity);
-                $("#parkmaxcap").html(data.capacity);    
-                renderDonut(data.current_capacity, data.capacity, "donutPark");
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log("erro na call");
+const loadShoppingStores = function() {
+    for (var i = 0; i < stores.length; i++){
+        if (i == 0){
+            $('<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>').appendTo('.carousel-indicators')
+            $('<div class="carousel-item active"><canvas class="d-block w-100" heigh="200" id="donut0" ></canvas><div class="carousel-caption d-none d-md-block">\
+            <h5 style="color:black;" id="storeName0"></h5>\
+            </div>\
+            </div>').appendTo('.carousel-inner');
+            $( "#to_remove1" ).remove();
+            $( "#to_remove2" ).remove();
         }
+        else{
+            $('<li data-target="#carouselExampleIndicators" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators')
+            $('<div class="carousel-item"><canvas class="d-block w-100" heigh="200" id="donut'+i+'" ></canvas><div class="carousel-caption d-none d-md-block">\
+            <h5 style="color:black;" id="storeName'+i+'"></h5>\
+            </div>\</div>').appendTo('.carousel-inner');
+        }
+        //<canvas id="visitors-chart" height="200"></canvas>
+    }
+    storeInformation(stores);
+    var curr, cap, id, nome;
+    [curr, cap, id, nome] = storesData[0]
+    renderDonut(curr, cap, id, nome);
+    $("#storeName0").html(nome);
+    contador++;
+    return;
+}
+
+const storeInformation = function(data){
+    data.forEach(function(e, i) {
+        storesData[i]=[e.current_capacity, e.capacity, 'donut'+i, e.name];
     })
+    return;
+}
+
+const loadShoppingsParks = function() {
+    let occupied = 0;
+    let total = 0;
+
+    for (var i = 0; i < parks.length; i++){
+        occupied += parks[i]["current_capacity"];
+        total += parks[i]["capacity"];
+        // aqui também podes gerar os donuts de cada park como tens no loadShoppingsStores()
+    }
+
+    $("#parkcurcap").html(occupied);
+    $("#parkmaxcap").html(total);
+    renderDonut(occupied, total, "donutPark");
 }
 
 const getAllStoresLastHourEntrance= function(){
+    var to_ret = null;
+
     $.ajax({
         url: consts.BASE_URL + '/api/CountLastHoursForStores/' + SessionManager.get("session").shopping.id,
         type: "GET", 
@@ -201,20 +179,23 @@ const getAllStoresLastHourEntrance= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                past_info_stores=data
+                to_ret = data
             } else {
                 console.log("No data");
             }
-
         },
 
         error: function() {
             console.log(" erro na call");
         }
-    })
+    });
+
+    return to_ret;
 }
 
 const getAllParksLastHourEntrance= function(){
+    var to_ret = null
+
     $.ajax({
         url: consts.BASE_URL + '/api/CountLastHoursForParks/' + SessionManager.get("session").shopping.id,
         type: "GET", 
@@ -222,17 +203,18 @@ const getAllParksLastHourEntrance= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                past_info_parks = data
+                to_ret = data
             } else {
                 console.log("No data");
             }
-
         },
 
         error: function() {
             console.log(" erro na call");
         }
-    })
+    });
+
+    return to_ret;
 }
 
 const loadShoppingEntrancesLastHour= function(){
@@ -278,15 +260,17 @@ const renderStoresTable = function (data) {
 
     $("#stores_body").empty();
     data.forEach(function(e, i) {
-        let horas_atrs = past_info_stores[e.id]["2_hours_ago"];
-        let horas_atual = past_info_stores[e.id]["last_hour"];
         let difference = 0
+        if (past_info_stores !== null) {
+            let horas_atrs = past_info_stores[e.id]["2_hours_ago"];
+            let horas_atual = past_info_stores[e.id]["last_hour"];
 
-        if (horas_atrs == 0) {
-            difference = (horas_atual- horas_atrs) * 100        
-        }
-        else {
-            difference = ((horas_atual - horas_atrs) / horas_atrs) * 100           
+            if (horas_atrs == 0) {
+                difference = (horas_atual- horas_atrs) * 100        
+            }
+            else {
+                difference = ((horas_atual - horas_atrs) / horas_atrs) * 100           
+            }
         }
 
         if (difference >0){
@@ -306,15 +290,17 @@ const renderParksTable = function (data) {
 
     $("#parks_body").empty();
     data.forEach(function(e, i) {
-        let two_hours_ago = past_info_parks[e.id]["2_hours_ago"];
-        let last_hour = past_info_parks[e.id]["last_hour"];
         let difference = 0
-
-        if (two_hours_ago == 0) {
-            difference = (last_hour- two_hours_ago) * 100        
-        }
-        else {
-            difference = ((last_hour - two_hours_ago) / two_hours_ago) * 100
+        if (past_info_parks !== null) {
+            let two_hours_ago = past_info_parks[e.id]["2_hours_ago"];
+            let last_hour = past_info_parks[e.id]["last_hour"];
+            
+            if (two_hours_ago == 0) {
+                difference = (last_hour- two_hours_ago) * 100        
+            }
+            else {
+                difference = ((last_hour - two_hours_ago) / two_hours_ago) * 100
+            }
         }
 
         if (difference > 0){
@@ -385,7 +371,7 @@ const renderDonut = function (curr, total, id, title=""){
     
     var donutData = {        
         labels: [
-            'Occuped',
+            'Occupied',
             'Free',
         ],
         datasets: [
