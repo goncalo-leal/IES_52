@@ -6,6 +6,7 @@ var table;
 var stores = [];
 
 $(document).ready(function () {
+    updateView();
     loadStores();
 
     table = $("#stores").DataTable({

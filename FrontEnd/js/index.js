@@ -274,10 +274,10 @@ const renderStoresTable = function (data) {
         }
 
         if (difference >0){
-            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i>' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i> ' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
         }
         else{
-            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-warning mr-1"><i class="ion ion-android-arrow-up text-warning"></i>' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-warning mr-1"><i class="ion ion-android-arrow-up text-warning"></i> ' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
         }
     });
    
@@ -304,10 +304,10 @@ const renderParksTable = function (data) {
         }
 
         if (difference > 0){
-            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i>' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i> ' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
         }
         else{
-            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-warning mr-1"><i class="ion ion-android-arrow-up text-warning"></i>' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-warning mr-1"><i class="ion ion-android-arrow-up text-warning"></i> ' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
         }
     });
    
@@ -344,11 +344,11 @@ const loadPeopleByWeek = function() {
                     
                 }
                 diferença=diferença.toFixed(2)
-                if (diferença >0){
-                    $("#Total_diferença_semanas").after($("<i class='ion ion-android-arrow-up text-success' ></i>").text(diferença+ "% Since last week")  )
+                if (diferença > 0){
+                    $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-up text-success' ></i> " + diferença + "% Since last week")
                 }
                 else{
-                    $("#Total_diferença_semanas").after($("<i class='ion ion-android-arrow-down text-warning' ></i>").text(diferença+ "% Since last week")  )
+                    $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-down text-warning' ></i> " + diferença+ "% Since last week")
 
                 }
                 renderGraphic(data.mapa);
@@ -377,7 +377,7 @@ const renderDonut = function (curr, total, id, title=""){
         datasets: [
             {
             data: [curr,total-curr],
-            backgroundColor : ['#f56954', '#00a65a'],
+            backgroundColor : ['#ced4da', '#007bff'],
             }
         ]
     }
@@ -402,27 +402,16 @@ const renderGraphic = function (mapa) {
         labels  : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
         datasets: [
             {
-            label               : 'This week',
-            backgroundColor     : 'rgba(0,255,0,0.9)',
-            borderColor         : 'rgba(0,255,0,0.8)',
-            pointRadius          : false,
-            pointColor          : '#3b8bba',
-            pointStrokeColor    : 'rgba(0,255,0,1)',
-            pointHighlightFill  : '#fff',
-            pointHighlightStroke: 'rgba(0,255,0,1)',
-            data                : [mapa["MONDAY"], mapa["TUESDAY"], mapa["WEDNESDAY"], mapa["THURSDAY"], mapa["FRIDAY"], mapa["SATURDAY"], mapa["SUNDAY"]]
-         
+                label               : 'This week',
+                backgroundColor     : '#007bff',
+                borderColor         : '#007bff',
+                data                : [mapa["MONDAY"], mapa["TUESDAY"], mapa["WEDNESDAY"], mapa["THURSDAY"], mapa["FRIDAY"], mapa["SATURDAY"], mapa["SUNDAY"]]
             },
             {
-            label               : 'Last week',
-            backgroundColor     : 'rgba(255, 0, 0, 1)',
-            borderColor         : 'rgba(255, 0, 0, 1)',
-            pointRadius         : false,
-            pointColor          : 'rgba(255, 0, 0, 1)',
-            pointStrokeColor    : '#c1c7d1',
-            pointHighlightFill  : '#fff',
-            pointHighlightStroke: 'rgba(220,220,220,1)',
-            data                : [mapa["LAST_MONDAY"], mapa["LAST_TUESDAY"], mapa["LAST_WEDNESDAY"], mapa["LAST_THURSDAY"], mapa["LAST_FRIDAY"], mapa["LAST_SATURDAY"], mapa["LAST_SUNDAY"]]
+                label               : 'Last week',
+                backgroundColor     : '#ced4da',
+                borderColor         : '#ced4da',
+                data                : [mapa["LAST_MONDAY"], mapa["LAST_TUESDAY"], mapa["LAST_WEDNESDAY"], mapa["LAST_THURSDAY"], mapa["LAST_FRIDAY"], mapa["LAST_SATURDAY"], mapa["LAST_SUNDAY"]]
             },
         ]
     }
@@ -434,11 +423,46 @@ const renderGraphic = function (mapa) {
     var temp1 = areaChartData.datasets[1]
     barChartData.datasets[0] = temp1
     barChartData.datasets[1] = temp0
+    var mode = 'index'
+    var intersect = true
+    var ticksStyle = {
+        fontColor: '#495057',
+        fontStyle: 'bold'
+    }
 
     var barChartOptions = {
         responsive              : true,
         maintainAspectRatio     : false,
-        datasetFill             : false
+        datasetFill             : false,
+        tooltips: {
+            mode: mode,
+            intersect: intersect
+        },
+        hover: {
+            mode: mode,
+            intersect: intersect
+        },
+        legend: {
+            display: false
+        },
+        scales: {
+            yAxes: [{
+                // display: false,
+                gridLines: {
+                    display: true,
+                    lineWidth: '4px',
+                    color: 'rgba(0, 0, 0, .2)',
+                    zeroLineColor: 'transparent'
+                },
+            }],
+            xAxes: [{
+                display: true,
+                gridLines: {
+                    display: false
+                },
+                ticks: ticksStyle
+            }]
+        }
     }
 
     new Chart(barChartCanvas, {
