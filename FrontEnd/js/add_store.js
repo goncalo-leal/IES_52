@@ -31,7 +31,8 @@ $(document).ready(function() {
     $("#add_store").click(function(){
         var data_complete = {"location":$("#location").val(), "name":$("#store_name").val(),
             "capacity":$("#capacity").val(), "opening":$("#opening").val(), "closing":$("#closing").val()};
-
+        
+        if ($("#location").val()!="" && $("#store_name").val()!="" && $("#capacity").val()!="" && $("#opening").val()!="" && $("#closing").val()!="")
             $.ajax({
                 url: consts.BASE_URL + '/api/addStore/' + SessionManager.get("session").shopping.id,
                 type: "POST", 
@@ -46,7 +47,7 @@ $(document).ready(function() {
                 error: function() {
                     console.log("erro na call");
                 }
-            })
+            });
     })
 });
 

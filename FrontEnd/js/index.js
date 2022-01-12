@@ -204,7 +204,6 @@ const loadShoppingsParks = function() {
     for (var i = 0; i < parks.length; i++){
         occupied += parks[i]["current_capacity"];
         total += parks[i]["capacity"];
-        // aqui também podes gerar os donuts de cada park como tens no loadShoppingsStores()
     }
 
     $("#parkcurcap").html(occupied);
@@ -420,7 +419,7 @@ const renderDonut = function (curr, total, id, title=""){
         datasets: [
             {
             data: [curr,total-curr],
-            backgroundColor : ['#ced4da', '#007bff'],
+            backgroundColor : ['#ff0000', '#13a300'],
             }
         ]
     }
