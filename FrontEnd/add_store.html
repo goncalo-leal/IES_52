@@ -181,47 +181,56 @@
                     <div class="row">
                         <!-- /.col -->
                         <div class="input-group mb col-4">
-                            <!-- Date -->
-                            <div class="form-group">
-                                <label for="opening">Opening</label>
-                                <input type="time" class="form-control" placeholder="Opening" id="opening" required>
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group">
+                                    <label>Opening:</label>
+              
+                                    <div class="input-group date" id="opening_timepicker" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" id="opening" data-target="#opening_timepicker"  onkeydown="return false;"/>
+                                        <div class="input-group-append" data-target="#opening_timepicker" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
+                                    <!-- /.input group -->
+                                </div>
+                                <!-- /.form group -->
                             </div>
-                            
                         </div>
                         <!-- /.col -->
 
                         <div class="input-group mb col-4">
-                            <!-- Date -->
-                            <div class="form-group">
-                                <label for="closing">Closing</label>
-                                <input type="time" class="form-control" placeholder="Closing" id="closing" required>
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group">
+                                    <label>Closing:</label>
+              
+                                    <div class="input-group date" id="closing_timepicker" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" id="closing" data-target="#closing_timepicker" onkeydown="return false;"/>
+                                        <div class="input-group-append" data-target="#closing_timepicker" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
+                                    <!-- /.input group -->
+                                </div>
+                                <!-- /.form group -->
                             </div>
                         </div>
-                
 
-                    </div>
-
-                    <div class="form-group mb-3">
-                        
-                    </div>
-
-                    <div class="row">
                         <div class="input-group mb col-4">
-                            <!-- Date -->
-                            <input type="number" class="form-control" placeholder="Capacity" id="capacity" min="1" max="9">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-warehouse"></span>
+                            <div class="form-group">
+                                <label>Capacity:</label>
+
+                                <div class="input-group">
+                                    <input type="number" class="form-control" placeholder="Capacity" id="capacity" min="1" max="2000">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text"><i class="fas fa-warehouse"></i></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                                        
-                    <div class="form-group mb-3">
-                        
-                    </div>
+
                     <div class="justify-content-center d-flex mx-auto">
-                        <button id="add_manager" type="button" class="btn btn-primary btn-block" style="width:200px">Create</button>
+                        <button id="add_store" type="button" class="btn btn-primary btn-block" style="width:200px">Create</button>
                     </div>
                 </form>
 
@@ -285,30 +294,5 @@
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <script type="module" src="./js/add_store.js"></script>
-<script>
-    $(function () {
-        var table = $("#example1").DataTable({
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "autoWidth": false,
-            "responsive": true,
-            "paging": false,
-            "lengthChange": false,
-            "info": false,
-            "columnDefs": [
-                { "searchable": true, "targets": 0 },
-                { "searchable": false, "targets": 1 },
-                { "searchable": false, "targets": 2 },
-                { "searchable": false, orderable: false, "targets": 3 },
-            ],
-            "dom": '<"top"i>rt<"bottom"><"clear">'
-        });
-        
-        $('#mySearchButton').on( 'keyup click', function () {
-            table.search($('#mySearchText').val()).draw();
-        } );  
-    });
-</script>
 </body>
 </html>

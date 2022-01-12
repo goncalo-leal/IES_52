@@ -20,7 +20,7 @@ public class StoreController {
     private ShoppingServices shoppingService;
 
 
-
+    @CrossOrigin(origins = "http://localhost:8000")
     @PostMapping("/addStore/{pid}")
     public Store newStore( @RequestBody Store s,  @PathVariable(value = "pid") int pid) {
         Shopping shopping = shoppingService.getShoppingById(pid);
