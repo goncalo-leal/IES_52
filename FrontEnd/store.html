@@ -11,16 +11,15 @@
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/fontawesome-free/css/all.min.css">
   <!-- IonIcons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- daterange picker -->
-  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/daterangepicker/daterangepicker.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="./AdminLTE-3.1.0/dist/css/adminlte.min.css">
   <!-- DataTables -->
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  
+   <!-- Tempusdominus Bootstrap 4 -->
+   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 </head>
 <!--
 `body` tag options:
@@ -31,10 +30,10 @@
   * sidebar-collapse
   * sidebar-mini
 -->
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini" style="display: none">
 <div class="wrapper">
     <div class="preloader flex-column justify-content-center align-items-center">
-        <h2 class="brand-text font-weight-bold">ShopAholytics</h2>
+        <img class="animation__wobble" src="./AdminLTE-3.1.0/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
     </div>
 
   <!-- Navbar -->
@@ -79,7 +78,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                     with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="index.html" class="nav-link">
+                    <a href="index.html" class="nav-link active">
                         <i class="nav-icon fa fa-circle"></i>
                         <p>
                             Home
@@ -94,8 +93,8 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item menu-open">
-                    <a href="#" class="nav-link active">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
                         <i class="nav-icon fa fa-circle"></i>
                         <p>
                             Management
@@ -122,7 +121,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="add_user.html" class="nav-link active">
+                            <a href="add_store.html" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Add Store</p>
                             </a>
@@ -137,7 +136,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                     with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="index.html" class="nav-link">
+                    <a href="account_settings.html" class="nav-link">
                         <i class="nav-icon fa fa-cog"></i>
                         <p>
                             Account Settings
@@ -157,7 +156,8 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">New Store</h1>
+                    <h1 id="store_name" class="m-0"></h1>
+                    <h5 id="store_location" class="text-secondary"></h5>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -166,90 +166,82 @@
 
     <!-- Main content -->
     <div class="content">
-        <div class="card d-flex mt-5 justify-content-center mx-auto" style="width:900px">
-            <div class="card-body login-card-body">
-                <p class="login-box-msg">Store Information</p>
-    
-                <form>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Name" id="store_name">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-signature"></span>
-                            </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <h3 class="card-title">Live Occupation</h3>
                         </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Location" id="location">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-location-arrow"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <!-- /.col -->
-                        <div class="input-group mb col-4">
-                            <div class="bootstrap-timepicker">
-                                <div class="form-group">
-                                    <label>Opening:</label>
-              
-                                    <div class="input-group date" id="opening_timepicker" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" id="opening" data-target="#opening_timepicker"  onkeydown="return false;"/>
-                                        <div class="input-group-append" data-target="#opening_timepicker" data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-12 border-right">
+                                    <div class="position-relative mb-4">
+                                        <canvas id="donutStore" height="300"></canvas>
+                                    </div>
+                                    <div id="parkingTab" class="d-flex justify-content-between align-items-center">
+                                        <p class="d-flex flex-column text-right">
+                                            <span class="font-weight-bold">
+                                                <span id="storecurcap">0</span>/<span id="storemaxcap">0</span> People
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <!-- /.d-flex -->
+                                </div>
+                                <div class="col-lg-6 col-sm-12 border-left">
+                                    <div>
+                                        <div class="info-box bg-success" id="cur_ocup_box">
+                                            <span class="info-box-icon"><i class="fas fa-users"></i></span>
+                            
+                                            <div class="info-box-content">
+                                            <span class="info-box-text">Occupation</span>
+                                            <span class="info-box-number" id="cur_ocup_num">0</span>
+                            
+                                            <div class="progress">
+                                                <div class="progress-bar" id="cur_ocup_bar" style="width: 0%"></div>
+                                            </div>
+                                            <span class="progress-description">
+                                                now
+                                            </span>
+                                            </div>
+                                            <!-- /.info-box-content -->
                                         </div>
                                     </div>
-                                    <!-- /.input group -->
-                                </div>
-                                <!-- /.form group -->
-                            </div>
-                        </div>
-                        <!-- /.col -->
-
-                        <div class="input-group mb col-4">
-                            <div class="bootstrap-timepicker">
-                                <div class="form-group">
-                                    <label>Closing:</label>
-              
-                                    <div class="input-group date" id="closing_timepicker" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" id="closing" data-target="#closing_timepicker" onkeydown="return false;"/>
-                                        <div class="input-group-append" data-target="#closing_timepicker" data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
-                                        </div>
+                                    <div>
+                                        <div class="small-box bg-info">
+                                            <div class="inner">
+                                              <h3>150</h3>
+                              
+                                              <p>Today customers</p>
+                                            </div>
+                                            <div class="icon">
+                                              <i class="fas fa-shopping-cart"></i>
+                                            </div>
+                                          </div>
                                     </div>
-                                    <!-- /.input group -->
-                                </div>
-                                <!-- /.form group -->
-                            </div>
-                        </div>
-
-                        <div class="input-group mb col-4">
-                            <div class="form-group">
-                                <label>Capacity:</label>
-
-                                <div class="input-group">
-                                    <input type="number" class="form-control" placeholder="Capacity" id="capacity" min="1" max="2000">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text"><i class="fas fa-warehouse"></i></div>
+                                    <div>
+                                        <div class="small-box bg-info">
+                                            <div class="inner">
+                                              <h3>12%</h3>
+                              
+                                              <p>Weekly Growth</p>
+                                            </div>
+                                            <div class="icon">
+                                              <i class="ion ion-stats-bars"></i>
+                                            </div>
+                                          </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="justify-content-center d-flex mx-auto">
-                        <button id="add_store" type="button" class="btn btn-primary btn-block" style="width:200px">Create</button>
-                    </div>
-                </form>
-
+                </div>
             </div>
-            <!-- /.login-card-body -->
         </div>
+        <!-- /.container-fluid -->
     </div>
-
-   
+    <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
 
@@ -303,6 +295,6 @@
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<script type="module" src="./js/add_store.js"></script>
+<script type="module" src="./js/store.js"></script>
 </body>
 </html>

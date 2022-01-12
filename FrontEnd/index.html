@@ -11,15 +11,14 @@
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/fontawesome-free/css/all.min.css">
   <!-- IonIcons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="./AdminLTE-3.1.0/dist/css/adminlte.min.css">
   <!-- DataTables -->
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-  
-   <!-- Tempusdominus Bootstrap 4 -->
-   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 </head>
 <!--
 `body` tag options:
@@ -33,7 +32,7 @@
 <body class="hold-transition sidebar-mini" style="display: none">
 <div class="wrapper">
     <div class="preloader flex-column justify-content-center align-items-center">
-        <img class="animation__wobble" src="./AdminLTE-3.1.0/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+        <h2 class="brand-text font-weight-bold">ShopAholytics</h2>
     </div>
 
   <!-- Navbar -->
@@ -229,19 +228,27 @@
                         </div>
 
                         <div class="card-body">
-                        
-                            <div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                <canvas id="barChart" style="min-height: 250px; height: 350px; max-height: 350px; max-width: 100%; display: block; width: 324px;" width="324" height="250" class="chartjs-render-monitor"></canvas>
+                            <div class="position-relative mb-4">
+                                <canvas id="barChart" height="350"></canvas>
                             </div>
 
-                            <div class="d-flex">
-                                <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg" id="shopping_capacity">820</span>
-                                    <span>Visitors This Week</span>
-                                </p>
-                                <p class="ml-auto d-flex flex-column text-right">
-                                    <span  class="text-success" id ="Total_diferença_semanas"></span>
-                                </p>
+                            <div class="d-flex flex-row justify-content-end">
+                                <span class="mr-2">
+                                    <i class="fas fa-square text-primary"></i> This week
+                                </span>
+              
+                                <span>
+                                    <i class="fas fa-square text-gray"></i> Last week
+                                </span>
+                            </div>
+
+                            <div class="d-flex mt-4 mb-0">
+                                <div class="d-flex flex-column">
+                                    <p><span class="text-bold text-lg" id="shopping_capacity">820</span> Visitors This Week</p>
+                                </div>
+                                <div class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success" id ="Total_diferença_semanas"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
