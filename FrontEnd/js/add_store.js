@@ -39,7 +39,8 @@ $(document).ready(function() {
                 contentType: "application/json",
                 dataType: "json",
                 success: function() {
-                    console.log("Store added")
+                    console.log("Store added");
+                    window.location.replace("index.html");
                 },
         
                 error: function() {
