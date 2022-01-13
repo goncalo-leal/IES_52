@@ -9,49 +9,89 @@ if (store_id === null) {
 }
 
 var store;
+var peopletoday;
 
 $(document).ready(function() {
-    fetchStore();
     updateView();
+    updateStoreViews();
 
 })
 
-
-const updateViewStore = function() {
-    console.log(store);
-    $('#store_name').text(store.name);
-    $('#store_location').text(store.location);
-
-    renderCards();
-    loadStoreOccupationDonut();
+const updateStoreViews = function() {
+    fetchStore();
+    fetchTodayInfo();
 }
 
+const fetchStore = function() {
+    $.ajax({
+        url: consts.BASE_URL + '/api/Store?id=' + store_id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                store = data;
+                var percent = Math.round((store.current_capacity / store.capacity) * 100);
+                var color = "bg-success";
+                if (percent > 80 && percent < 90) {
+                    color = "bg-warning";
+                } 
+                else if (percent >= 90) {
+                    color = "bg-danger";
+                }
+                $('#cur_ocup_box').addClass(color);
+                $('#cur_ocup_num').text(percent + ' %');
+                $('#cur_ocup_bar').width(percent + '%');  
 
+                $('#store_name').text(store.name);
+                $('#store_location').text(store.location);
+            
+                var cur_cap = store.current_capacity;
+                var cap = store.capacity;
+            
+                $("#storecurcap").text(cur_cap);
+                $("#storemaxcap").text(cap);
+                renderDonut(cur_cap, cap, "donutStore");
+            }
+        },
 
-const renderCards = function() {
-    
-    // cur ocupation card
-    var percent = (store.current_capacity / store.capacity) * 100;
-    var color = "bg-success";
-    percent = 95;
-    if (percent > 80 && percent < 90) {
-        color = "bg-warning";
-    } 
-    else if (percent >= 90) {
-        color = "bg-danger";
-    }
-    $('#cur_ocup_box').addClass(color);
-    $('#cur_ocup_num').text(percent + ' %');
-    $('#cur_ocup_bar').width(percent + '%');
+        error: function() {
+            console.log(" erro na call");
+        }
+    });
 }
 
-const loadStoreOccupationDonut = function() {
-    var cur_cap = store.current_capacity;
-    var cap = store.capacity;
+const fetchTodayInfo = function() {
+    $.ajax({
+        url: consts.BASE_URL + '/api/PeopleInStoreToday/'+ store_id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            peopletoday = data;
+            $('#peopletoday').text(peopletoday);
+        },
 
-    $("#storecurcap").text(cur_cap);
-    $("#storemaxcap").text(cap);
-    renderDonut(cur_cap, cap, "donutStore");
+        error: function() {
+            console.log(" erro na call");
+        }
+    });
+}
+
+const fetchLastWeek = function() {
+    $.ajax({
+        url: consts.BASE_URL + '/api/PeopleInStoreLast7Days/'+ store_id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            $('#peopletoday').text(peopletoday);
+        },
+
+        error: function() {
+            console.log(" erro na call");
+        }
+    })
 }
 
 
@@ -84,23 +124,4 @@ const renderDonut = function (curr, total, id, title=""){
         data: donutData,
         options: donutOptions
     })    
-}
-
-const fetchStore = function() {
-    $.ajax({
-        url: consts.BASE_URL + '/api/Store?id=' + store_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                store = data;
-                updateViewStore()
-            }
-        },
-
-        error: function() {
-            console.log(" erro na call");
-        }
-    });
 }
