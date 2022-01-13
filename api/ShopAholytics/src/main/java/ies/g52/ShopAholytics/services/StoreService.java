@@ -1,17 +1,26 @@
 package ies.g52.ShopAholytics.services;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ies.g52.ShopAholytics.enumFolder.SensorEnum;
+import ies.g52.ShopAholytics.models.SensorStore;
 import ies.g52.ShopAholytics.models.Store;
+import ies.g52.ShopAholytics.models.SensorStoreService;
+
 import ies.g52.ShopAholytics.repository.StoreRepository;
+
 
 @Service
 public class StoreService {
     @Autowired
     private StoreRepository repository;
+
+    @Autowired
+    private SensorStoreService SensorStoreService;
 
     public Store saveStore(Store Store) {
         return repository.save(Store);
@@ -27,6 +36,20 @@ public class StoreService {
 
     public Store getStoreById(int id) {
         return repository.findById((int)id).orElse(null);
+    }
+
+    public HashMap<String,Integer> getAllSensorsAssociatedStore(int id){
+       
+        HashMap<String,Integer> map = new HashMap<>();
+
+        List<SensorStore>a = SensorStoreService.getSensorStores();
+        for ( SensorStore s : a){
+            if (s.getStore().getId() == id && s.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                map.put(s.getSensor().getName(),s.getId());
+            }
+        }
+
+        return map;
     }
 
 

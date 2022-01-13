@@ -1,10 +1,13 @@
 package ies.g52.ShopAholytics.services;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -225,6 +228,100 @@ public class SensorDataService {
         return map;
     } 
 
+    public int entradasTodayLojas(int id){
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==id ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int dia_atual=LocalDateTime.now().getDayOfYear();
+                    int ano_atual=LocalDateTime.now().getYear();
+                    if(dia ==dia_atual && ano_atual == ano){
+                        counter++;
+
+                    }
+                    
+                    
+                }
+            }  
+        }
+        return counter;
+    }
+    public int getEntrancesTodaySensor(int id){
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getId() == id){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int dia_atual=LocalDateTime.now().getDayOfYear();
+                    int ano_atual=LocalDateTime.now().getYear();
+                    if(dia ==dia_atual && ano_atual == ano){
+                        counter++;
+
+                    }
+                    
+                    
+                }
+            }  
+        }
+        return counter;
+    }
+    public int entradasTodayPark(int pid){
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int dia_atual=LocalDateTime.now().getDayOfYear();
+                    int ano_atual=LocalDateTime.now().getYear();
+                    if(dia ==dia_atual && ano_atual == ano){
+                        counter++;
+
+                    }
+                    
+                   
+                }
+            }  
+        }
+        return counter;
+    }
+
+    public int entradasShoppingHoje(int pid){
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int dia_atual=LocalDateTime.now().getDayOfYear();
+                    int ano_atual=LocalDateTime.now().getYear();
+                    if(dia ==dia_atual && ano_atual == ano){
+                        counter++;
+
+                    }
+                    
+                    
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        return counter;
+    }
     public HashMap<String,Integer> lastHourCountsPark(int id){
         List<SensorData> a = this.getSensorDatas();
         Collections.reverse(a);
@@ -327,10 +424,349 @@ public class SensorDataService {
         map.put("2_hours_ago", counter2);
         return map;
     } 
-    // Não faz sentido alterar nem sequer os dados
-    //public SensorData updateSensorData(SensorData sensorData) {
-    //    SensorData existingShoppingManager = repository.findById((int)sensorData.getId()).orElse(null);
-    //    existingShoppingManager.setData(sensorData.getData());
-    //    return repository.save(existingShoppingManager);
-    //}
+    
+    public int EntradasNoShoppingWeek(int pid){
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        int dia_atual=LocalDateTime.now().getDayOfYear();
+
+        int ano_atual=LocalDateTime.now().getYear();
+        LocalDate d = LocalDate.parse(ano_atual-1+"-12-31"); 
+        List<Integer> dias = new ArrayList<>();
+        for (int i =1; i <=7 ; i++){
+            int tmep=dia_atual-i;
+            if (tmep < 1){
+                if (d.lengthOfYear() == 365){
+                    tmep=tmep+365;
+                }
+                else{
+                    tmep=tmep+366;
+                }
+            }
+
+            dias.add(tmep);
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                      
+                    /*
+                        Problemas com as trocas de anos
+                     */
+                    if(dias.contains(dia)){
+                        counter++;
+                        
+
+                    }
+                  
+                  
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        return counter;
+    }
+    public int EntradasNoShoppingMonth(int pid){
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        int dia_atual=LocalDateTime.now().getDayOfYear();
+
+        int ano_atual=LocalDateTime.now().getYear();
+        LocalDate d = LocalDate.parse(ano_atual-1+"-12-31"); 
+        List<Integer> dias = new ArrayList<>();
+        for (int i =1; i <=31 ; i++){
+            int tmep=dia_atual-i;
+            if (tmep < 1){
+                if (d.lengthOfYear() == 365){
+                    tmep=tmep+365;
+                }
+                else{
+                    tmep=tmep+366;
+                }
+            }
+
+            dias.add(tmep);
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                      
+                    /*
+                        Problemas com as trocas de anos
+                     */
+                    if(dias.contains(dia)){
+                        counter++;
+                        
+
+                    }
+                  
+                  
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        return counter;
+    }
+
+    public int peopleInParkWeek(int pid){
+        List<SensorData> a = this.getSensorDatas();
+            Collections.reverse(a);
+            int counter=0;
+            int dia_atual=LocalDateTime.now().getDayOfYear();
+    
+            int ano_atual=LocalDateTime.now().getYear();
+            LocalDate d = LocalDate.parse(ano_atual-1+"-12-31"); 
+            List<Integer> dias = new ArrayList<>();
+            for (int i =1; i <=7 ; i++){
+                int tmep=dia_atual-i;
+                if (tmep < 1){
+                    if (d.lengthOfYear() == 365){
+                        tmep=tmep+365;
+                    }
+                    else{
+                        tmep=tmep+366;
+                    }
+                }
+    
+                dias.add(tmep);
+            }
+            for (SensorData data : a){
+                if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                    Sensor x= data.getSensor();
+                    if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==pid ){
+                        int dia =data.getDate().getDayOfYear();
+                        int ano = data.getDate().getYear();
+                          
+                       
+                        /*
+                            Problemas com as trocas de anos
+                         */
+                        if(dias.contains(dia)){
+                            counter++;
+    
+                        }
+                        else if ( dia_atual == dia){
+                            continue;
+                        }
+                      
+                        //ver se esta solução da 
+                    }
+                }  
+            }
+            return counter;
+    }
+    public int peopleInParkMonth(int pid){
+        List<SensorData> a = this.getSensorDatas();
+            Collections.reverse(a);
+            int counter=0;
+            int dia_atual=LocalDateTime.now().getDayOfYear();
+    
+            int ano_atual=LocalDateTime.now().getYear();
+            LocalDate d = LocalDate.parse(ano_atual-1+"-12-31"); 
+            List<Integer> dias = new ArrayList<>();
+            for (int i =1; i <=31 ; i++){
+                int tmep=dia_atual-i;
+                if (tmep < 1){
+                    if (d.lengthOfYear() == 365){
+                        tmep=tmep+365;
+                    }
+                    else{
+                        tmep=tmep+366;
+                    }
+                }
+    
+                dias.add(tmep);
+            }
+            for (SensorData data : a){
+                if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                    Sensor x= data.getSensor();
+                    if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==pid ){
+                        int dia =data.getDate().getDayOfYear();
+                        int ano = data.getDate().getYear();
+                          
+                       
+                        /*
+                            Problemas com as trocas de anos
+                         */
+                        if(dias.contains(dia)){
+                            counter++;
+    
+                        }
+                        else if ( dia_atual == dia){
+                            continue;
+                        }
+                      
+                        //ver se esta solução da 
+                    }
+                }  
+            }
+            return counter;
+    }
+
+
+    public int peopleInStoreWeek(int pid){
+        List<SensorData> a = this.getSensorDatas();
+            Collections.reverse(a);
+            int counter=0;
+            int dia_atual=LocalDateTime.now().getDayOfYear();
+    
+            int ano_atual=LocalDateTime.now().getYear();
+            LocalDate d = LocalDate.parse(ano_atual-1+"-12-31"); 
+            List<Integer> dias = new ArrayList<>();
+            for (int i =1; i <=7 ; i++){
+                int tmep=dia_atual-i;
+                if (tmep < 1){
+                    if (d.lengthOfYear() == 365){
+                        tmep=tmep+365;
+                    }
+                    else{
+                        tmep=tmep+366;
+                    }
+                }
+    
+                dias.add(tmep);
+            }
+            for (SensorData data : a){
+                if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                    Sensor x= data.getSensor();
+                    if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid ){
+                        int dia =data.getDate().getDayOfYear();
+                        int ano = data.getDate().getYear();
+                          
+                       
+                        /*
+                            Problemas com as trocas de anos
+                         */
+                        if(dias.contains(dia)){
+                            counter++;
+    
+                        }
+                        else if ( dia_atual == dia){
+                            continue;
+                        }
+                      
+                        //ver se esta solução da 
+                    }
+                }  
+            }
+            return counter;
+    }
+    public int peopleInStoreMonth(int pid){
+        List<SensorData> a = this.getSensorDatas();
+            Collections.reverse(a);
+            int counter=0;
+            int dia_atual=LocalDateTime.now().getDayOfYear();
+    
+            int ano_atual=LocalDateTime.now().getYear();
+            LocalDate d = LocalDate.parse(ano_atual-1+"-12-31"); 
+            List<Integer> dias = new ArrayList<>();
+            for (int i =1; i <=31 ; i++){
+                int tmep=dia_atual-i;
+                if (tmep < 1){
+                    if (d.lengthOfYear() == 365){
+                        tmep=tmep+365;
+                    }
+                    else{
+                        tmep=tmep+366;
+                    }
+                }
+    
+                dias.add(tmep);
+            }
+            for (SensorData data : a){
+                if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                    Sensor x= data.getSensor();
+                    if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid ){
+                        int dia =data.getDate().getDayOfYear();
+                        int ano = data.getDate().getYear();
+                          
+                       
+                        /*
+                            Problemas com as trocas de anos
+                         */
+                        if(dias.contains(dia)){
+                            counter++;
+    
+                        }
+                        else if ( dia_atual == dia){
+                            continue;
+                        }
+                      
+                        //ver se esta solução da 
+                    }
+                }  
+            }
+            return counter;
+    }
+
+    public Map<String,Integer> compareWithLastWeekShopping(int pid) {
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        int counter=0;
+        int counter2=0;
+        int dia_atual=LocalDateTime.now().getDayOfYear();
+        int ano_atual=LocalDateTime.now().getYear();
+        boolean end=false;
+        LocalDate d = LocalDate.parse(ano_atual-1+"-12-31");                   // import Java.time.LocalDate;
+        int dia_last_week=LocalDateTime.now().getDayOfYear() -7;
+        int ano_last_week= LocalDateTime.now().getYear();
+        int hora_atual=LocalDateTime.now().getHour();
+        int minutos_atual=LocalDateTime.now().getMinute();
+        if (dia_last_week < 1){
+            if (d.lengthOfYear() == 365){
+                dia_last_week=dia_last_week+365;
+                ano_last_week--;
+            }
+            else{
+                dia_last_week=dia_last_week+366;
+                ano_last_week--;
+            }
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int minutos = data.getDate().getMinute();
+                    int horas = data.getDate().getHour();
+
+                    if(dia ==dia_atual && ano_atual == ano){
+                        counter++;
+                    }
+                    else if (dia_last_week ==dia && ano_last_week==ano   ){
+                        if (horas < hora_atual){
+                            counter2++;
+                            end=false;
+                        }
+                        else if (horas == hora_atual && minutos <= minutos_atual){
+                            counter2++;
+
+                            end=false;
+                        }
+                        else{
+                            end =true;
+                        }
+                    }
+                   
+                    
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        Map<String,Integer> map = new HashMap<>();
+        map.put("Today", counter);
+        map.put("LastWeek", counter2);
+        return map;
+    }
+
+
 }
