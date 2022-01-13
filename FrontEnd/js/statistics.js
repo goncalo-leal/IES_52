@@ -282,6 +282,9 @@ const renderBarGraphic = function (data,id) {
                     color: 'rgba(0, 0, 0, .2)',
                     zeroLineColor: 'transparent'
                 },
+                ticks: {
+                    beginAtZero: true
+                }
             }],
             xAxes: [{
                 display: true,
