@@ -90,109 +90,36 @@ public class SensorDataController {
     }
     @GetMapping("/PeopleInShoppingInLastHour/{pid}")
     public HashMap<String,Integer> lastHourPeopleInShopping(@PathVariable(value = "pid") int pid){
-        List<SensorData> a = sensorDataService.getSensorDatas();
-        Collections.reverse(a);
-        int counter=0;
-        int counter2=0;
-        HashMap<String,Integer> map = new HashMap<>();
-        for (SensorData data : a){
-            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
-                Sensor x= data.getSensor();
-                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
-                    int horas = data.getDate().getHour();               
-                    int minutos= data.getDate().getMinute();
-                    int segundos =data.getDate().getSecond();
-                    int horas_atuais= LocalTime.now().getHour();
-                    int minutos_atuais= LocalTime.now().getMinute();
-                    int dia= data.getDate().getDayOfYear();
-                    int dia_atuais= LocalDateTime.now().getDayOfYear();
-                    int ano= data.getDate().getYear();
-                    int ano_atual= LocalDateTime.now().getYear();
-                    int segundos_atuais=LocalTime.now().getSecond();
-                    
-                    if (horas_atuais > 0){
-                        long total= 3600* horas+ minutos*60+segundos;
-                        long total_limite= 3600*(horas_atuais-1)+ minutos_atuais*60+segundos_atuais;
-                        if(total >= total_limite && dia == dia_atuais && ano == ano_atual){
-                            counter++;
-                            continue;
-                        }
-                    }
-                    else if (horas_atuais == 0  && horas==0){
-                        long total= minutos*60+segundos;
-                        long total_meia_noite=minutos_atuais*60+segundos;
-                        if(total <= total_meia_noite && dia == dia_atuais && ano == ano_atual){
-                            counter++;
-                            continue;
-                        }
-                    }
-                    else if (horas_atuais-1 == -1  && horas==23){
-                        long total= 3600* horas+ minutos*60+segundos;
-                        long total_meia_noite=(23)*3600+ minutos_atuais*60+segundos_atuais;
-                        if(total >= total_meia_noite && dia == dia_atuais-1 && ano == ano_atual){
-                            counter++;
-                            continue;
-                        }
-                    }
-                    if (horas_atuais > 1){
-                        long total= 3600*(horas_atuais-1)+ minutos_atuais*60+segundos_atuais;
-                        long atual= 3600*(horas)+ minutos*60+segundos;
-                        long total_limite= 3600*(horas_atuais-2)+ minutos_atuais*60+segundos_atuais;
-                        
-
-                        if(total >=  atual && atual >=total_limite && dia == dia_atuais && ano == ano_atual){
-                            counter2++; continue;
-                        }
-                    }
-                    else if (horas_atuais-2 == 0  && horas==0){
-                        long total_maximo=3600+minutos_atuais*60+segundos_atuais;
-                        long total= minutos*60+segundos;
-                        long total_meia_noite=minutos_atuais*60+segundos_atuais;
-                        if(total_maximo >= total && total >= total_meia_noite && dia == dia_atuais && ano == ano_atual){
-                            counter2++;
-                            continue;
-                        }
-                    }
-                    else if (horas_atuais-2 == -1  && horas==23){
-                        long total=horas*3600+ minutos*60+segundos;
-                        long total_meia_noite=23*3600+minutos_atuais*60+segundos_atuais;
-                        if( total >= total_meia_noite && dia == dia_atuais-1 && ano == ano_atual){
-                            counter2++;
-                            continue;
-                        }
-                    }
-                    else if (horas_atuais-2 == -1  && horas==0){
-                        long total_maximo=minutos_atuais*60+segundos_atuais;
-                        long total= minutos*60+segundos;
-                        if(total_maximo >= total && dia == dia_atuais && ano == ano_atual){
-                            counter2++;
-                            continue;
-                        }
-                    }
-                    else if (horas_atuais-2 == -2  ){
-                        long total_maximo=23*3600+minutos_atuais*60+segundos_atuais;
-                        long total=horas*3600+ minutos*60+segundos;
-                        long total_meia_noite=22*3600+minutos_atuais*60+segundos_atuais;
-                        if(total_maximo >= total && total >= total_meia_noite && dia == dia_atuais-1 && ano == ano_atual){
-                            counter2++;
-                            continue;
-                        }
-                    }
-                 
-                    
-                    
-                    
-
-                   
-                }
-            }  
-        }
-        map.put("last_hour", counter);
-        map.put("2_hours_ago", counter2);
-        return map;
+        return sensorDataService.lastHourShopping(pid);
     }
 
-    
+    @GetMapping("/lastHourShoppingAndParksbySensor/{pid}")
+    public HashMap<String,HashMap<String,Integer>> lastHourShoppingAndParks(@PathVariable(value = "pid") int pid){
+        HashMap<String,HashMap<String,Integer>> map = new HashMap<>();
+        HashMap<String, Integer> tmp= new HashMap<>();
+        Shopping s = shoppingServices.getShoppingById(pid);
+        Set<Park> parks = s.getParks();
+        HashMap<String, Integer> shopping_sensors = (shoppingServices.getAllSensorsAssociatedShopping(pid));
+        for (Map.Entry<String, Integer> entry : shopping_sensors.entrySet()) {
+            HashMap<String, Integer> a = sensorDataService.lastHourCountsBySensor(entry.getValue());
+            
+            tmp.put(entry.getKey(), a.get("last_hour"));
+        }
+        HashMap<String, Integer> tmp2= new HashMap<>();
+        for (Park park : parks){
+            HashMap<String, Integer> parkSensor= parkServices.getAllSensorsAssociatedPark(park.getId());
+            
+            for (Map.Entry<String, Integer> entry : parkSensor.entrySet()) {
+                HashMap<String, Integer> a = sensorDataService.lastHourCountsBySensor(entry.getValue());
+                tmp2.put(entry.getKey(), a.get("last_hour"));
+            }
+
+        }
+        map.put("Shopping", tmp);
+        map.put("Park", tmp2);
+
+        return map;
+    }
 
     @GetMapping("/PeopleInShoppingToday/{pid}/{hours}")
     public int PeopleInShoppingAtXHours(@PathVariable(value = "pid") int pid,@PathVariable(value = "hours") int hours){
@@ -253,6 +180,60 @@ public class SensorDataController {
         return map;
     }
 
+    @GetMapping("/AllSensorsForThatShoppingWeek/{pid}")
+    public HashMap<String,HashMap<String,Integer>> allSensorsWeek(@PathVariable(value = "pid") int pid){
+        HashMap<String,HashMap<String,Integer>> map = new HashMap<>();
+        HashMap<String, Integer> tmp= new HashMap<>();
+        Shopping s = shoppingServices.getShoppingById(pid);
+        Set<Park> parks = s.getParks();
+        HashMap<String, Integer> shopping_sensors = (shoppingServices.getAllSensorsAssociatedShopping(pid));
+        for (Map.Entry<String, Integer> entry : shopping_sensors.entrySet()) {
+            int data = sensorDataService.getEntrancesWeekSensor(entry.getValue());
+            tmp.put(entry.getKey(), data);
+        }
+        HashMap<String, Integer> tmp2= new HashMap<>();
+        for (Park park : parks){
+            HashMap<String, Integer> parkSensor= parkServices.getAllSensorsAssociatedPark(park.getId());
+            
+            for (Map.Entry<String, Integer> entry : parkSensor.entrySet()) {
+                int data = sensorDataService.getEntrancesWeekSensor(entry.getValue());
+                tmp2.put(entry.getKey(), data);
+            }
+
+        }
+        map.put("Shopping", tmp);
+        map.put("Park", tmp2);
+
+        return map;
+    }
+
+    @GetMapping("/AllSensorsForThatShoppingMonth/{pid}")
+    public HashMap<String,HashMap<String,Integer>> allSensorsMonth(@PathVariable(value = "pid") int pid){
+        HashMap<String,HashMap<String,Integer>> map = new HashMap<>();
+        HashMap<String, Integer> tmp= new HashMap<>();
+        Shopping s = shoppingServices.getShoppingById(pid);
+        Set<Park> parks = s.getParks();
+        HashMap<String, Integer> shopping_sensors = (shoppingServices.getAllSensorsAssociatedShopping(pid));
+        for (Map.Entry<String, Integer> entry : shopping_sensors.entrySet()) {
+            int data = sensorDataService.AllSensorsMonth(entry.getValue());
+            tmp.put(entry.getKey(), data);
+        }
+        HashMap<String, Integer> tmp2= new HashMap<>();
+        for (Park park : parks){
+            HashMap<String, Integer> parkSensor= parkServices.getAllSensorsAssociatedPark(park.getId());
+            
+            for (Map.Entry<String, Integer> entry : parkSensor.entrySet()) {
+                int data = sensorDataService.AllSensorsMonth(entry.getValue());
+                tmp2.put(entry.getKey(), data);
+            }
+
+        }
+        map.put("Shopping", tmp);
+        map.put("Park", tmp2);
+
+        return map;
+    }
+
     @GetMapping("/PeopleEntrancesTodayByShoppingOrPark/{pid}")
     public HashMap<String,Integer> PeopleEntrancesTodayByShoppingOrPark(@PathVariable(value = "pid") int pid){
         HashMap<String,Integer>  ret= new HashMap<>();
@@ -262,6 +243,25 @@ public class SensorDataController {
             ret.put("Shopping", sensorDataService.entradasShoppingHoje(pid));
             for (Park a : s.getParks()){
                 counter+= sensorDataService.entradasTodayPark(a.getId());
+            }
+            ret.put("Park",counter);
+
+        }
+        return ret;
+    }
+
+
+    @GetMapping("/PeopleEntrancesLastHourByShoppingOrPark/{pid}")
+    public HashMap<String,Integer> PeopleEntrancesLastHourByShoppingOrPark(@PathVariable(value = "pid") int pid){
+        HashMap<String,Integer>  ret= new HashMap<>();
+        Shopping s = shoppingServices.getShoppingById(pid);
+        int counter=0;
+        if (s != null){
+            HashMap<String, Integer> dic_shop= sensorDataService.lastHourShopping(pid);
+            ret.put("Shopping",dic_shop.get("last_hour"));
+            for (Park a : s.getParks()){
+                HashMap<String, Integer> dic_park = sensorDataService.lastHourCountsPark(a.getId());
+                counter+= dic_park.get("last_hour");
             }
             ret.put("Park",counter);
 

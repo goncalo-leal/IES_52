@@ -171,19 +171,23 @@
     </div>
 
     <div class="row">
-        
-        <div class="col-lg-4 col-sm-12 border-right">
+        <div class="col-lg-3 col-sm-12 border-right">
+            <h3 class="card-title">Park entrances vs Shopping Entrances (Last Hour)</h3>
+            <div class="card-body">
+                <div class="chartjs-size-monitor">
+                    <div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+            <canvas id="donutChartLastHour" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 323px;" width="323" height="250" class="chartjs-render-monitor"></canvas>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-12 border-right">
             <h3 class="card-title">Park entrances vs Shopping Entrances (Today)</h3>
-            <div class="position-relative mb-4">
-                <canvas id="barChart" height="350"></canvas>
-            </div>
             <div class="card-body">
                 <div class="chartjs-size-monitor">
                     <div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
             <canvas id="donutChartParkvsShopping" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 323px;" width="323" height="250" class="chartjs-render-monitor"></canvas>
           </div>
         </div>
-        <div class="col-lg-4 col-sm-12 border-right">
+        <div class="col-lg-3 col-sm-12 border-right">
             <h3 class="card-title">Park entrances vs Shopping Entrances (Last Week)</h3>
             <div class="card-body">
                 <div class="chartjs-size-monitor">
@@ -191,13 +195,27 @@
             <canvas id="donutChartParkvsShoppinglastWeek" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 323px;" width="323" height="250" class="chartjs-render-monitor"></canvas>
           </div>
         </div>
-        <div class="col-lg-4 col-sm-12 border-right">
+        <div class="col-lg-3 col-sm-12 border-right">
             <h3 class="card-title">Park entrances vs Shopping Entrances (Last Month)</h3>
             <div class="card-body">
                 <div class="chartjs-size-monitor">
                     <div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
             <canvas id="donutChartParkvsShoppinglastMonth" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 323px;" width="323" height="250" class="chartjs-render-monitor"></canvas>
           </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="position-relative  col-lg-3 mb-4">
+            <canvas id="barChartLastHour" height="350"></canvas>
+        </div>
+        <div class="position-relative  col-lg-3 mb-4">
+            <canvas id="barChartToday" height="350"></canvas>
+        </div>
+        <div class="position-relative col-lg-3 mb-4">
+            <canvas id="barChartWeek" height="350"></canvas>
+        </div>
+        <div class="position-relative col-lg-3 mb-4">
+            <canvas id="barChartMonth" height="350"></canvas>
         </div>
     </div>
         <!-- /.d-flex -->

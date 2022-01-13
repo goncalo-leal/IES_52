@@ -5,12 +5,15 @@ import updateView from "./common.js"
 
 $(document).ready(function() {
     updateView();
+    loadShoppingEntrancesLastHour()
     loadShoppingEntrancesLastToday()
     loadShoppingEntrancesLastWeek()
     compararLastWeek()
     loadShoppingEntrancesLastMonth()
+    loadDataBySensorLastHour()
     loadDataBySensorToday()
-
+    loadDataBySensorWeek()
+    loadDataBySensorMonth()
     // OUTRO VAI SER DE BARRAS SENSOR A SENSOR ONDE VOU MOSTRAR QUAL OS QUE TEM MAIS ADESÃO
     // day, week , last 2 weeks
     //falta o last hour
@@ -39,6 +42,29 @@ const loadShoppingEntrancesLastToday= function(){
     })
 }
 
+const loadShoppingEntrancesLastHour= function(){
+    $.ajax({
+        url: consts.BASE_URL + '/api/PeopleEntrancesLastHourByShoppingOrPark/' + SessionManager.get("session").shopping.id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                console.log(data)
+                renderDonut(data["Shopping"],data["Park"], "donutChartLastHour", "Shopping vs Park (last hour)")
+            } else {
+                console.log("No data");
+            }
+
+        },
+
+        error: function() {
+            console.log(" erro na call");
+        }
+    })
+}
+
+
 
 const loadDataBySensorToday= function(){
     $.ajax({
@@ -49,7 +75,74 @@ const loadDataBySensorToday= function(){
         success: function(data) {
             if (data) {
                 console.log("aqui", data)
-                renderBarGraphic(data)
+                renderBarGraphic(data,'barChartToday')
+
+            } else {
+                console.log("No data");
+            }
+
+        },
+
+        error: function() {
+            console.log(" erro na call");
+        }
+    })
+}
+
+const loadDataBySensorWeek= function(){
+    $.ajax({
+        url: consts.BASE_URL + '/api/AllSensorsForThatShoppingWeek/' + SessionManager.get("session").shopping.id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                console.log("aqui", data)
+                renderBarGraphic(data,'barChartWeek')
+
+            } else {
+                console.log("No data");
+            }
+
+        },
+
+        error: function() {
+            console.log(" erro na call");
+        }
+    })
+}
+const loadDataBySensorLastHour= function(){
+    $.ajax({
+        url: consts.BASE_URL + '/api/lastHourShoppingAndParksbySensor/' + SessionManager.get("session").shopping.id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                console.log("aqui", data)
+                renderBarGraphic(data,'barChartLastHour')
+
+            } else {
+                console.log("No data");
+            }
+
+        },
+
+        error: function() {
+            console.log(" erro na call");
+        }
+    })
+}
+const loadDataBySensorMonth= function(){
+    $.ajax({
+        url: consts.BASE_URL + '/api/AllSensorsForThatShoppingMonth/' + SessionManager.get("session").shopping.id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                console.log("aqui", data)
+                renderBarGraphic(data,'barChartMonth')
 
             } else {
                 console.log("No data");
@@ -160,7 +253,7 @@ const renderDonut = function (curr, total, id, title=""){
     })    
 }
 
-const renderBarGraphic = function (data) {
+const renderBarGraphic = function (data,id) {
     var labels = []
     var info = []
 
@@ -168,7 +261,7 @@ const renderBarGraphic = function (data) {
         for (const [key, v] of Object.entries(value)) {
             console.log(key+": "+v)
             labels.push(key)
-            info.push(v + 10)
+            info.push(v )
         }
     }
 
@@ -187,9 +280,8 @@ const renderBarGraphic = function (data) {
     }
     
     console.log(areaChartData)
-    alert("para aí")
 
-    var barChartCanvas = $('#barChart').get(0).getContext('2d');
+    var barChartCanvas = $('#'+id).get(0).getContext('2d');
 
     var barChartData = $.extend(true, {}, areaChartData)
     var mode = 'index'
