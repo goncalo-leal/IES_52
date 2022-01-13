@@ -1,20 +1,35 @@
 package ies.g52.ShopAholytics.services;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ies.g52.ShopAholytics.enumFolder.SensorEnum;
 import ies.g52.ShopAholytics.models.Park;
+import ies.g52.ShopAholytics.models.SensorShopping;
 import ies.g52.ShopAholytics.models.Shopping;
+import ies.g52.ShopAholytics.models.SensorShoppingService;
+import ies.g52.ShopAholytics.models.SensorStoreService;
+
+import ies.g52.ShopAholytics.models.SensorStore;
 import ies.g52.ShopAholytics.models.Store;
+
 import ies.g52.ShopAholytics.repository.ShoppingRepository;
 
 @Service
 public class ShoppingServices {
     @Autowired
     private ShoppingRepository repository;
+
+    @Autowired
+    private SensorShoppingService SensorShoppingServices;
+
+    @Autowired
+    private SensorStoreService SensorStoreServices;
 
     public Shopping saveShopping(Shopping Shopping) {
         return repository.save(Shopping);
@@ -38,6 +53,20 @@ public class ShoppingServices {
         return ret;
     }
 
+
+    public HashMap<String,Integer> getAllSensorsAssociatedShopping(int id){
+       
+        HashMap<String,Integer> map = new HashMap<>();
+
+        List<SensorShopping> a = SensorShoppingServices.getSensorShoppings();
+        for ( SensorShopping s : a){
+            if (s.getShopping().getId() == id && s.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                map.put(s.getSensor().getName(),s.getId());
+            }
+        }
+
+        return map;
+    }
 
     public List<Shopping> getShopping() {
         return repository.findAll();
