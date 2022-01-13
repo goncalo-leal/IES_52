@@ -101,19 +101,27 @@ public class ShopAholyticsApplication {
 
 				Sensor gli_exit3= new Sensor(SensorEnum.EXIT.toString(),"Sensor de saida do glicinias 3");
 				Sensor gli_enter3 = new Sensor(SensorEnum.ENTRACE.toString(), "Sensor de entrada do glicinias 3");
+				
+				Sensor linkpark1= new Sensor(SensorEnum.ENTRACE.toString(),"Sensor de entrada pelo park 1");
+				Sensor linkpark2 = new Sensor(SensorEnum.ENTRACE.toString(), "Sensor de entrada pelo park 2");
 
-				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_exit1));
-				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_exit2));
-				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_exit3));
-				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_enter1));
-				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_enter2));
-				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_enter3));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_exit1,false));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_exit2,false));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_exit3,false));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_enter1,false));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_enter2,false));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_enter3,false));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,linkpark1,true));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,linkpark2,true));
 				sensorService.saveSensor(gli_exit1);
 				sensorService.saveSensor(gli_exit2);
 				sensorService.saveSensor(gli_exit3);
 				sensorService.saveSensor(gli_enter1);
 				sensorService.saveSensor(gli_enter2);
 				sensorService.saveSensor(gli_enter3);
+
+				sensorService.saveSensor(linkpark1);
+				sensorService.saveSensor(linkpark2);
 
 				SensorStoreServices.saveSensorStore(new SensorStore(zara,zara_exit));
 				SensorStoreServices.saveSensorStore(new SensorStore(zara,zara_enter));

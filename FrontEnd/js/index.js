@@ -18,7 +18,6 @@ $(document).ready(function() {
     
     past_info_stores = getAllStoresLastHourEntrance();
     past_info_parks = getAllParksLastHourEntrance();
-
     stores_table = $("#stores").DataTable({
         "lengthChange": false,
         "searching": true,
@@ -231,7 +230,6 @@ const getAllStoresLastHourEntrance= function(){
             console.log(" erro na call");
         }
     });
-
     return to_ret;
 }
 
@@ -334,6 +332,7 @@ const renderParksTable = function (data) {
     data.forEach(function(e, i) {
         let difference = 0
         if (past_info_parks !== null) {
+            console.log("HEYYY")
             let two_hours_ago = past_info_parks[e.id]["2_hours_ago"];
             let last_hour = past_info_parks[e.id]["last_hour"];
             
@@ -344,7 +343,7 @@ const renderParksTable = function (data) {
                 difference = ((last_hour - two_hours_ago) / two_hours_ago) * 100
             }
         }
-
+        console.log(difference)
         if (difference > 0){
             table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i> ' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
         }

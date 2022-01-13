@@ -35,7 +35,7 @@ public class SensorShoppingController {
         Sensor s = sensorService.getSensorById(pid);
         if (s.getSensorPark() == null && s.getSensorShopping()==null && s.getSensorStore()==null ){
             
-            return SensorShoppingServices.saveSensorShopping(new SensorShopping (shoppingServices.getShoppingById(shopping),sensorService.getSensorById(pid)));
+            return SensorShoppingServices.saveSensorShopping(new SensorShopping (shoppingServices.getShoppingById(shopping),sensorService.getSensorById(pid),false));
          }
          return null;
     }
@@ -73,7 +73,7 @@ public class SensorShoppingController {
         
         if (s.getSensorPark() == null && s.getSensorShopping()==null && s.getSensorStore()==null ){
             
-            return SensorShoppingServices.saveSensorShopping(new SensorShopping (shoppingServices.getShoppingById(shopping),s));
+            return SensorShoppingServices.saveSensorShopping(new SensorShopping (shoppingServices.getShoppingById(shopping),s,false));
          }
          return null;
     }

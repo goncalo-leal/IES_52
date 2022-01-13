@@ -97,23 +97,19 @@ public class SensorDataController {
     public HashMap<String,HashMap<String,Integer>> lastHourShoppingAndParks(@PathVariable(value = "pid") int pid){
         HashMap<String,HashMap<String,Integer>> map = new HashMap<>();
         HashMap<String, Integer> tmp= new HashMap<>();
+        HashMap<String, Integer> tmp2= new HashMap<>();       
         Shopping s = shoppingServices.getShoppingById(pid);
-        Set<Park> parks = s.getParks();
         HashMap<String, Integer> shopping_sensors = (shoppingServices.getAllSensorsAssociatedShopping(pid));
         for (Map.Entry<String, Integer> entry : shopping_sensors.entrySet()) {
             HashMap<String, Integer> a = sensorDataService.lastHourCountsBySensor(entry.getValue());
-            
-            tmp.put(entry.getKey(), a.get("last_hour"));
-        }
-        HashMap<String, Integer> tmp2= new HashMap<>();
-        for (Park park : parks){
-            HashMap<String, Integer> parkSensor= parkServices.getAllSensorsAssociatedPark(park.getId());
-            
-            for (Map.Entry<String, Integer> entry : parkSensor.entrySet()) {
-                HashMap<String, Integer> a = sensorDataService.lastHourCountsBySensor(entry.getValue());
+            if (SensorShoppingServices.getSensorShoppingById(entry.getValue()).isPark_associated()){
+                            
                 tmp2.put(entry.getKey(), a.get("last_hour"));
-            }
 
+            }
+            else{
+                tmp.put(entry.getKey(), a.get("last_hour"));
+            }
         }
         map.put("Shopping", tmp);
         map.put("Park", tmp2);
@@ -158,22 +154,20 @@ public class SensorDataController {
         HashMap<String,HashMap<String,Integer>> map = new HashMap<>();
         HashMap<String, Integer> tmp= new HashMap<>();
         Shopping s = shoppingServices.getShoppingById(pid);
-        Set<Park> parks = s.getParks();
+        HashMap<String, Integer> tmp2= new HashMap<>();
         HashMap<String, Integer> shopping_sensors = (shoppingServices.getAllSensorsAssociatedShopping(pid));
         for (Map.Entry<String, Integer> entry : shopping_sensors.entrySet()) {
             int data = sensorDataService.getEntrancesTodaySensor(entry.getValue());
-            tmp.put(entry.getKey(), data);
-        }
-        HashMap<String, Integer> tmp2= new HashMap<>();
-        for (Park park : parks){
-            HashMap<String, Integer> parkSensor= parkServices.getAllSensorsAssociatedPark(park.getId());
-            
-            for (Map.Entry<String, Integer> entry : parkSensor.entrySet()) {
-                int data = sensorDataService.getEntrancesTodaySensor(entry.getValue());
-                tmp2.put(entry.getKey(), data);
-            }
+            if (SensorShoppingServices.getSensorShoppingById(entry.getValue()).isPark_associated()){
+                            
+                tmp2.put(entry.getKey(),data);
 
+            }
+            else{
+                tmp.put(entry.getKey(), data);
+            }
         }
+       
         map.put("Shopping", tmp);
         map.put("Park", tmp2);
 
@@ -185,22 +179,18 @@ public class SensorDataController {
         HashMap<String,HashMap<String,Integer>> map = new HashMap<>();
         HashMap<String, Integer> tmp= new HashMap<>();
         Shopping s = shoppingServices.getShoppingById(pid);
-        Set<Park> parks = s.getParks();
+        HashMap<String, Integer> tmp2= new HashMap<>();
         HashMap<String, Integer> shopping_sensors = (shoppingServices.getAllSensorsAssociatedShopping(pid));
         for (Map.Entry<String, Integer> entry : shopping_sensors.entrySet()) {
             int data = sensorDataService.getEntrancesWeekSensor(entry.getValue());
-            tmp.put(entry.getKey(), data);
-        }
-        HashMap<String, Integer> tmp2= new HashMap<>();
-        for (Park park : parks){
-            HashMap<String, Integer> parkSensor= parkServices.getAllSensorsAssociatedPark(park.getId());
-            
-            for (Map.Entry<String, Integer> entry : parkSensor.entrySet()) {
-                int data = sensorDataService.getEntrancesWeekSensor(entry.getValue());
-                tmp2.put(entry.getKey(), data);
+            if (SensorShoppingServices.getSensorShoppingById(entry.getValue()).isPark_associated()){
+                tmp2.put(entry.getKey(),data);
             }
-
+            else{
+                tmp.put(entry.getKey(), data);
+            }
         }
+  
         map.put("Shopping", tmp);
         map.put("Park", tmp2);
 
@@ -212,21 +202,19 @@ public class SensorDataController {
         HashMap<String,HashMap<String,Integer>> map = new HashMap<>();
         HashMap<String, Integer> tmp= new HashMap<>();
         Shopping s = shoppingServices.getShoppingById(pid);
-        Set<Park> parks = s.getParks();
+        HashMap<String, Integer> tmp2= new HashMap<>();
+
         HashMap<String, Integer> shopping_sensors = (shoppingServices.getAllSensorsAssociatedShopping(pid));
         for (Map.Entry<String, Integer> entry : shopping_sensors.entrySet()) {
             int data = sensorDataService.AllSensorsMonth(entry.getValue());
-            tmp.put(entry.getKey(), data);
-        }
-        HashMap<String, Integer> tmp2= new HashMap<>();
-        for (Park park : parks){
-            HashMap<String, Integer> parkSensor= parkServices.getAllSensorsAssociatedPark(park.getId());
-            
-            for (Map.Entry<String, Integer> entry : parkSensor.entrySet()) {
-                int data = sensorDataService.AllSensorsMonth(entry.getValue());
-                tmp2.put(entry.getKey(), data);
-            }
+            if (SensorShoppingServices.getSensorShoppingById(entry.getValue()).isPark_associated()){
+                            
+                tmp2.put(entry.getKey(),data);
 
+            }
+            else{
+                tmp.put(entry.getKey(), data);
+            }
         }
         map.put("Shopping", tmp);
         map.put("Park", tmp2);
@@ -258,6 +246,7 @@ public class SensorDataController {
         int counter=0;
         if (s != null){
             HashMap<String, Integer> dic_shop= sensorDataService.lastHourShopping(pid);
+            
             ret.put("Shopping",dic_shop.get("last_hour"));
             for (Park a : s.getParks()){
                 HashMap<String, Integer> dic_park = sensorDataService.lastHourCountsPark(a.getId());

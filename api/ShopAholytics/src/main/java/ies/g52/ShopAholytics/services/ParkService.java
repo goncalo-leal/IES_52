@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import ies.g52.ShopAholytics.enumFolder.SensorEnum;
 import ies.g52.ShopAholytics.models.Park;
 import ies.g52.ShopAholytics.models.SensorPark;
-import ies.g52.ShopAholytics.models.SensorParkService;
+import ies.g52.ShopAholytics.services.SensorParkService;
 
 import ies.g52.ShopAholytics.repository.ParkRepository;
 

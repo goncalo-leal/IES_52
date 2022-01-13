@@ -12,8 +12,8 @@ import ies.g52.ShopAholytics.enumFolder.SensorEnum;
 import ies.g52.ShopAholytics.models.Park;
 import ies.g52.ShopAholytics.models.SensorShopping;
 import ies.g52.ShopAholytics.models.Shopping;
-import ies.g52.ShopAholytics.models.SensorShoppingService;
-import ies.g52.ShopAholytics.models.SensorStoreService;
+import ies.g52.ShopAholytics.services.SensorShoppingService;
+import ies.g52.ShopAholytics.services.SensorStoreService;
 
 import ies.g52.ShopAholytics.models.SensorStore;
 import ies.g52.ShopAholytics.models.Store;
