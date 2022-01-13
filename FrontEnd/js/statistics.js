@@ -48,7 +48,9 @@ const loadDataBySensorToday= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                console.log(data)
+                console.log("aqui", data)
+                renderBarGraphic(data)
+
             } else {
                 console.log("No data");
             }
@@ -156,4 +158,85 @@ const renderDonut = function (curr, total, id, title=""){
         data: donutData,
         options: donutOptions
     })    
+}
+
+const renderBarGraphic = function (data) {
+    var labels = []
+    var info = []
+
+    for (const [key, value] of Object.entries(data)) {
+        for (const [key, v] of Object.entries(value)) {
+            console.log(key+": "+v)
+            labels.push(key)
+            info.push(v + 10)
+        }
+    }
+
+    console.log(info)
+    
+    var areaChartData = {
+        labels  : labels,
+        datasets: [
+            {
+                label               : 'Entries',
+                backgroundColor     : '#007bff',
+                borderColor         : '#007bff',
+                data                : info
+            }
+        ]
+    }
+    
+    console.log(areaChartData)
+    alert("para aí")
+
+    var barChartCanvas = $('#barChart').get(0).getContext('2d');
+
+    var barChartData = $.extend(true, {}, areaChartData)
+    var mode = 'index'
+    var intersect = true
+    var ticksStyle = {
+        fontColor: '#495057',
+        fontStyle: 'bold'
+    }
+
+    var barChartOptions = {
+        responsive              : true,
+        maintainAspectRatio     : true,
+        datasetFill             : false,
+        tooltips: {
+            mode: mode,
+            intersect: intersect
+        },
+        hover: {
+            mode: mode,
+            intersect: intersect
+        },
+        legend: {
+            display: false
+        },
+        scales: {
+            yAxes: [{
+                // display: false,
+                gridLines: {
+                    display: true,
+                    lineWidth: '4px',
+                    color: 'rgba(0, 0, 0, .2)',
+                    zeroLineColor: 'transparent'
+                },
+            }],
+            xAxes: [{
+                display: true,
+                gridLines: {
+                    display: false
+                },
+                ticks: ticksStyle
+            }]
+        }
+    }
+
+    new Chart(barChartCanvas, {
+        type: 'bar',
+        data: barChartData,
+        options: barChartOptions
+    })
 }
