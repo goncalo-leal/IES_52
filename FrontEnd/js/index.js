@@ -7,6 +7,8 @@ var parks_table;
 var past_info_stores;
 var past_info_parks;
 var contador = 0;
+var p_contador = 0;
+
 var stores = [];
 var parks = [];
 var storesData={};
@@ -68,13 +70,25 @@ $(document).ready(function() {
 
     $('#carouselExampleIndicators').on('slid.bs.carousel', function () {
         if (contador <= stores.length-1){
-            var currentIndex = $('div.active').index();
+            var currentIndex = $('#carouselExampleIndicators div.active').index();
             var curr, cap, id, nome;
             [curr, cap, id, nome] = storesData[currentIndex];
             var donutChartCanvas = $('#'+id).get(0).getContext('2d')
             $("#storeName"+currentIndex).html(nome);
             renderDonut(curr, cap, id, nome);
             contador++;
+        }
+    });
+
+    $('#carouselParks').on('slid.bs.carousel', function () {
+        if (p_contador <= parks.length-1){
+            var p_currentIndex = $('#carouselParks div.active').index();
+            var p_curr, p_cap, p_id, p_nome;
+            [p_curr, p_cap, p_id, p_nome] = [parks[p_currentIndex].current_capacity, parks[p_currentIndex].capacity, "parkDonut"+p_currentIndex, parks[p_currentIndex].name];
+            var donutChartCanvas = $('#'+p_id).get(0).getContext('2d')
+            $("#parkName"+p_currentIndex).html(p_nome);
+            renderDonut(p_curr, p_cap, p_id, p_nome);
+            p_contador++;
         }
     });
 });
@@ -92,6 +106,7 @@ const loadShoppingInfo = function() {
                 var cur_capacity = 0;
                 stores = data.stores;
                 parks = data.parks;
+                
                 
                 $("#shopcurcap").text(data.current_capacity);
                 $("#shopmaxcap").text(data.capacity);
@@ -122,27 +137,55 @@ const loadShoppingInfo = function() {
 const loadShoppingStores = function() {
     for (var i = 0; i < stores.length; i++){
         if (i == 0){
-            $('<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>').appendTo('.carousel-indicators')
+            $('<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>').appendTo('#to_remove2')
             $('<div class="carousel-item active"><canvas class="d-block w-100" heigh="200" id="donut0" ></canvas><div class="carousel-caption d-none d-md-block">\
             <h5 style="color:black;" id="storeName0"></h5>\
             </div>\
-            </div>').appendTo('.carousel-inner');
+            </div>').appendTo('#itemsStores');
             $( "#to_remove1" ).remove();
             $( "#to_remove2" ).remove();
         }
         else{
-            $('<li data-target="#carouselExampleIndicators" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators')
+            $('<li data-target="#carouselExampleIndicators" data-slide-to="'+i+'"></li>').appendTo('#to_remove2')
             $('<div class="carousel-item"><canvas class="d-block w-100" heigh="200" id="donut'+i+'" ></canvas><div class="carousel-caption d-none d-md-block">\
             <h5 style="color:black;" id="storeName'+i+'"></h5>\
-            </div>\</div>').appendTo('.carousel-inner');
+            </div>\</div>').appendTo('#itemsStores');
         }
-        //<canvas id="visitors-chart" height="200"></canvas>
     }
+    for (var j=0; j< parks.length; j++){
+        if (j == 0){
+            $('<li data-target="#carouselParks" data-slide-to="0" class="active"></li>').appendTo('#arrow_parks')
+            $('<div class="carousel-item active"><canvas class="d-block w-100" heigh="200" id="parkDonut0" ></canvas><div class="carousel-caption d-none d-md-block">\
+            <h5 style="color:black;" id="parkName0"></h5>\
+            </div>\
+            </div>').appendTo('#itemsParks');
+            $( "#arrow_parks" ).remove();
+            $( "#carousel_item" ).remove();
+        }
+        else{
+            $('<li data-target="#carouselParks" data-slide-to="'+i+'"></li>').appendTo('#arrow_parks')
+            $('<div class="carousel-item"><canvas class="d-block w-100" heigh="200" id="parkDonut'+j+'" ></canvas><div class="carousel-caption d-none d-md-block">\
+            <h5 style="color:black;" id="parkName'+j+'"></h5>\
+            </div>\</div>').appendTo('#itemsParks');
+        }
+    }
+
+    var p_curr, p_cap, p_id, p_nome 
+    
+    [p_curr, p_cap, p_id, p_nome]= [parks[0].current_capacity, parks[0].capacity, "parkDonut0", parks[0].name];
+    renderDonut(p_curr, p_cap, p_id, p_nome);
+    $("#parkName0").html(p_nome);
+    p_contador++;
+    
+
+
+
     storeInformation(stores);
     var curr, cap, id, nome;
     [curr, cap, id, nome] = storesData[0]
     renderDonut(curr, cap, id, nome);
     $("#storeName0").html(nome);
+    
     contador++;
     return;
 }
@@ -161,7 +204,6 @@ const loadShoppingsParks = function() {
     for (var i = 0; i < parks.length; i++){
         occupied += parks[i]["current_capacity"];
         total += parks[i]["capacity"];
-        // aqui também podes gerar os donuts de cada park como tens no loadShoppingsStores()
     }
 
     $("#parkcurcap").html(occupied);
@@ -274,10 +316,10 @@ const renderStoresTable = function (data) {
         }
 
         if (difference >0){
-            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i>' + difference + '%</span></b></p>', '<a href="/store.html?id=' + e.id + '" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i> ' + difference + '%</span></b></p>', '<a href="/store.html?id=' + e.id + '" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
         }
         else{
-            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-warning mr-1"><i class="ion ion-android-arrow-up text-warning"></i>' + difference + '%</span></b></p>', '<a href="/store.html?id=' + e.id + '" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-warning mr-1"><i class="ion ion-android-arrow-up text-warning"></i> ' + difference + '%</span></b></p>', '<a href="/store.html?id=' + e.id + '" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
         }
     });
    
@@ -304,10 +346,10 @@ const renderParksTable = function (data) {
         }
 
         if (difference > 0){
-            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i>' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i> ' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
         }
         else{
-            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-warning mr-1"><i class="ion ion-android-arrow-up text-warning"></i>' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-warning mr-1"><i class="ion ion-android-arrow-up text-warning"></i> ' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
         }
     });
    
@@ -344,11 +386,11 @@ const loadPeopleByWeek = function() {
                     
                 }
                 diferença=diferença.toFixed(2)
-                if (diferença >0){
-                    $("#Total_diferença_semanas").after($("<i class='ion ion-android-arrow-up text-success' ></i>").text(diferença+ "% Since last week")  )
+                if (diferença > 0){
+                    $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-up text-success' ></i> " + diferença + "% Since last week")
                 }
                 else{
-                    $("#Total_diferença_semanas").after($("<i class='ion ion-android-arrow-down text-warning' ></i>").text(diferença+ "% Since last week")  )
+                    $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-down text-warning' ></i> " + diferença+ "% Since last week")
 
                 }
                 renderGraphic(data.mapa);
@@ -377,7 +419,7 @@ const renderDonut = function (curr, total, id, title=""){
         datasets: [
             {
             data: [curr,total-curr],
-            backgroundColor : ['#f56954', '#00a65a'],
+            backgroundColor : ['#ff0000', '#13a300'],
             }
         ]
     }
@@ -402,27 +444,16 @@ const renderGraphic = function (mapa) {
         labels  : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
         datasets: [
             {
-            label               : 'This week',
-            backgroundColor     : 'rgba(0,255,0,0.9)',
-            borderColor         : 'rgba(0,255,0,0.8)',
-            pointRadius          : false,
-            pointColor          : '#3b8bba',
-            pointStrokeColor    : 'rgba(0,255,0,1)',
-            pointHighlightFill  : '#fff',
-            pointHighlightStroke: 'rgba(0,255,0,1)',
-            data                : [mapa["MONDAY"], mapa["TUESDAY"], mapa["WEDNESDAY"], mapa["THURSDAY"], mapa["FRIDAY"], mapa["SATURDAY"], mapa["SUNDAY"]]
-         
+                label               : 'This week',
+                backgroundColor     : '#007bff',
+                borderColor         : '#007bff',
+                data                : [mapa["MONDAY"], mapa["TUESDAY"], mapa["WEDNESDAY"], mapa["THURSDAY"], mapa["FRIDAY"], mapa["SATURDAY"], mapa["SUNDAY"]]
             },
             {
-            label               : 'Last week',
-            backgroundColor     : 'rgba(255, 0, 0, 1)',
-            borderColor         : 'rgba(255, 0, 0, 1)',
-            pointRadius         : false,
-            pointColor          : 'rgba(255, 0, 0, 1)',
-            pointStrokeColor    : '#c1c7d1',
-            pointHighlightFill  : '#fff',
-            pointHighlightStroke: 'rgba(220,220,220,1)',
-            data                : [mapa["LAST_MONDAY"], mapa["LAST_TUESDAY"], mapa["LAST_WEDNESDAY"], mapa["LAST_THURSDAY"], mapa["LAST_FRIDAY"], mapa["LAST_SATURDAY"], mapa["LAST_SUNDAY"]]
+                label               : 'Last week',
+                backgroundColor     : '#ced4da',
+                borderColor         : '#ced4da',
+                data                : [mapa["LAST_MONDAY"], mapa["LAST_TUESDAY"], mapa["LAST_WEDNESDAY"], mapa["LAST_THURSDAY"], mapa["LAST_FRIDAY"], mapa["LAST_SATURDAY"], mapa["LAST_SUNDAY"]]
             },
         ]
     }
@@ -434,11 +465,46 @@ const renderGraphic = function (mapa) {
     var temp1 = areaChartData.datasets[1]
     barChartData.datasets[0] = temp1
     barChartData.datasets[1] = temp0
+    var mode = 'index'
+    var intersect = true
+    var ticksStyle = {
+        fontColor: '#495057',
+        fontStyle: 'bold'
+    }
 
     var barChartOptions = {
         responsive              : true,
         maintainAspectRatio     : false,
-        datasetFill             : false
+        datasetFill             : false,
+        tooltips: {
+            mode: mode,
+            intersect: intersect
+        },
+        hover: {
+            mode: mode,
+            intersect: intersect
+        },
+        legend: {
+            display: false
+        },
+        scales: {
+            yAxes: [{
+                // display: false,
+                gridLines: {
+                    display: true,
+                    lineWidth: '4px',
+                    color: 'rgba(0, 0, 0, .2)',
+                    zeroLineColor: 'transparent'
+                },
+            }],
+            xAxes: [{
+                display: true,
+                gridLines: {
+                    display: false
+                },
+                ticks: ticksStyle
+            }]
+        }
     }
 
     new Chart(barChartCanvas, {
