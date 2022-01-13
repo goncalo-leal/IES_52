@@ -21,6 +21,7 @@ $(document).ready(function() {
     $("#capacity").on('input', function(e) {
         $(this).val($(this).val().replace(/[^0-9]/g, ''));
     });
+    
     loadMaxStoreCapacity()
     $("#capacity").attr({
         "max" : 20,

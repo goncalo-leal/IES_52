@@ -43,9 +43,10 @@ public class StoreController {
         
     }
 
+    @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping("/updateStore")
-    public Store updateStore(@RequestBody Store user) {
-        return storeService.updateStore(user);
+    public Store updateStore(@RequestBody Store store) {
+        return storeService.updateStore(store);
     }
 
     @DeleteMapping("/deleteStore/{id}")
