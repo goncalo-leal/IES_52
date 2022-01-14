@@ -435,78 +435,25 @@ public class SensorDataController {
 
     @GetMapping("/PeopleInShoppingLast7Days/{pid}")
     public OccupationInLast7Days peopleInShoppingInLast7days(@PathVariable(value = "pid") int pid){
-        OccupationInLast7Days ret= new OccupationInLast7Days();
-        List<SensorData> a = sensorDataService.getSensorDatas();
-        Collections.reverse(a);
-        int dia_atual=LocalDateTime.now().getDayOfYear();
-        int ano_atual=LocalDateTime.now().getYear();
-        LocalDate d = LocalDate.parse(ano_atual-1+"-12-31"); 
-        List<Integer> dias = new ArrayList<>();
-        List<Integer> dias_passada = new ArrayList<>();
-        for (int i =1; i <=7 ; i++){
-            int tmep=dia_atual-i;
-            if (tmep < 1){
-                if (d.lengthOfYear() == 365){
-                    tmep=tmep+365;
-                }
-                else{
-                    tmep=tmep+366;
-                }
+        return sensorDataService.parkMovementLast14Days(pid);
+    }
+
+    @GetMapping("/ParksMovementInShoppingLast14Days/{pid}")
+    public OccupationInLast7Days ParksMovementInShoppingLast14Days(@PathVariable(value = "pid") int pid){
+        Shopping s = shoppingServices.getShoppingById(pid);
+        OccupationInLast7Days ret = new  OccupationInLast7Days();
+        for(Park park : s.getParks()){
+            
+            OccupationInLast7Days a = (sensorDataService.parkMovementLast14Days(park.getId()));
+            for (Map.Entry<String, Integer> entry : a.getMapa().entrySet()) {
+                String key = entry.getKey();
+                int val = entry.getValue();
+                ret.getMapa().put(key, ret.getMapa().get(key)+val);
             }
-
-            dias.add(tmep);
-
-        }
-        
-        for (int i =8; i <=14 ; i++){
-            int tmep=dia_atual-i;
-            if (tmep < 1){
-                if (d.lengthOfYear() == 365){
-                    tmep=tmep+365;
-                }
-                else{
-                    tmep=tmep+366;
-                }
-            }
-
-            dias_passada.add(tmep);
-
-        }
-        for (SensorData data : a){
-            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
-                Sensor x= data.getSensor();
-                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
-                    int dia =data.getDate().getDayOfYear();
-                    int ano = data.getDate().getYear();
-                    String semana_dia=data.getDate().getDayOfWeek().toString();
-                    if(dias.contains(dia)){
-                        if (ret.getMapa().containsKey(semana_dia)){
-                            ret.getMapa().put(semana_dia, ret.getMapa().get(semana_dia)+1);
-                        }
-                        else{
-                            ret.getMapa().put(semana_dia, 1);
-                        }
-
-                    }
-                    if(dias_passada.contains(dia)){
-                        if (ret.getMapa().containsKey("LAST_"+semana_dia)){
-                            ret.getMapa().put("LAST_"+semana_dia, ret.getMapa().get("LAST_"+semana_dia)+1);
-                        }
-                        else{
-                            ret.getMapa().put("LAST_"+semana_dia, 1);
-                        }
-
-                    }
-
-                   
-                    
-                 
-                    //ver se esta solução da 
-                }
-            }  
         }
         return ret;
     }
+
 
     @GetMapping("/PeopleInShoppingWeek/{pid}")
     public int weekPeopleInShopping(@PathVariable(value = "pid") int pid){
