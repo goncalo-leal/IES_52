@@ -296,6 +296,19 @@ public class SensorDataController {
         List<SensorData> a = sensorDataService.getSensorDatas();
         Collections.reverse(a);
         HashMap<Integer,Integer> map = new HashMap<>();
+        Shopping s = shoppingServices.getShoppingById(pid);
+        int abertura=s.getOpening().getHour();
+        int fecho =s.getClosing().getHour();
+        while (abertura != fecho+1){
+            map.put(abertura, 0);
+
+            abertura++;
+
+            if (abertura==24){
+                abertura =0;
+            }
+            System.out.println(abertura);
+        }
         for (SensorData data : a){
             if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
                 Sensor x= data.getSensor();
@@ -772,7 +785,7 @@ public class SensorDataController {
     }
 
 
-    @GetMapping("/PeopleInStoreLast7Days/{pid}")
+    @GetMapping("/PeopleInStoreLast14Days/{pid}")
     public OccupationInLast7Days peopleInPeopleInStoreLast7Days(@PathVariable(value = "pid") int pid){
         OccupationInLast7Days ret= new OccupationInLast7Days();
         List<SensorData> a = sensorDataService.getSensorDatas();
