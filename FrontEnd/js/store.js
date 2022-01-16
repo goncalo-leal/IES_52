@@ -21,6 +21,7 @@ const updateStoreViews = function() {
     fetchTodayInfo();
     customersToday();
     loadPeopleByWeek();
+    getLastWeekShoppingInfo()
 
 }
 
@@ -189,6 +190,30 @@ const renderDonut = function (curr, total, id, title=""){
     })    
 }
 
+const getLastWeekShoppingInfo= function(){
+    var date = new Date();
+    date.setDate(date.getDate() - 7);
+    var finalDate = date.getFullYear()+'-'+ (date.getMonth()+1)+'-' +date.getDate()
+    $.ajax({
+        url: consts.BASE_URL + '/api/PeopleInStoreByhours/' + store_id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                renderBarGraphic(data,"barChartStoreTodayHours")
+            } else {
+                console.log("No data");
+            }
+        },
+
+        error: function() {
+            console.log(" erro na call");
+        }
+    });
+
+}
+
 const renderGraphic = function (mapa) {
     console.log(mapa);
     var areaChartData = {
@@ -216,6 +241,81 @@ const renderGraphic = function (mapa) {
     var temp1 = areaChartData.datasets[1]
     barChartData.datasets[0] = temp1
     barChartData.datasets[1] = temp0
+    var mode = 'index'
+    var intersect = true
+    var ticksStyle = {
+        fontColor: '#495057',
+        fontStyle: 'bold'
+    }
+
+    var barChartOptions = {
+        responsive              : true,
+        maintainAspectRatio     : false,
+        datasetFill             : false,
+        tooltips: {
+            mode: mode,
+            intersect: intersect
+        },
+        hover: {
+            mode: mode,
+            intersect: intersect
+        },
+        legend: {
+            display: false
+        },
+        scales: {
+            yAxes: [{
+                // display: false,
+                gridLines: {
+                    display: true,
+                    lineWidth: '4px',
+                    color: 'rgba(0, 0, 0, .2)',
+                    zeroLineColor: 'transparent'
+                },
+            }],
+            xAxes: [{
+                display: true,
+                gridLines: {
+                    display: false
+                },
+                ticks: ticksStyle
+            }]
+        }
+    }
+
+    new Chart(barChartCanvas, {
+        type: 'bar',
+        data: barChartData,
+        options: barChartOptions
+    })
+}
+
+const renderBarGraphic = function (today,id) {
+    var labels = []
+    var info1 = []
+    console.log(today)
+    for (const [key, value] of Object.entries(today)) {
+            labels.push(key)
+            info1.push(value)
+    }
+ 
+    var areaChartData = {
+        labels :labels,
+        datasets: [
+            {
+                label               : 'This week',
+                backgroundColor     : '#007bff',
+                borderColor         : '#007bff',
+                data                : info1,
+            },
+        ]
+    }
+
+    var barChartCanvas = $('#'+id).get(0).getContext('2d');
+
+    var barChartData = $.extend(true, {}, areaChartData)
+    var temp0 = areaChartData.datasets[0]
+    barChartData.datasets[0] = temp0
     var mode = 'index'
     var intersect = true
     var ticksStyle = {

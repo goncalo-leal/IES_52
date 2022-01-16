@@ -1062,6 +1062,305 @@ public class SensorDataService {
         return map;
     }
 
+    public HashMap<Integer,Integer>  PeopleInParkByhours( int pid){
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        HashMap<Integer,Integer> map = new HashMap<>();
+        Park s = parkServices.getParkById(pid);
+        int abertura=s.getOpening().getHour();
+        int fecho =s.getClosing().getHour();
+        while (abertura != fecho+1){
+            map.put(abertura, 0);
+
+            abertura++;
+
+            if (abertura==24){
+                abertura =0;
+            }
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int dia_atual=LocalDateTime.now().getDayOfYear();
+                    int ano_atual=LocalDateTime.now().getYear();
+                    int hora = data.getDate().getHour();
+                    
+                    if(dia ==dia_atual && ano_atual == ano  ){
+                        
+                        if (map.containsKey(hora)){
+                            map.put(hora, map.get(hora)+1);
+                        }
+                        else{
+                            map.put(hora, 1);
+                        }
+                    }
+                    
+                
+                    
+
+                    
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        return map;
+    }
+
+    public HashMap<Integer,Integer>  PeopleInParkByhoursDe( int pid, String day){
+        /*
+            A estrutura do dia deve ser algo como ano-mes-dia
+        */
+        String [] escolha=day.split("-");
+        int ano_pedido=Integer.parseInt(escolha[0]);
+        int mes_pedido=Integer.parseInt(escolha[1]);
+        int dia_pedido=Integer.parseInt(escolha[2]);
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        HashMap<Integer,Integer> map = new HashMap<>();
+
+        Park s = parkServices.getParkById(pid);
+        int abertura=s.getOpening().getHour();
+        int fecho =s.getClosing().getHour();
+        while (abertura != fecho+1){
+            map.put(abertura, 0);
+
+            abertura++;
+
+            if (abertura==24){
+                abertura =0;
+            }
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorPark() != null && x.getSensorPark().getPark().getId()==pid ){
+                    int dia =data.getDate().getDayOfMonth();
+                    int mes =data.getDate().getMonthValue();
+
+                    int ano = data.getDate().getYear();
+                    int hora = data.getDate().getHour();
+                    
+                    if(dia ==dia_pedido && ano_pedido == ano && mes_pedido == mes  ){
+                        
+                        if (map.containsKey(hora)){
+                            map.put(hora, map.get(hora)+1);
+                        }
+                        else{
+                            map.put(hora, 1);
+                        }
+                    }
+                    
+                    
+                    
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        return map;
+    }
+    public HashMap<Integer,Integer>  PeopleInShoppingByhours( int pid){
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        HashMap<Integer,Integer> map = new HashMap<>();
+        Shopping s = shoppingServices.getShoppingById(pid);
+        int abertura=s.getOpening().getHour();
+        int fecho =s.getClosing().getHour();
+        while (abertura != fecho+1){
+            map.put(abertura, 0);
+
+            abertura++;
+
+            if (abertura==24){
+                abertura =0;
+            }
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int dia_atual=LocalDateTime.now().getDayOfYear();
+                    int ano_atual=LocalDateTime.now().getYear();
+                    int hora = data.getDate().getHour();
+                    
+                    if(dia ==dia_atual && ano_atual == ano  ){
+                        
+                        if (map.containsKey(hora)){
+                            map.put(hora, map.get(hora)+1);
+                        }
+                        else{
+                            map.put(hora, 1);
+                        }
+                    }
+                    
+                
+                   
+
+                    
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        return map;
+    }
+    public HashMap<Integer,Integer>  PeopleInShoppingByhoursDe( int pid, String day){
+        /*
+            A estrutura do dia deve ser algo como ano-mes-dia
+        */
+        String [] escolha=day.split("-");
+        int ano_pedido=Integer.parseInt(escolha[0]);
+        int mes_pedido=Integer.parseInt(escolha[1]);
+        int dia_pedido=Integer.parseInt(escolha[2]);
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        HashMap<Integer,Integer> map = new HashMap<>();
+        Store s = storeService.getStoreById(pid);
+        int abertura=s.getOpening().getHour();
+        int fecho =s.getClosing().getHour();
+        while (abertura != fecho+1){
+            map.put(abertura, 0);
+
+            abertura++;
+
+            if (abertura==24){
+                abertura =0;
+            }
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid ){
+                    int dia =data.getDate().getDayOfMonth();
+                    int mes =data.getDate().getMonthValue();
+
+                    int ano = data.getDate().getYear();
+                    int hora = data.getDate().getHour();
+                    
+                    if(dia ==dia_pedido && ano_pedido == ano && mes_pedido == mes  ){
+                        
+                        if (map.containsKey(hora)){
+                            map.put(hora, map.get(hora)+1);
+                        }
+                        else{
+                            map.put(hora, 1);
+                        }
+                    }
+                    
+                  
+
+                    
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        return map;
+    }
+
+    public HashMap<Integer,Integer>  PeopleInStoreByhours( int pid){
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        HashMap<Integer,Integer> map = new HashMap<>();
+        Store s = storeService.getStoreById(pid);
+        int abertura=s.getOpening().getHour();
+        int fecho =s.getClosing().getHour();
+        while (abertura != fecho+1){
+            map.put(abertura, 0);
+
+            abertura++;
+
+            if (abertura==24){
+                abertura =0;
+            }
+        }
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid ){
+                    int dia =data.getDate().getDayOfYear();
+                    int ano = data.getDate().getYear();
+                    int dia_atual=LocalDateTime.now().getDayOfYear();
+                    int ano_atual=LocalDateTime.now().getYear();
+                    int hora = data.getDate().getHour();
+                    
+                    if(dia ==dia_atual && ano_atual == ano  ){
+                        
+                        if (map.containsKey(hora)){
+                            map.put(hora, map.get(hora)+1);
+                        }
+                        else{
+                            map.put(hora, 1);
+                        }
+                    }
+                    
+                
+                   
+
+                    
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        return map;
+    }
+
+    public HashMap<Integer,Integer>  PeopleInShoppingByhours(int pid, String day){
+        /*
+            A estrutura do dia deve ser algo como ano-mes-dia
+        */
+        String [] escolha=day.split("-");
+        int ano_pedido=Integer.parseInt(escolha[0]);
+        int mes_pedido=Integer.parseInt(escolha[1]);
+        int dia_pedido=Integer.parseInt(escolha[2]);
+
+        Shopping s = shoppingServices.getShoppingById(pid);
+        int abertura=s.getOpening().getHour();
+        HashMap<Integer,Integer> map = new HashMap<>();
+        int fecho =s.getClosing().getHour();
+        while (abertura != fecho+1){
+            map.put(abertura, 0);
+
+            abertura++;
+
+            if (abertura==24){
+                abertura =0;
+            }
+        }
+        List<SensorData> a = this.getSensorDatas();
+        Collections.reverse(a);
+        for (SensorData data : a){
+            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                Sensor x= data.getSensor();
+                if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
+                    int dia =data.getDate().getDayOfMonth();
+                    int mes =data.getDate().getMonthValue();
+
+                    int ano = data.getDate().getYear();
+                    int hora = data.getDate().getHour();
+                    
+                    if(dia ==dia_pedido && ano_pedido == ano && mes_pedido == mes  ){
+                        
+                        if (map.containsKey(hora)){
+                            map.put(hora, map.get(hora)+1);
+                        }
+                        else{
+                            map.put(hora, 1);
+                        }
+                    }
+                    
+                   
+
+                    
+                    //ver se esta solução da 
+                }
+            }  
+        }
+        return map;
+    }
+
     public OccupationInLast7Days parkMovementLast14Days(int pid){
     OccupationInLast7Days ret= new OccupationInLast7Days();
         List<SensorData> a = this.getSensorDatas();
