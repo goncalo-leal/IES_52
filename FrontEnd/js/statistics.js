@@ -6,19 +6,33 @@ import updateView from "./common.js"
 $(document).ready(function() {
     updateView();
 
-    loadPeopleByWeek()
-    compararLastWeek()
-    loadDataBySensorLastHour()
-    loadDataBySensorToday()
-    loadDataBySensorWeek()
-    loadDataBySensorMonth()
+    loadPeopleByWeek();
+    compararLastWeek();
+    loadDataBySensorLastHour();
+    loadDataBySensorToday();
+    loadDataBySensorWeek();
+    loadDataBySensorMonth();
+    loadShoppingByHours();
     // OUTRO VAI SER DE BARRAS SENSOR A SENSOR ONDE VOU MOSTRAR QUAL OS QUE TEM MAIS ADESÃO
     // day, week , last 2 weeks
     //falta o last hour
     
 });
 
-
+const loadShoppingByHours = function () {  
+    $.ajax({
+        url: consts.BASE_URL + '/api/PeopleInShoppingByhours/' + SessionManager.get("session").shopping.id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data){
+            renderBarGraphic(data,'shoppingByHours')
+        },
+        error: function(){
+            console.log("Error calling /api/PeopleInShoppingByhours/'")
+        }
+    })
+}
 
 
 const loadDataBySensorToday= function(){
@@ -63,7 +77,6 @@ const loadDataBySensorWeek= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                console.log("aqui", data)
                 renderBarGraphic(data,'barChartWeek')
 
                 var shopping =data["Shopping"]
@@ -270,14 +283,9 @@ const renderBarGraphic = function (data,id) {
     var info = []
 
     for (const [key, value] of Object.entries(data)) {
-        for (const [key, v] of Object.entries(value)) {
-            console.log(key+": "+v)
-            labels.push(key)
-            info.push(v )
-        }
+        labels.push(key)
+        info.push(value)
     }
-
-    console.log(info)
     
     var areaChartData = {
         labels  : labels,
@@ -325,7 +333,6 @@ const renderBarGraphic = function (data,id) {
                 gridLines: {
                     display: true,
                     lineWidth: '4px',
-                    
                     color: 'rgba(0, 0, 0, .2)',
                     zeroLineColor: 'transparent'
                 },
