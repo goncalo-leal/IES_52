@@ -20,6 +20,7 @@ const login = function() {
         dataType: "json",
         success: function(data) {
             if (data) {
+                console.log(data)
                 SessionManager.set("session", data);
                 window.location.href = "./index.html";
             } else {
