@@ -1176,7 +1176,6 @@ public class SensorDataService {
             if (abertura==24){
                 abertura =0;
             }
-            System.out.println(abertura);
         }
         for (SensorData data : a){
             if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
@@ -1230,7 +1229,6 @@ public class SensorDataService {
             if (abertura==24){
                 abertura =0;
             }
-            System.out.println(abertura);
         }
         List<SensorData> a = this.getSensorDatas();
         Collections.reverse(a);

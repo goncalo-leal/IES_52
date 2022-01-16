@@ -16,8 +16,7 @@ var storesData={};
 var shopping_id=1
 
 $(document).ready(function() {
-    
-
+    past_info_stores = getAllStoresLastHourEntrance();
     getLastWeekShoppingInfo()
     past_info_parks = getAllParksLastHourEntrance();
     stores_table = $("#stores").DataTable({
@@ -63,6 +62,7 @@ $(document).ready(function() {
 
    
 });
+
 const getLastWeekShoppingInfo= function(){
     var date = new Date();
     date.setDate(date.getDate() - 7);
@@ -111,6 +111,30 @@ const getLastWeekParkInfo= function(){
     });
 
 }
+const getAllStoresLastHourEntrance= function(){
+    var to_ret = null;
+
+    $.ajax({
+        url: consts.BASE_URL + '/api/CountLastHoursForStores/' + shopping_id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                to_ret = data
+            } else {
+                console.log("No data");
+            }
+        },
+
+        error: function() {
+            console.log(" erro na call");
+        }
+    });
+    return to_ret;
+}
+
+
 const loadShoppingInfo = function() {
     console.log(shopping_id)
     $.ajax({
@@ -135,9 +159,11 @@ const loadShoppingInfo = function() {
                     $("#parkingTab").empty();
                 }
 
+                renderStoresTable(stores);
                 renderParksTable(parks);
 
                 loadShoppingsParks();
+                loadShoppingStores();
             } else {
                 console.log("No store for this shopping");
             }
@@ -149,8 +175,35 @@ const loadShoppingInfo = function() {
     })
 }
 
+const renderStoresTable = function (data) {
+    var table_data = []
 
+    $("#stores_body").empty();
+    data.forEach(function(e, i) {
+        let difference = 0
+        if (past_info_stores !== null) {
+            let horas_atrs = past_info_stores[e.id]["2_hours_ago"];
+            let horas_atual = past_info_stores[e.id]["last_hour"];
 
+            if (horas_atrs == 0) {
+                difference = (horas_atual- horas_atrs) * 100        
+            }
+            else {
+                difference = ((horas_atual - horas_atrs) / horas_atrs) * 100           
+            }
+        }
+
+        if (difference >0){
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i> ' + difference + '%</span></b></p>', '<a href="/store.html?id=' + e.id + '" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+        }
+        else{
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-warning mr-1"><i class="ion ion-android-arrow-up text-warning"></i> ' + difference + '%</span></b></p>', '<a href="/store.html?id=' + e.id + '" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+        }
+    });
+   
+    stores_table.clear();
+    stores_table.rows.add( table_data ).draw();
+}
 
 const loadShoppingsParks = function() {
     let occupied = 0;
