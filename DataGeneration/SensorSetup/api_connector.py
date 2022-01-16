@@ -16,3 +16,8 @@ class ApiConnector:
         method = "ShoppingAllSensors"
         response = requests.get(self.api_url+method+"/"+str(shopping_id))
         return json.loads(response.text)
+
+    def get_sensor_limit(self, sensor_id):
+        method = "getMaxPossible"
+        response = requests.get(self.api_url+method+"/"+str(sensor_id))
+        return json.loads(response.text)
