@@ -522,80 +522,12 @@ public class SensorDataController {
 
     @GetMapping("/PeopleInStoreByhours/{pid}")
     public HashMap<Integer,Integer>  PeopleInStoreByhours(@PathVariable(value = "pid") int pid){
-        List<SensorData> a = sensorDataService.getSensorDatas();
-        Collections.reverse(a);
-        HashMap<Integer,Integer> map = new HashMap<>();
-        for (SensorData data : a){
-            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
-                Sensor x= data.getSensor();
-                if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid ){
-                    int dia =data.getDate().getDayOfYear();
-                    int ano = data.getDate().getYear();
-                    int dia_atual=LocalDateTime.now().getDayOfYear();
-                    int ano_atual=LocalDateTime.now().getYear();
-                    int hora = data.getDate().getHour();
-                    
-                    if(dia ==dia_atual && ano_atual == ano  ){
-                        
-                        if (map.containsKey(hora)){
-                            map.put(hora, map.get(hora)+1);
-                        }
-                        else{
-                            map.put(hora, 1);
-                        }
-                    }
-                    
-                
-                   
-
-                    
-                    //ver se esta solução da 
-                }
-            }  
-        }
-        return map;
+        return sensorDataService.PeopleInStoreByhours(pid);
     }
 
     @GetMapping("/PeopleInStoreByhours/{pid}/{day}")
     public HashMap<Integer,Integer>  PeopleInShoppingByhoursDe(@PathVariable(value = "pid") int pid,@PathVariable(value = "day") String day){
-        /*
-            A estrutura do dia deve ser algo como ano-mes-dia
-        */
-        String [] escolha=day.split("-");
-        int ano_pedido=Integer.parseInt(escolha[0]);
-        int mes_pedido=Integer.parseInt(escolha[1]);
-        int dia_pedido=Integer.parseInt(escolha[2]);
-        List<SensorData> a = sensorDataService.getSensorDatas();
-        Collections.reverse(a);
-        HashMap<Integer,Integer> map = new HashMap<>();
-        for (SensorData data : a){
-            if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
-                Sensor x= data.getSensor();
-                if (x.getSensorStore() != null && x.getSensorStore().getStore().getId()==pid ){
-                    int dia =data.getDate().getDayOfMonth();
-                    int mes =data.getDate().getMonthValue();
-
-                    int ano = data.getDate().getYear();
-                    int hora = data.getDate().getHour();
-                    
-                    if(dia ==dia_pedido && ano_pedido == ano && mes_pedido == mes  ){
-                        
-                        if (map.containsKey(hora)){
-                            map.put(hora, map.get(hora)+1);
-                        }
-                        else{
-                            map.put(hora, 1);
-                        }
-                    }
-                    
-                  
-
-                    
-                    //ver se esta solução da 
-                }
-            }  
-        }
-        return map;
+        return sensorDataService.PeopleInParkByhoursDe(pid, day);
     }
 
 
