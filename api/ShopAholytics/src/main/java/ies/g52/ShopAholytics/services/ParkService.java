@@ -63,6 +63,7 @@ public class ParkService {
         existingPark.setName(Park.getName());
         existingPark.setLocation(Park.getLocation());
         existingPark.setCapacity(Park.getCapacity());
+        existingPark.setCurrent_capacity(Park.getCurrent_capacity());
         existingPark.setOpening(Park.getOpening());
         existingPark.setClosing(Park.getClosing());
         return repository.save(existingPark);

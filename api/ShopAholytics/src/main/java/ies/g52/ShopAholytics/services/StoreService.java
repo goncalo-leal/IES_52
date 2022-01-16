@@ -67,6 +67,9 @@ public class StoreService {
         if (user.getCapacity() != 0){
             existingStore.setCapacity(user.getCapacity());
         }
+        if (user.getCurrent_capacity() != 0){
+            existingStore.setCurrent_capacity(user.getCurrent_capacity());
+        }
         if (user.getOpening() != null) {
             existingStore.setOpening(user.getOpening());
         }
@@ -79,7 +82,6 @@ public class StoreService {
         }
         if (user.getLocation() != null){
             existingStore.setLocation(user.getLocation());
-
         }        
         return repository.save(existingStore);
     }

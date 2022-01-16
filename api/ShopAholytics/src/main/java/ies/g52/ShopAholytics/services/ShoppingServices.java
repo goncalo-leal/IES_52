@@ -91,6 +91,7 @@ public class ShoppingServices {
         Shopping existingShopping = repository.findById((int)user.getId()).orElse(null);
         existingShopping.setName(user.getName());
         existingShopping.setLocation(user.getLocation());
+        existingShopping.setCurrent_capacity(user.getCurrent_capacity());
         existingShopping.setCapacity(user.getCapacity());
         existingShopping.setOpening(user.getOpening());
         existingShopping.setClosing(user.getClosing());
