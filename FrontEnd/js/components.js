@@ -1,3 +1,12 @@
+import SessionManager from "./session.js";
+
+
+var logged_in = SessionManager.get("session") !== null;
+var role = null;
+if (logged_in) {
+    role = SessionManager.get("session")
+}
+
 class Navbar extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
@@ -13,12 +22,22 @@ class Navbar extends HTMLElement {
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         <a class="nav-link" data-widget="fullscreen" href="login.html" role="button" id="loginBttn">
-                            Login
+                        ${logged_in
+                            ? 'Logout'
+                            : 'Login'
+                        }
                         </a>
                     </li>
                 </ul>
             </nav>
         `
+
+        $("#loginBttn").click(function() {
+            if (logged_in) {
+                SessionManager.set("session", null)
+            } 
+            window.location.href = 'login.html'
+        })
     }
 }
 
@@ -28,22 +47,28 @@ class SideBar extends HTMLElement {
         this.innerHTML =`
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="index.html" class="brand-link text-center">
+            ${ logged_in
+                ? ' <a href="index.html" class="brand-link text-center"> '
+                : ' <a href="no_loggin_shopp.html" class="brand-link text-center">'
+            }
                 <span class="brand-text font-weight-bold">ShopAholytics</span>
             </a>
         
             <!-- Sidebar -->
             <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="info">
-                        <a id="sm_name" class="d-block"></a>
+                ${ logged_in
+                    ? `
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                        <div class="info">
+                            <a id="sm_name" class="d-block"></a>
+                        </div>
                     </div>
-                </div>
-        
-                <!-- Sidebar Menu -->
+                    `
+                    :''
+                }
                 <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                ${logged_in
+                    ? `<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                             with font-awesome or any other icon font library -->
                         <li class="nav-item">
@@ -98,6 +123,9 @@ class SideBar extends HTMLElement {
                             </ul>
                         </li>
                     </ul>
+                    `
+                    : ``
+                }
                 </nav>
                 <!-- /.sidebar-menu -->
                 <div class="fixed-bottom">
@@ -119,13 +147,25 @@ class SideBar extends HTMLElement {
         </aside>
       `
 
-      var page = window.location.pathname;
 
-      if (["/add_store.html", "/store_management.html", "/add_user.html", "/user_management.html"].includes(page)) {
-          $("#menu-toggle").addClass("menu-open");
-      }
+      this.update_sidebar_user_info();
+      this.update_sidebar_selected_item();
 
-      $(`a[href="${page}"]`).addClass("active");
+    }
+
+    update_sidebar_user_info() {
+        if (logged_in) {
+            $("#sm_name").text(SessionManager.get("session").user.name);
+          }
+    }
+
+    update_sidebar_selected_item() {
+        var page = window.location.pathname;
+        if (["/add_store.html", "/store_management.html", "/add_user.html", "/user_management.html"].includes(page)) {
+            $("#menu-toggle").addClass("menu-open");
+        }
+  
+        $(`a[href="${page}"]`).addClass("active");
     }
 }
 
