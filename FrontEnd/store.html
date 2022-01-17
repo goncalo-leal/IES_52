@@ -36,136 +36,140 @@
         <img class="animation__wobble" src="./AdminLTE-3.1.0/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
     </div>
 
-  <!-- Navbar -->
-  <main-nav></main-nav>
-  <side-nav></side-nav>
+    <!-- Navbar -->
+    <main-nav></main-nav>
+    <side-nav></side-nav>
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 id="store_name" class="m-0"></h1>
-                    <h5 id="store_location" class="text-secondary"></h5>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 id="store_name" class="m-0"></h1>
+                        <h5 id="store_location" class="text-secondary"></h5>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
 
-    <!-- Main content -->
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header border-0">
-                            <h3 class="card-title">Live Occupation</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-6 col-sm-12 border-right">
-                                    <div class="position-relative mb-4">
-                                        <canvas id="donutStore" height="300"></canvas>
-                                    </div>
-                                    <div id="parkingTab" class="d-flex justify-content-between align-items-center">
-                                        <p class="d-flex flex-column text-right">
-                                            <span class="font-weight-bold">
-                                                <span id="storecurcap">0</span>/<span id="storemaxcap">0</span> People
-                                            </span>
-                                        </p>
-                                    </div>
-                                    <!-- /.d-flex -->
-                                </div>
-                                <div class="col-lg-6 col-sm-12 border-left">
-                                    <div>
-                                        <div class="info-box bg-success" id="cur_ocup_box">
-                                            <span class="info-box-icon"><i class="fas fa-users"></i></span>
-                            
-                                            <div class="info-box-content">
-                                            <span class="info-box-text">Occupation</span>
-                                            <span class="info-box-number" id="cur_ocup_num">0</span>
-                            
-                                            <div class="progress">
-                                                <div class="progress-bar" id="cur_ocup_bar" style="width: 0%"></div>
-                                            </div>
-                                            <span class="progress-description">
-                                                now
-                                            </span>
-                                            </div>
-                                            <!-- /.info-box-content -->
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header border-0">
+                                <h3 class="card-title">Live Occupation</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12 border-right">
+                                        <div class="position-relative mb-4">
+                                            <canvas id="donutStore" height="300"></canvas>
                                         </div>
+                                        <div id="parkingTab" class="d-flex justify-content-between align-items-center">
+                                            <p class="d-flex flex-column text-right">
+                                                <span class="font-weight-bold">
+                                                    <span id="storecurcap">0</span>/<span id="storemaxcap">0</span> People
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <!-- /.d-flex -->
                                     </div>
-                                    <div>
-                                        <div class="small-box bg-info">
-                                            <div class="inner">
-                                              <h3 id="peopletoday"></h3>
-                              
-                                              <p>Customers Today</p>
+                                    <div class="col-lg-6 col-sm-12 border-left">
+                                        <div>
+                                            <div class="info-box bg-success" id="cur_ocup_box">
+                                                <span class="info-box-icon"><i class="fas fa-users"></i></span>
+                                
+                                                <div class="info-box-content">
+                                                <span class="info-box-text">Occupation</span>
+                                                <span class="info-box-number" id="cur_ocup_num">0</span>
+                                
+                                                <div class="progress">
+                                                    <div class="progress-bar" id="cur_ocup_bar" style="width: 0%"></div>
+                                                </div>
+                                                <span class="progress-description">
+                                                    now
+                                                </span>
+                                                </div>
+                                                <!-- /.info-box-content -->
                                             </div>
-                                            <div class="icon">
-                                              <i class="fas fa-shopping-cart"></i>
+                                        </div>
+                                        <div>
+                                            <div class="small-box bg-info">
+                                                <div class="inner">
+                                                <h3 id="peopletoday"></h3>
+                                
+                                                <p>Customers Today</p>
+                                                </div>
+                                                <div class="icon">
+                                                <i class="fas fa-shopping-cart"></i>
+                                                </div>
                                             </div>
-                                          </div>
-                                    </div>
-                                    <div>
-                                        <div class="small-box bg-info">
-                                            <div class="inner ">
-                                              <h3 id="Weekly_grouth">12%</h3>
-                              
-                                              <p>Weekly Growth</p>
+                                        </div>
+                                        <div>
+                                            <div class="small-box bg-info">
+                                                <div class="inner ">
+                                                <h3 id="Weekly_grouth">12%</h3>
+                                
+                                                <p>Weekly Growth</p>
+                                                </div>
+                                                <div class="icon">
+                                                <i class="ion ion-stats-bars"></i>
+                                                </div>
                                             </div>
-                                            <div class="icon">
-                                              <i class="ion ion-stats-bars"></i>
-                                            </div>
-                                          </div>
-                                    </div>
+                                        </div>
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="position-relative mb-4">
+                            <canvas id="barChartLastWeek" height="350"></canvas>
+                        </div>
+            
+                        <div class="d-flex flex-row justify-content-end">
+                            <span class="mr-2">
+                                <i class="fas fa-square text-primary"></i> Today
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="position-relative mb-4">
+                            <canvas id="barChartStoreTodayHours" height="350"></canvas>
+                        </div>
+            
+                        <div class="d-flex flex-row justify-content-end">
+                            <span class="mr-2">
+                                <i class="fas fa-square text-primary"></i> Today
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <!-- /.container-fluid -->
         </div>
-        <!-- /.container-fluid -->
+        <!-- /.content -->
     </div>
-    
-    <!-- /.content -->
-  </div>
-    <div class="row">
-        <div class="position-relative  col-lg-12 mb-4">
-            <canvas id="barChartLastWeek"></canvas>
-        </div>
+    <!-- /.content-wrapper -->
 
-        <div class="card-body">
-            <div class="position-relative mb-4">
-                <canvas id="barChartStoreTodayHours" height="350"></canvas>
-            </div>
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
 
-            <div class="d-flex flex-row justify-content-end">
-                <span class="mr-2">
-                    <i class="fas fa-square text-primary"></i> Today
-                </span>
-            </div>
-        </div>
-    </div>
-    
-
-
-   
-  <!-- /.content-wrapper -->
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-
-  <!-- Main Footer -->
-  <main-foot></main-foot>
+    <!-- Main Footer -->
+    <main-foot></main-foot>
 </div>
 <!-- ./wrapper -->
 

@@ -7,7 +7,7 @@ $(document).ready(function() {
     updateView();
 
     loadPeopleByWeek();
-    compararLastWeek();
+    compareLastWeek();
     loadDataBySensorLastHour();
     loadDataBySensorToday();
     loadDataBySensorWeek();
@@ -46,13 +46,12 @@ const loadDataBySensorToday= function(){
                 renderBarGraphic(data,'barChartToday')
                 var shopping =data["Shopping"]
                 var park=data["Park"]
-                 var var_shop=0
+                var var_shop=0
                 var var_park=0
                 for (const [key, value] of Object.entries(shopping)) {
                     var_shop+=value
                   }
                 for (const [key, value] of Object.entries(park)) {
-                    console.log(key, value);
                     var_park+=value
                   }
                 renderDonut(var_shop,var_park, "donutChartParkvsShopping", "Shopping vs Park")
@@ -81,13 +80,12 @@ const loadDataBySensorWeek= function(){
 
                 var shopping =data["Shopping"]
                 var park=data["Park"]
-                 var var_shop=0
+                var var_shop=0
                 var var_park=0
                 for (const [key, value] of Object.entries(shopping)) {
                     var_shop+=value
                   }
                 for (const [key, value] of Object.entries(park)) {
-                    console.log(key, value);
                     var_park+=value
                   }
                 renderDonut(var_shop,var_park, "donutChartParkvsShoppinglastWeek", "Shopping vs Park")
@@ -112,18 +110,16 @@ const loadDataBySensorLastHour= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                console.log("aqui", data)
                 renderBarGraphic(data,'barChartLastHour')
 
                 var shopping =data["Shopping"]
                 var park=data["Park"]
-                 var var_shop=0
+                var var_shop=0
                 var var_park=0
                 for (const [key, value] of Object.entries(shopping)) {
                     var_shop+=value
                   }
                 for (const [key, value] of Object.entries(park)) {
-                    console.log(key, value);
                     var_park+=value
                   }
                 renderDonut(var_shop,var_park, "donutChartLastHour", "Shopping vs Park")
@@ -148,17 +144,15 @@ const loadDataBySensorMonth= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                console.log("aqui MONTH", data)
                 renderBarGraphic(data,'barChartMonth')
                 var shopping =data["Shopping"]
                 var park=data["Park"]
-                 var var_shop=0
+                var var_shop=0
                 var var_park=0
                 for (const [key, value] of Object.entries(shopping)) {
                     var_shop+=value
                   }
                 for (const [key, value] of Object.entries(park)) {
-                    console.log(key, value);
                     var_park+=value
                   }
                 renderDonut(var_shop,var_park, "donutChartParkvsShoppinglastMonth", "Shopping vs Park")
@@ -176,7 +170,7 @@ const loadDataBySensorMonth= function(){
     })
 }
 
-const compararLastWeek= function(){
+const compareLastWeek= function(){
     $.ajax({
         url: consts.BASE_URL + '/api/PeopleInShoppingTodayCompareWithLaskWeek/' + SessionManager.get("session").shopping.id,
         type: "GET", 
@@ -298,8 +292,6 @@ const renderBarGraphic = function (data,id) {
             }
         ]
     }
-    
-    console.log(areaChartData)
 
     var barChartCanvas = $('#'+id).get(0).getContext('2d');
 
@@ -313,7 +305,7 @@ const renderBarGraphic = function (data,id) {
 
     var barChartOptions = {
         responsive              : true,
-        maintainAspectRatio     : true,
+        maintainAspectRatio     : false,
         datasetFill             : false,
         tooltips: {
             mode: mode,
@@ -361,7 +353,6 @@ const renderBarGraphic = function (data,id) {
 
 
 const renderGraphic = function (mapa) {
-    console.log(mapa);
     var areaChartData = {
         labels  : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
         datasets: [
