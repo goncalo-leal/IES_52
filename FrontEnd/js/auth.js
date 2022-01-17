@@ -22,7 +22,7 @@ const login = function() {
             if (data) {
                 console.log(data)
                 SessionManager.set("session", data);
-                window.location.href = "./index.html";
+                window.location.href = "./home.html";
             } else {
                 console.log("nao autenticado");
             }
