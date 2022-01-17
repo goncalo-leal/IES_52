@@ -35,8 +35,12 @@ class Navbar extends HTMLElement {
         $("#loginBttn").click(function() {
             if (logged_in) {
                 SessionManager.set("session", null)
-            } 
-            window.location.href = 'login.html'
+                SessionManager.set("shopping", null)
+                window.location.href = 'index.html'
+            }
+            else {
+                window.location.href = 'login.html'
+            }
         })
     }
 }
@@ -173,9 +177,13 @@ class NavbarIndex extends HTMLElement {
 
             $("#loginBttn").click(function() {
                 if (logged_in) {
+                    SessionManager.set("shopping", null)
                     SessionManager.set("session", null)
-                } 
-                window.location.href = 'login.html'
+                    window.location.href = 'index.html'
+                }
+                else {
+                    window.location.href = 'login.html'
+                }
             })
         }
         else {
@@ -368,7 +376,7 @@ class Footer extends HTMLElement {
             <strong>ShopAholytics &copy; 2021 <a href="https://github.com/goncalo-leal/IES_52"><i class="fab fa-github"></i></a>.</strong>
                 All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 1.0 | <b>Iteration</b> 1
+                <b>Version</b> 1.0 | <b>Iteration</b> 3
             </div>
         </footer>
         `

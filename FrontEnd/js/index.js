@@ -13,9 +13,15 @@ var stores = [];
 var parks = [];
 var storesData={};
 
-var shopping_id=1
+var shopping_id
 
 $(document).ready(function() {
+    if (SessionManager.get("shopping") == null){
+        window.location.href = "./select_shopping.html";
+    }
+    shopping_id = SessionManager.get("shopping")
+    console.log(shopping_id)
+
     past_info_stores = getAllStoresLastHourEntrance();
     getLastWeekShoppingInfo()
     past_info_parks = getAllParksLastHourEntrance();
