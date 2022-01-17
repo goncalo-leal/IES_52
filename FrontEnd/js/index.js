@@ -16,8 +16,9 @@ var storesData={};
 $(document).ready(function() {
     updateView();
     
-    past_info_stores = getAllStoresLastHourEntrance();
-    past_info_parks = getAllParksLastHourEntrance();
+    getAllStoresLastHourEntrance();
+    
+    getAllParksLastHourEntrance();
     stores_table = $("#stores").DataTable({
         "lengthChange": false,
         "searching": true,
@@ -58,6 +59,8 @@ $(document).ready(function() {
     loadShoppingInfo();
     loadPeopleByWeek();
     loadShoppingEntrancesLastHour();
+    
+    
 
     $("#stores_search_txt").on('input', function() {
         stores_table.search($('#stores_search_txt').val()).draw();
@@ -92,6 +95,8 @@ $(document).ready(function() {
     });
 });
 
+
+
 const loadShoppingInfo = function() {
     $("#s_name").text(SessionManager.get("session").shopping.name);
 
@@ -105,6 +110,7 @@ const loadShoppingInfo = function() {
                 var cur_capacity = 0;
                 stores = data.stores;
                 parks = data.parks;
+                //loadParksEntrancesLastHour();
                 
                 
                 $("#shopcurcap").text(data.current_capacity);
@@ -116,9 +122,7 @@ const loadShoppingInfo = function() {
                 } else {
                     $("#parkingTab").empty();
                 }
-
-                renderStoresTable(stores);
-                renderParksTable(parks);
+                
 
                 loadShoppingsParks();
                 loadShoppingStores();
@@ -132,6 +136,12 @@ const loadShoppingInfo = function() {
         }
     })
 }
+//const loadParksEntrancesLastHour = function() {
+//    $.ajax()
+//    parks.forEach(function(e,i){
+//        alert(i);
+//    })
+//}
 
 const loadShoppingStores = function() {
     for (var i = 0; i < stores.length; i++){
@@ -175,7 +185,6 @@ const loadShoppingStores = function() {
     renderDonut(p_curr, p_cap, p_id, p_nome);
     $("#parkName0").html(p_nome);
     p_contador++;
-    
 
 
 
@@ -211,7 +220,6 @@ const loadShoppingsParks = function() {
 }
 
 const getAllStoresLastHourEntrance= function(){
-    var to_ret = null;
 
     $.ajax({
         url: consts.BASE_URL + '/api/CountLastHoursForStores/' + SessionManager.get("session").shopping.id,
@@ -220,7 +228,10 @@ const getAllStoresLastHourEntrance= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                to_ret = data
+                past_info_stores = data
+                renderStoresTable(stores);
+
+                
             } else {
                 console.log("No data");
             }
@@ -230,12 +241,10 @@ const getAllStoresLastHourEntrance= function(){
             console.log(" erro na call");
         }
     });
-    return to_ret;
 }
 
-const getAllParksLastHourEntrance= function(){
-    var to_ret = null
 
+const getAllParksLastHourEntrance= function(){
     $.ajax({
         url: consts.BASE_URL + '/api/CountLastHoursForParks/' + SessionManager.get("session").shopping.id,
         type: "GET", 
@@ -243,7 +252,8 @@ const getAllParksLastHourEntrance= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                to_ret = data
+                past_info_parks = data
+                renderParksTable(parks);
             } else {
                 console.log("No data");
             }
@@ -253,8 +263,6 @@ const getAllParksLastHourEntrance= function(){
             console.log(" erro na call");
         }
     });
-
-    return to_ret;
 }
 
 const loadShoppingEntrancesLastHour= function(){
@@ -301,10 +309,13 @@ const renderStoresTable = function (data) {
     $("#stores_body").empty();
     data.forEach(function(e, i) {
         let difference = 0
+        console.log("tenho info das stores"+past_info_stores)
         if (past_info_stores !== null) {
+
+            
+            
             let horas_atrs = past_info_stores[e.id]["2_hours_ago"];
             let horas_atual = past_info_stores[e.id]["last_hour"];
-
             if (horas_atrs == 0) {
                 difference = (horas_atual- horas_atrs) * 100        
             }
@@ -312,7 +323,7 @@ const renderStoresTable = function (data) {
                 difference = ((horas_atual - horas_atrs) / horas_atrs) * 100           
             }
         }
-
+        
         if (difference >0){
             table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i> ' + difference + '%</span></b></p>', '<a href="/store.html?id=' + e.id + '" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
         }
@@ -320,9 +331,10 @@ const renderStoresTable = function (data) {
             table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-warning mr-1"><i class="ion ion-android-arrow-up text-warning"></i> ' + difference + '%</span></b></p>', '<a href="/store.html?id=' + e.id + '" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
         }
     });
-   
+    
     stores_table.clear();
-    stores_table.rows.add( table_data ).draw();
+    stores_table.rows.add(table_data).draw();
+    
 }
 
 const renderParksTable = function (data) {
@@ -332,7 +344,7 @@ const renderParksTable = function (data) {
     data.forEach(function(e, i) {
         let difference = 0
         if (past_info_parks !== null) {
-            console.log("HEYYY")
+            
             let two_hours_ago = past_info_parks[e.id]["2_hours_ago"];
             let last_hour = past_info_parks[e.id]["last_hour"];
             
@@ -343,7 +355,7 @@ const renderParksTable = function (data) {
                 difference = ((last_hour - two_hours_ago) / two_hours_ago) * 100
             }
         }
-        console.log(difference)
+        
         if (difference > 0){
             table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i> ' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
         }
