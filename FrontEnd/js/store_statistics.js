@@ -2,6 +2,13 @@ import consts from "./consts.js";
 import SessionManager from "./session.js";
 import updateView from "./common.js"
 
+var date = new Date();
+var day =new Date(date.getTime())
+day= day.getFullYear()+'-'+day.getMonth()+1+'-'+day.getDate()
+/*
+    Pedir ajuda ao gonçalo
+*/
+var store_id =3
 
 $(document).ready(function() {
     updateView();
@@ -18,8 +25,10 @@ $(document).ready(function() {
 });
 
 const loadShoppingByHours = function () {  
+    
+    console.log(day)
     $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInShoppingByhours/' + SessionManager.get("session").shopping.id,
+        url: consts.BASE_URL + '/api/PeopleInStoreByhours/' + store_id +'/'+day,
         type: "GET", 
         contentType: "application/json",
         dataType: "json",
@@ -35,26 +44,14 @@ const loadShoppingByHours = function () {
 
 const loadDataBySensorToday= function(){
     $.ajax({
-        url: consts.BASE_URL + '/api/AllSensorsForThatShoppingToday/' + SessionManager.get("session").shopping.id,
+        url: consts.BASE_URL + '/api/AllSensorsForThatStoreToday/' + store_id,
         type: "GET", 
         contentType: "application/json",
         dataType: "json",
         success: function(data) {
             if (data) {
-                
-                renderBarGraphicV2(data,'barChartToday')
-                var shopping =data["Shopping"]
-                var park=data["Park"]
-                var var_shop=0
-                var var_park=0
-                for (const [key, value] of Object.entries(shopping)) {
-                    var_shop+=value
-                  }
-                for (const [key, value] of Object.entries(park)) {
-                    var_park+=value
-                  }
-                renderDonut(var_shop,var_park, "donutChartParkvsShopping", "Shopping vs Park")
-
+                renderBarGraphic(data,'barChartToday')
+             
             } else {
                 console.log("No data");
             }
@@ -69,26 +66,15 @@ const loadDataBySensorToday= function(){
 
 const loadDataBySensorWeek= function(){
     $.ajax({
-        url: consts.BASE_URL + '/api/AllSensorsForThatShoppingWeek/' + SessionManager.get("session").shopping.id,
+        url: consts.BASE_URL + '/api/AllSensorsForThatStoreWeek/' + store_id,
         type: "GET", 
         contentType: "application/json",
         dataType: "json",
         success: function(data) {
             if (data) {
-                renderBarGraphicV2(data,'barChartWeek')
+                renderBarGraphic(data,'barChartWeek')
 
-                var shopping =data["Shopping"]
-                var park=data["Park"]
-                var var_shop=0
-                var var_park=0
-                for (const [key, value] of Object.entries(shopping)) {
-                    var_shop+=value
-                  }
-                for (const [key, value] of Object.entries(park)) {
-                    var_park+=value
-                  }
-                renderDonut(var_shop,var_park, "donutChartParkvsShoppinglastWeek", "Shopping vs Park")
-
+            
 
             } else {
                 console.log("No data");
@@ -103,26 +89,15 @@ const loadDataBySensorWeek= function(){
 }
 const loadDataBySensorLastHour= function(){
     $.ajax({
-        url: consts.BASE_URL + '/api/lastHourShoppingAndParksbySensor/' + SessionManager.get("session").shopping.id,
+        url: consts.BASE_URL + '/api/AllSensorsForThatStoreHour/' +store_id,
         type: "GET", 
         contentType: "application/json",
         dataType: "json",
         success: function(data) {
             if (data) {
-                renderBarGraphicV2(data,'barChartLastHour')
-
-                var shopping =data["Shopping"]
-                var park=data["Park"]
-                var var_shop=0
-                var var_park=0
-                for (const [key, value] of Object.entries(shopping)) {
-                    var_shop+=value
-                  }
-                for (const [key, value] of Object.entries(park)) {
-                    var_park+=value
-                  }
-                renderDonut(var_shop,var_park, "donutChartLastHour", "Shopping vs Park")
-
+                renderBarGraphic(data,'barChartLastHour')
+                
+           
 
             } else {
                 console.log("No data");
@@ -137,26 +112,14 @@ const loadDataBySensorLastHour= function(){
 }
 const loadDataBySensorMonth= function(){
     $.ajax({
-        url: consts.BASE_URL + '/api/AllSensorsForThatShoppingMonth/' + SessionManager.get("session").shopping.id,
+        url: consts.BASE_URL + '/api/AllSensorsForThatStoreMonth/' + store_id,
         type: "GET", 
         contentType: "application/json",
         dataType: "json",
         success: function(data) {
             if (data) {
-                renderBarGraphicV2(data,'barChartMonth')
-                var shopping =data["Shopping"]
-                var park=data["Park"]
-                var var_shop=0
-                var var_park=0
-                for (const [key, value] of Object.entries(shopping)) {
-                    var_shop+=value
-                  }
-                for (const [key, value] of Object.entries(park)) {
-                    var_park+=value
-                  }
-                renderDonut(var_shop,var_park, "donutChartParkvsShoppinglastMonth", "Shopping vs Park")
-
-
+                renderBarGraphic(data,'barChartMonth')
+                
             } else {
                 console.log("No data");
             }
@@ -171,7 +134,7 @@ const loadDataBySensorMonth= function(){
 
 const compareLastWeek= function(){
     $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInShoppingTodayCompareWithLaskWeek/' + SessionManager.get("session").shopping.id,
+        url: consts.BASE_URL + '/api/PeopleInStoreTodayCompareWithLaskWeek/' + SessionManager.get("session").shopping.id,
         type: "GET", 
         contentType: "application/json",
         dataType: "json",
@@ -243,6 +206,7 @@ const loadPeopleByWeek = function() {
 const renderDonut = function (curr, total, id, title=""){
     var donutChartCanvas = $('#'+id).get(0).getContext('2d')
     //var donutChartCanvas = $('#donut1').get(0).getContext('2d')
+    
     var donutData = {        
         labels: [
             'Doors',
@@ -261,17 +225,6 @@ const renderDonut = function (curr, total, id, title=""){
         responsive : true,
     }
 
-    if (curr ==0 && total == 0){
-        $("#"+id+"Warning").removeClass("d-none")
-        $("#"+id+"Warning").addClass("d-flex")
-        document.getElementById(id).style.display="none"
-    }
-    else{
-        $("#"+id+"Warning").removeClass("d-flex")
-        $("#"+id+"Warning").addClass("d-none")
-        document.getElementById(id).style.display="block"
-
-    }
     //Create pie or douhnut chart
     // You can switch between pie and douhnut using the method below.
     return new Chart(donutChartCanvas, {
@@ -281,87 +234,6 @@ const renderDonut = function (curr, total, id, title=""){
     })    
 }
 
-const renderBarGraphicV2 = function (data,id) {
-    var labels = []
-    var info = []
-    for (const [key, value] of Object.entries(data)) {
-        for (const [key, v] of Object.entries(value)) {
-            labels.push(key)
-            info.push(v )
-        }
-    }
-
-    console.log(info)
-
-    var areaChartData = {
-        labels  : labels,
-        datasets: [
-            {
-                label               : 'Entries',
-                backgroundColor     : '#007bff',
-                borderColor         : '#007bff',
-                data                : info
-            }
-        ]
-    }
-
-    var barChartCanvas = $('#'+id).get(0).getContext('2d');
-
-    var barChartData = $.extend(true, {}, areaChartData)
-    var mode = 'index'
-    var intersect = true
-    var ticksStyle = {
-        fontColor: '#495057',
-        fontStyle: 'bold'
-    }
-
-    var barChartOptions = {
-        responsive              : true,
-        maintainAspectRatio     : false,
-        datasetFill             : false,
-        tooltips: {
-            mode: mode,
-            intersect: intersect
-        },
-        hover: {
-            mode: mode,
-            intersect: intersect
-        },
-        legend: {
-            display: false
-        },
-        scales: {
-            scaleStartValue: 0,
-            yAxes: [{
-                // display: false,
-                gridLines: {
-                    display: true,
-                    lineWidth: '4px',
-                    color: 'rgba(0, 0, 0, .2)',
-                    zeroLineColor: 'transparent'
-                },
-                ticks: {
-                    beginAtZero: true
-                }
-            }],
-            xAxes: [{
-                display: true,
-                gridLines: {
-                    display: false
-                },
-                ticks: ticksStyle
-            }],
-           
-        }
-    }
-
-    new Chart(barChartCanvas, {
-        type: 'bar',
-        data: barChartData,
-        options: barChartOptions
-    })
-}
-
 const renderBarGraphic = function (data,id) {
     var labels = []
     var info = []
@@ -369,7 +241,6 @@ const renderBarGraphic = function (data,id) {
         labels.push(key)
         info.push(value)
     }
-
     var areaChartData = {
         labels  : labels,
         datasets: [

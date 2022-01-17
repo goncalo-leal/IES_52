@@ -33,7 +33,7 @@ $(document).ready(function () {
     loadMaxStoreCapacity()
 
     $("#edit_store").click(function() {
-        let store_name = $("#store_name").val();
+        let store_name = $("#store_name").val(); // document.getElementById("store_name").value()
         let location = $("#location").val();
         let capacity = $("#capacity").val();
         let opening = $("#opening").val().split(":");

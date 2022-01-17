@@ -37,7 +37,7 @@ public class StoreService {
     public Store getStoreById(int id) {
         return repository.findById((int)id).orElse(null);
     }
-
+    
     public HashMap<String,Integer> getAllSensorsAssociatedStore(int id){
        
         HashMap<String,Integer> map = new HashMap<>();

@@ -1208,7 +1208,7 @@ public class SensorDataService {
         }
         return map;
     }
-    public HashMap<Integer,Integer>  PeopleInShoppingByhoursDe( int pid, String day){
+    public HashMap<Integer,Integer>  PeopleInStoreByhours( int pid, String day){
         /*
             A estrutura do dia deve ser algo como ano-mes-dia
         */
@@ -1260,6 +1260,8 @@ public class SensorDataService {
         }
         return map;
     }
+
+    
 
     public HashMap<Integer,Integer>  PeopleInStoreByhours( int pid){
         List<SensorData> a = this.getSensorDatas();
@@ -1436,5 +1438,78 @@ public class SensorDataService {
         return ret;
     }
 
-
+    public OccupationInLast7Days ShoppingMovementLast14Days(int pid){
+        OccupationInLast7Days ret= new OccupationInLast7Days();
+            List<SensorData> a = this.getSensorDatas();
+            Collections.reverse(a);
+            int dia_atual=LocalDateTime.now().getDayOfYear();
+            int ano_atual=LocalDateTime.now().getYear();
+            LocalDate d = LocalDate.parse(ano_atual-1+"-12-31"); 
+            List<Integer> dias = new ArrayList<>();
+            List<Integer> dias_passada = new ArrayList<>();
+            for (int i =1; i <=7 ; i++){
+                int tmep=dia_atual-i;
+                if (tmep < 1){
+                    if (d.lengthOfYear() == 365){
+                        tmep=tmep+365;
+                    }
+                    else{
+                        tmep=tmep+366;
+                    }
+                }
+    
+                dias.add(tmep);
+    
+            }
+            
+            for (int i =8; i <=14 ; i++){
+                int tmep=dia_atual-i;
+                if (tmep < 1){
+                    if (d.lengthOfYear() == 365){
+                        tmep=tmep+365;
+                    }
+                    else{
+                        tmep=tmep+366;
+                    }
+                }
+    
+                dias_passada.add(tmep);
+    
+            }
+            for (SensorData data : a){
+                if (data.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                    Sensor x= data.getSensor();
+                    if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
+                        int dia =data.getDate().getDayOfYear();
+                        int ano = data.getDate().getYear();
+                        String semana_dia=data.getDate().getDayOfWeek().toString();
+                        if(dias.contains(dia)){
+                            if (ret.getMapa().containsKey(semana_dia)){
+                                ret.getMapa().put(semana_dia, ret.getMapa().get(semana_dia)+1);
+                            }
+                            else{
+                                ret.getMapa().put(semana_dia, 1);
+                            }
+    
+                        }
+                        if(dias_passada.contains(dia)){
+                            if (ret.getMapa().containsKey("LAST_"+semana_dia)){
+                                ret.getMapa().put("LAST_"+semana_dia, ret.getMapa().get("LAST_"+semana_dia)+1);
+                            }
+                            else{
+                                ret.getMapa().put("LAST_"+semana_dia, 1);
+                            }
+    
+                        }
+    
+                       
+                        
+                     
+                        //ver se esta solução da 
+                    }
+                }  
+            }
+            return ret;
+        }
+    
 }

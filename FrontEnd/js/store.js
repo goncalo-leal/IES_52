@@ -290,24 +290,24 @@ const renderGraphic = function (mapa) {
     })
 }
 
-const renderBarGraphic = function (today,id) {
+const renderBarGraphic = function (today, id) {
     var labels = []
     var info1 = []
     console.log(today)
     for (const [key, value] of Object.entries(today)) {
-            labels.push(key)
-            info1.push(value)
+        labels.push(key)
+        info1.push(value)
     }
  
     var areaChartData = {
         labels :labels,
         datasets: [
             {
-                label               : 'This week',
+                label               : 'Today',
                 backgroundColor     : '#007bff',
                 borderColor         : '#007bff',
                 data                : info1,
-            },
+            }
         ]
     }
 
