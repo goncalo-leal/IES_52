@@ -41,6 +41,7 @@ const loadDataBySensorToday= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
+                
                 renderBarGraphicV2(data,'barChartToday')
                 var shopping =data["Shopping"]
                 var park=data["Park"]
