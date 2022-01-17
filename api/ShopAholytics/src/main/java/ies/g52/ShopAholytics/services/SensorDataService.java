@@ -1208,7 +1208,7 @@ public class SensorDataService {
         }
         return map;
     }
-    public HashMap<Integer,Integer>  PeopleInShoppingByhoursDe( int pid, String day){
+    public HashMap<Integer,Integer>  PeopleInStoreByhours( int pid, String day){
         /*
             A estrutura do dia deve ser algo como ano-mes-dia
         */
@@ -1260,6 +1260,8 @@ public class SensorDataService {
         }
         return map;
     }
+
+    
 
     public HashMap<Integer,Integer>  PeopleInStoreByhours( int pid){
         List<SensorData> a = this.getSensorDatas();

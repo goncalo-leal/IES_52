@@ -173,6 +173,63 @@ public class SensorDataController {
 
         return map;
     }
+    @GetMapping("/AllSensorsForThatStoreWeek/{pid}")
+    public HashMap<String,Integer> allSensorsWeekStore(@PathVariable(value = "pid") int pid){
+        HashMap<String, Integer> tmp= new HashMap<>();
+        Store s = storeService.getStoreById(pid);
+        HashMap<String, Integer> shopping_sensors = (storeService.getAllSensorsAssociatedStore(pid));
+        for (Map.Entry<String, Integer> entry : shopping_sensors.entrySet()) {
+            int data = sensorDataService.getEntrancesWeekSensor(entry.getValue());
+            tmp.put(entry.getKey() ,data);
+           
+        }
+  
+     
+        return tmp;
+    }
+    @GetMapping("/AllSensorsForThatStoreHour/{pid}")
+    public HashMap<String,Integer> allSensorsHourStore(@PathVariable(value = "pid") int pid){
+        HashMap<String, Integer> tmp= new HashMap<>();
+        Store s = storeService.getStoreById(pid);
+        HashMap<String, Integer> shopping_sensors = (storeService.getAllSensorsAssociatedStore(pid));
+        for (Map.Entry<String, Integer> entry : shopping_sensors.entrySet()) {
+             HashMap<String, Integer> data = sensorDataService.lastHourCountsBySensor(entry.getValue());
+            tmp.put(entry.getKey() ,data.get("last_hour"));
+           
+        }
+  
+     
+        return tmp;
+    }
+    @GetMapping("/AllSensorsForThatStoreToday/{pid}")
+    public HashMap<String,Integer> allSensorsTodayStore(@PathVariable(value = "pid") int pid){
+        HashMap<String, Integer> tmp= new HashMap<>();
+        Store s = storeService.getStoreById(pid);
+        HashMap<String, Integer> shopping_sensors = (storeService.getAllSensorsAssociatedStore(pid));
+        for (Map.Entry<String, Integer> entry : shopping_sensors.entrySet()) {
+            int data = sensorDataService.getEntrancesTodaySensor(entry.getValue());
+            tmp.put(entry.getKey() ,data);
+           
+        }
+  
+     
+        return tmp;
+    }
+
+    @GetMapping("/AllSensorsForThatStoreMonth/{pid}")
+    public HashMap<String,Integer> allSensorsMonthStore(@PathVariable(value = "pid") int pid){
+        HashMap<String, Integer> tmp= new HashMap<>();
+        Store s = storeService.getStoreById(pid);
+        HashMap<String, Integer> shopping_sensors = (storeService.getAllSensorsAssociatedStore(pid));
+        for (Map.Entry<String, Integer> entry : shopping_sensors.entrySet()) {
+            int data = sensorDataService.AllSensorsMonth(entry.getValue());
+            tmp.put(entry.getKey() ,data);
+           
+        }
+  
+     
+        return tmp;
+    }
 
     @GetMapping("/AllSensorsForThatShoppingWeek/{pid}")
     public HashMap<String,HashMap<String,Integer>> allSensorsWeek(@PathVariable(value = "pid") int pid){
@@ -527,7 +584,7 @@ public class SensorDataController {
 
     @GetMapping("/PeopleInStoreByhours/{pid}/{day}")
     public HashMap<Integer,Integer>  PeopleInShoppingByhoursDe(@PathVariable(value = "pid") int pid,@PathVariable(value = "day") String day){
-        return sensorDataService.PeopleInParkByhoursDe(pid, day);
+        return sensorDataService.PeopleInStoreByhours(pid, day);
     }
 
 
