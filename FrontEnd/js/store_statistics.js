@@ -8,7 +8,7 @@ day= day.getFullYear()+'-'+day.getMonth()+1+'-'+day.getDate()
 /*
     Pedir ajuda ao gonçalo
 */
-var store_id =3
+var store_id = new URLSearchParams(window.location.search).get('id');
 
 $(document).ready(function() {
     updateView();

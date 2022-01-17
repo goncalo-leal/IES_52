@@ -76,7 +76,7 @@ public class ShopAholyticsApplication {
 				storeService.saveStore(jumbo);
 				storeService.saveStore(hm);
 
-				User user = new User("admin", "admin@ua.pt" ,"Administrador","male","1988-07-28",repository.getUserStateById(2));
+				User user = new User("admin", "admin@ua.pt" ,"Administrador","male","1988-07-28",repository.getUserStateById(2), "ROLE_SHOPPING_MANAGER");
 				ShoppingManagerServices.saveShoppingManager(new ShoppingManager(user, shoppingService.getShoppingById(1)));
 				userService.saveUser(user);
 

@@ -22,7 +22,12 @@ const login = function() {
             if (data) {
                 console.log(data)
                 SessionManager.set("session", data);
-                window.location.href = "./home.html";
+                
+                if (SessionManager.get("session").user.authority == "ROLE_SHOPPING_MANAGER") {
+                    window.location.href = "./home.html";
+                } else {
+                    window.location.href = "./store.html?id=" + data.store.id
+                }
             } else {
                 console.log("nao autenticado");
             }
