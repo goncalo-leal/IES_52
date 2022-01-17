@@ -986,6 +986,24 @@ public class SensorDataController {
         return map;
     }
 
+    @GetMapping("/PeopleInParkInLastHour/{pid}")
+    public HashMap<String,Integer> lastHourPeopleInParkv2(@PathVariable(value = "pid") int pid){
+        Shopping s = shoppingServices.getShoppingById(pid);
+        HashMap<String,Integer> map = new HashMap<>();
+        map.put("last_hour", 0);
+        map.put("2_hours_ago",0);
+        for (Park a : s.getParks()){
+            HashMap<String, Integer> c = sensorDataService.lastHourCountsPark(a.getId());
+
+            map.put("last_hour", map.get("last_hour")+c.get("last_hour"));
+            map.put("2_hours_ago", map.get("2_hours_ago")+c.get("2_hours_ago"));
+
+
+        }
+        return map;
+    }
+   
+
     @GetMapping("/PeopleInParkByhours/{pid}/{day}")
     public HashMap<Integer,Integer>  PeopleInParkByhoursDe(@PathVariable(value = "pid") int pid,@PathVariable(value = "day") String day){
        return sensorDataService.PeopleInParkByhoursDe(pid, day);

@@ -16,15 +16,17 @@ var storesData={};
 var shopping_id
 
 $(document).ready(function() {
+    updateView();
+    
+    getAllStoresLastHourEntrance();
+    
+    getAllParksLastHourEntrance();
     if (SessionManager.get("shopping") == null){
         window.location.href = "./select_shopping.html";
     }
     shopping_id = SessionManager.get("shopping")
-    console.log(shopping_id)
 
-    past_info_stores = getAllStoresLastHourEntrance();
     getLastWeekShoppingInfo()
-    past_info_parks = getAllParksLastHourEntrance();
     stores_table = $("#stores").DataTable({
         "lengthChange": false,
         "searching": true,
@@ -65,6 +67,8 @@ $(document).ready(function() {
     loadShoppingInfo();
     getLastWeekParkInfo();
     loadShoppingEntrancesLastHour();
+    
+    
 
    
 });
@@ -118,7 +122,6 @@ const getLastWeekParkInfo= function(){
 
 }
 const getAllStoresLastHourEntrance= function(){
-    var to_ret = null;
 
     $.ajax({
         url: consts.BASE_URL + '/api/CountLastHoursForStores/' + shopping_id,
@@ -127,7 +130,9 @@ const getAllStoresLastHourEntrance= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                to_ret = data
+                
+                past_info_stores = data
+
             } else {
                 console.log("No data");
             }
@@ -137,7 +142,6 @@ const getAllStoresLastHourEntrance= function(){
             console.log(" erro na call");
         }
     });
-    return to_ret;
 }
 
 
@@ -153,6 +157,8 @@ const loadShoppingInfo = function() {
                 var cur_capacity = 0;
                 stores = data.stores;
                 parks = data.parks;
+                renderStoresTable(stores);
+                renderParksTable(parks);
                 
                 
                 $("#shopcurcap").text(data.current_capacity);
@@ -164,9 +170,7 @@ const loadShoppingInfo = function() {
                 } else {
                     $("#parkingTab").empty();
                 }
-
-                renderStoresTable(stores);
-                renderParksTable(parks);
+                
 
                 loadShoppingsParks();
                 loadShoppingStores();
@@ -180,36 +184,14 @@ const loadShoppingInfo = function() {
         }
     })
 }
+//const loadParksEntrancesLastHour = function() {
+//    $.ajax()
+//    parks.forEach(function(e,i){
+//        alert(i);
+//    })
+//}
 
-const renderStoresTable = function (data) {
-    var table_data = []
 
-    $("#stores_body").empty();
-    data.forEach(function(e, i) {
-        let difference = 0
-        if (past_info_stores !== null) {
-            let horas_atrs = past_info_stores[e.id]["2_hours_ago"];
-            let horas_atual = past_info_stores[e.id]["last_hour"];
-
-            if (horas_atrs == 0) {
-                difference = (horas_atual- horas_atrs) * 100        
-            }
-            else {
-                difference = ((horas_atual - horas_atrs) / horas_atrs) * 100           
-            }
-        }
-
-        if (difference >0){
-            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i> ' + difference + '%</span></b></p>', '<a href="/store.html?id=' + e.id + '" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
-        }
-        else{
-            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-warning mr-1"><i class="ion ion-android-arrow-up text-warning"></i> ' + difference + '%</span></b></p>', '<a href="/store.html?id=' + e.id + '" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
-        }
-    });
-   
-    stores_table.clear();
-    stores_table.rows.add( table_data ).draw();
-}
 
 const loadShoppingsParks = function() {
     let occupied = 0;
@@ -228,8 +210,6 @@ const loadShoppingsParks = function() {
 
 
 const getAllParksLastHourEntrance= function(){
-    var to_ret = null
-
     $.ajax({
         url: consts.BASE_URL + '/api/CountLastHoursForParks/' + shopping_id,
         type: "GET", 
@@ -237,7 +217,7 @@ const getAllParksLastHourEntrance= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                to_ret = data
+                past_info_parks = data
             } else {
                 console.log("No data");
             }
@@ -247,8 +227,6 @@ const getAllParksLastHourEntrance= function(){
             console.log(" erro na call");
         }
     });
-
-    return to_ret;
 }
 
 const loadShoppingEntrancesLastHour= function(){
@@ -289,6 +267,38 @@ const loadShoppingEntrancesLastHour= function(){
     })
 }
 
+const renderStoresTable = function (data) {
+    var table_data = []
+
+    $("#stores_body").empty();
+    data.forEach(function(e, i) {
+        let difference = 0
+        console.log("tenho info das stores"+past_info_stores)
+        if (past_info_stores !== null) {
+
+                    
+            let horas_atrs = past_info_stores[e.id]["2_hours_ago"];
+            let horas_atual = past_info_stores[e.id]["last_hour"];
+            if (horas_atrs == 0) {
+                difference = (horas_atual- horas_atrs) * 100        
+            }
+            else {
+                difference = ((horas_atual - horas_atrs) / horas_atrs) * 100           
+            }
+        }
+        
+        if (difference >0){
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i> ' + difference + '%</span></b></p>', '<a href="/store.html?id=' + e.id + '" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+        }
+        else{
+            table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-warning mr-1"><i class="ion ion-android-arrow-up text-warning"></i> ' + difference + '%</span></b></p>', '<a href="/store.html?id=' + e.id + '" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
+        }
+    });
+    
+    stores_table.clear();
+    stores_table.rows.add(table_data).draw();
+    
+}
 
 const renderParksTable = function (data) {
     var table_data = []
@@ -296,8 +306,9 @@ const renderParksTable = function (data) {
     $("#parks_body").empty();
     data.forEach(function(e, i) {
         let difference = 0
+        
         if (past_info_parks !== null) {
-            console.log("HEYYY")
+            
             let two_hours_ago = past_info_parks[e.id]["2_hours_ago"];
             let last_hour = past_info_parks[e.id]["last_hour"];
             
@@ -308,7 +319,7 @@ const renderParksTable = function (data) {
                 difference = ((last_hour - two_hours_ago) / two_hours_ago) * 100
             }
         }
-        console.log(difference)
+        
         if (difference > 0){
             table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i> ' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
         }
