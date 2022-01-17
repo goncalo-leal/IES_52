@@ -41,6 +41,7 @@ const loadDataBySensorToday= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
+                
                 renderBarGraphicV2(data,'barChartToday')
                 var shopping =data["Shopping"]
                 var park=data["Park"]
@@ -242,7 +243,6 @@ const loadPeopleByWeek = function() {
 const renderDonut = function (curr, total, id, title=""){
     var donutChartCanvas = $('#'+id).get(0).getContext('2d')
     //var donutChartCanvas = $('#donut1').get(0).getContext('2d')
-    
     var donutData = {        
         labels: [
             'Doors',
@@ -261,6 +261,17 @@ const renderDonut = function (curr, total, id, title=""){
         responsive : true,
     }
 
+    if (curr ==0 && total == 0){
+        $("#"+id+"Warning").removeClass("d-none")
+        $("#"+id+"Warning").addClass("d-flex")
+        document.getElementById(id).style.display="none"
+    }
+    else{
+        $("#"+id+"Warning").removeClass("d-flex")
+        $("#"+id+"Warning").addClass("d-none")
+        document.getElementById(id).style.display="block"
+
+    }
     //Create pie or douhnut chart
     // You can switch between pie and douhnut using the method below.
     return new Chart(donutChartCanvas, {

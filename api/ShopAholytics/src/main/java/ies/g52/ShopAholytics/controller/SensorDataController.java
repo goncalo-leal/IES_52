@@ -447,7 +447,7 @@ public class SensorDataController {
 
     @GetMapping("/PeopleInShoppingLast7Days/{pid}")
     public OccupationInLast7Days peopleInShoppingInLast7days(@PathVariable(value = "pid") int pid){
-        return sensorDataService.parkMovementLast14Days(pid);
+        return sensorDataService.ShoppingMovementLast14Days(pid);
     }
 
     @GetMapping("/ParksMovementInShoppingLast14Days/{pid}")
