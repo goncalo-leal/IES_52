@@ -15,6 +15,7 @@ import ies.g52.ShopAholytics.models.Shopping;
 import ies.g52.ShopAholytics.services.SensorService;
 import ies.g52.ShopAholytics.services.SensorShoppingService;
 import ies.g52.ShopAholytics.services.ShoppingServices;
+import ies.g52.ShopAholytics.views.SensorShoppingPark;
 
 
 
@@ -31,11 +32,11 @@ public class SensorShoppingController {
 
 
     @PostMapping("/addSensorShopping/{pid}/{shopping}")
-    public SensorShopping newSensorShopping(@PathVariable(value = "pid") int pid, @PathVariable(value = "shopping") int shopping) {
+    public SensorShopping newSensorShopping(@PathVariable(value = "pid") int pid, @PathVariable(value = "shopping") int shopping,@RequestBody SensorShoppingPark var) {
         Sensor s = sensorService.getSensorById(pid);
         if (s.getSensorPark() == null && s.getSensorShopping()==null && s.getSensorStore()==null ){
             
-            return SensorShoppingServices.saveSensorShopping(new SensorShopping (shoppingServices.getShoppingById(shopping),sensorService.getSensorById(pid)));
+            return SensorShoppingServices.saveSensorShopping(new SensorShopping (shoppingServices.getShoppingById(shopping),sensorService.getSensorById(pid),var.isBool()));
          }
          return null;
     }
@@ -60,20 +61,18 @@ public class SensorShoppingController {
         return shop;
     }
     @PostMapping("/addSensorShopping/{shopping}")
-    public SensorShopping newSensorShoppingWithNewSensor(@PathVariable(value = "shopping") int shopping, @RequestBody Sensor s1) {
-        
-        if (s1.getType().equals("entrace") || s1.getType().equals("exit")){}
+    public SensorShopping newSensorShoppingWithNewSensor(@PathVariable(value = "shopping") int shopping, @RequestBody SensorShoppingPark s1) {
+        if (s1.getType().equalsIgnoreCase("entrace") || s1.getType().equalsIgnoreCase("exit")){}
         else{
             return null;
         }
         Sensor s = new Sensor(s1.getType(), s1.getName());
-
         
         sensorService.saveSensor(s);
         
         if (s.getSensorPark() == null && s.getSensorShopping()==null && s.getSensorStore()==null ){
             
-            return SensorShoppingServices.saveSensorShopping(new SensorShopping (shoppingServices.getShoppingById(shopping),s));
+            return SensorShoppingServices.saveSensorShopping(new SensorShopping (shoppingServices.getShoppingById(shopping),s,s1.isBool()));
          }
          return null;
     }

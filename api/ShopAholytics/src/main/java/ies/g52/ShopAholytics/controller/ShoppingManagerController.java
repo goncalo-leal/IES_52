@@ -39,7 +39,7 @@ public class ShoppingManagerController {
     @PostMapping("/addShoppingManager/{shopping}")
     public ShoppingManager newShoppingManagerWithNewUser(@PathVariable(value = "shopping") int shopping, @RequestBody User m) {
 
-        User user = new User(m.getPassword(),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1));
+        User user = new User(m.getPassword(),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1), "ROLE_SHOPPING_MANAGER");
         serviceUser.saveUser(user);
 
         return ShoppingManagerServices.saveShoppingManager(new ShoppingManager(user,shoppingServices.getShoppingById(shopping)));

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShopAholytics | Home</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/dist/css/adminlte.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  
+   <!-- Tempusdominus Bootstrap 4 -->
+   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+</head>
+<!--
+`body` tag options:
+
+  Apply one or more of the following classes to to the body tag
+  to get the desired effect
+
+  * sidebar-collapse
+  * sidebar-mini
+-->
+<body class="hold-transition sidebar-mini" style="display: none">
+<div class="wrapper">
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <img class="animation__wobble" src="./AdminLTE-3.1.0/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+    </div>
+
+    <!-- Navbar -->
+    <main-nav></main-nav>
+    <side-nav></side-nav>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 id="store_name" class="m-0"></h1>
+                        <h5 id="store_location" class="text-secondary"></h5>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header border-0">
+                                <h3 class="card-title">Live Occupation</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12 border-right">
+                                        <div class="position-relative mb-4">
+                                            <canvas id="donutStore" height="300"></canvas>
+                                        </div>
+                                        <div id="parkingTab" class="d-flex justify-content-between align-items-center">
+                                            <p class="d-flex flex-column text-right">
+                                                <span class="font-weight-bold">
+                                                    <span id="storecurcap">0</span>/<span id="storemaxcap">0</span> People
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <!-- /.d-flex -->
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12 border-left">
+                                        <div>
+                                            <div class="info-box bg-success" id="cur_ocup_box">
+                                                <span class="info-box-icon"><i class="fas fa-users"></i></span>
+                                
+                                                <div class="info-box-content">
+                                                <span class="info-box-text">Occupation</span>
+                                                <span class="info-box-number" id="cur_ocup_num">0</span>
+                                
+                                                <div class="progress">
+                                                    <div class="progress-bar" id="cur_ocup_bar" style="width: 0%"></div>
+                                                </div>
+                                                <span class="progress-description">
+                                                    now
+                                                </span>
+                                                </div>
+                                                <!-- /.info-box-content -->
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="small-box bg-info">
+                                                <div class="inner">
+                                                <h3 id="peopletoday"></h3>
+                                
+                                                <p>Customers Today</p>
+                                                </div>
+                                                <div class="icon">
+                                                <i class="fas fa-shopping-cart"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="small-box bg-info">
+                                                <div class="inner ">
+                                                <h3 id="Weekly_grouth">12%</h3>
+                                
+                                                <p>Weekly Growth</p>
+                                                </div>
+                                                <div class="icon">
+                                                <i class="ion ion-stats-bars"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="position-relative mb-4">
+                            <canvas id="barChartLastWeek" height="350"></canvas>
+                        </div>
+            
+                        <div class="d-flex flex-row justify-content-end">
+                            <span class="mr-2">
+                                <i class="fas fa-square text-primary"></i> This Week
+                            </span>
+                            <span>
+                                <i class="fas fa-square text-gray"></i> Last week
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="position-relative mb-4">
+                            <canvas id="barChartStoreTodayHours" height="350"></canvas>
+                        </div>
+            
+                        <div class="d-flex flex-row justify-content-end">
+                            <span class="mr-2">
+                                <i class="fas fa-square text-primary"></i> Today
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <main-foot></main-foot>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="./AdminLTE-3.1.0/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="./AdminLTE-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE -->
+<script src="./AdminLTE-3.1.0/dist/js/adminlte.js"></script>
+<!-- Bootstrap 4 -->
+<script src="./AdminLTE-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/moment/moment.min.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<!-- OPTIONAL SCRIPTS -->
+<script src="./AdminLTE-3.1.0/plugins/chart.js/Chart.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="./AdminLTE-3.1.0/dist/js/demo.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="./AdminLTE-3.1.0/dist/js/pages/dashboard3.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="./AdminLTE-3.1.0/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/jszip/jszip.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script type="module" src="./js/store.js"></script>
+<script type="module" src="./js/components.js"></script>
+</body>
+</html>

@@ -37,7 +37,7 @@ public class StoreManagerController {
     @PostMapping("/addStoreManager/{store}")
     public StoreManager newShoppingManagerWithNewUser( @PathVariable(value = "store") int store,@RequestBody User m) {
 
-        User user = new User(m.getPassword(),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1));
+        User user = new User(m.getPassword(),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1), "ROLE_STORE_MANAGER");
         serviceUser.saveUser(user);
 
         return StoreManagerServices.saveStoreManager(new StoreManager (user,StoreServices.getStoreById(store)));
@@ -63,9 +63,22 @@ public class StoreManagerController {
     }
 
     // Os updates são feitos na no store e no user
-    @PutMapping("/updateStoreManager")
-    public StoreManager updateStoreManager(@RequestBody StoreManager user) {
-        return StoreManagerServices.updateStoreManager(user);
+    @CrossOrigin(origins = "http://localhost:8000")
+    @PutMapping("/updateAcceptStoreManager/{user}")
+    public User updateAcceptStoreManager(@PathVariable(value = "user") StoreManager user) {
+        StoreManager a = StoreManagerServices.getStoreManagerById(user.getId());
+        User u= a.getUser();
+        u.setState(userStateService.getUserStateById(2));
+        return serviceUser.updateUser(u);
+    }
+
+    @CrossOrigin(origins = "http://localhost:8000")
+    @PutMapping("/updateBlockStoreManager/{user}")
+    public User updateBlockStoreManager( @PathVariable(value = "user") StoreManager user) {
+        StoreManager a = StoreManagerServices.getStoreManagerById(user.getId());
+        User u= a.getUser();
+        u.setState(userStateService.getUserStateById(3));
+        return serviceUser.updateUser(u);
     }
 
     @DeleteMapping("/deleteStoreManager/{id}")
