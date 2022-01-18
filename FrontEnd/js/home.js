@@ -16,7 +16,7 @@ var storesData={};
 $(document).ready(function() {
     updateView();
     
-    past_info_stores = getAllStoresLastHourEntrance();
+    getAllStoresLastHourEntrance();
     past_info_parks = getAllParksLastHourEntrance();
     stores_table = $("#stores").DataTable({
         "lengthChange": false,
@@ -117,8 +117,6 @@ const loadShoppingInfo = function() {
                     $("#parkingTab").empty();
                 }
 
-                renderStoresTable(stores);
-                renderParksTable(parks);
 
                 loadShoppingsParks();
                 loadShoppingStores();
@@ -211,7 +209,6 @@ const loadShoppingsParks = function() {
 }
 
 const getAllStoresLastHourEntrance= function(){
-    var to_ret = null;
 
     $.ajax({
         url: consts.BASE_URL + '/api/CountLastHoursForStores/' + SessionManager.get("session").shopping.id,
@@ -220,7 +217,9 @@ const getAllStoresLastHourEntrance= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                to_ret = data
+                past_info_stores = data;
+                renderStoresTable(stores);
+                return;
             } else {
                 console.log("No data");
             }
@@ -230,11 +229,9 @@ const getAllStoresLastHourEntrance= function(){
             console.log(" erro na call");
         }
     });
-    return to_ret;
 }
 
 const getAllParksLastHourEntrance= function(){
-    var to_ret = null
 
     $.ajax({
         url: consts.BASE_URL + '/api/CountLastHoursForParks/' + SessionManager.get("session").shopping.id,
@@ -243,7 +240,9 @@ const getAllParksLastHourEntrance= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                to_ret = data
+                past_info_parks = data
+                renderParksTable(parks);
+
             } else {
                 console.log("No data");
             }
@@ -254,7 +253,6 @@ const getAllParksLastHourEntrance= function(){
         }
     });
 
-    return to_ret;
 }
 
 const loadShoppingEntrancesLastHour= function(){
@@ -343,7 +341,7 @@ const renderParksTable = function (data) {
                 difference = ((last_hour - two_hours_ago) / two_hours_ago) * 100
             }
         }
-        console.log(difference)
+        difference = Math.round(difference)
         if (difference > 0){
             table_data.push([e.name, '<p class="text-center">'+e.current_capacity+'</p>', '<p class="text-center"><b><span class="text-success mr-1"><i class="ion ion-android-arrow-up text-success"></i> ' + difference + '%</span></b></p>', '<a href="#" class="text-muted float-right"><i class="fas fa-search"></i></a>']);
         }

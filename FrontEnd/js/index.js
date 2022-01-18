@@ -13,6 +13,7 @@ var stores = [];
 var parks = [];
 var storesData={};
 
+
 var shopping_id
 
 $(document).ready(function() {
@@ -26,8 +27,8 @@ $(document).ready(function() {
     }
     shopping_id = SessionManager.get("shopping")
 
-    console.log(shopping_id)
-
+    
+    calculateParkPercentage()
     getAllStoresLastHourEntrance();    
     getAllParksLastHourEntrance();
 
@@ -77,6 +78,41 @@ $(document).ready(function() {
 
    
 });
+const calculateParkPercentage = function(){
+    $.ajax({
+        url: consts.BASE_URL + '/api/PeopleInParkInLastHour2/' + shopping_id,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            if (data) {
+                var duas_horas = data["2_hours_ago"];
+                var ultima_hora = data["last_hour"];
+                if (duas_horas==0){
+                    duas_horas=1;
+                }
+                var percentagem = ((parseInt(ultima_hora)-parseInt(duas_horas))/parseInt(duas_horas))*100;
+                percentagem=Math.round(percentagem);
+                if (percentagem<0){
+                    percentagem = Math.abs(percentagem);
+                }
+                if (percentagem>0){
+                    $("#park_capacity_percentagem").append('<i class="ion ion-android-arrow-up text-success">'+percentagem+'% in last hour</i>');
+                }
+                else{
+                    $("#park_capacity_percentagem").append('<i class="ion ion-android-arrow-up text-warning">'+percentagem+'% in last hour</i>');
+                }
+
+            } else {
+                console.log("No data");
+            }
+        },
+
+        error: function() {
+            console.log(" erro na call");
+        }
+    });
+}
 
 const getLastWeekShoppingInfo= function(){
     var date = new Date();
@@ -137,6 +173,8 @@ const getAllStoresLastHourEntrance= function(){
             if (data) {
                 
                 past_info_stores = data
+                renderStoresTable(stores);
+
 
             } else {
                 console.log("No data");
@@ -162,8 +200,6 @@ const loadShoppingInfo = function() {
                 var cur_capacity = 0;
                 stores = data.stores;
                 parks = data.parks;
-                renderStoresTable(stores);
-                renderParksTable(parks);
                 
                 
                 $("#shopcurcap").text(data.current_capacity);
@@ -178,7 +214,7 @@ const loadShoppingInfo = function() {
                 
 
                 loadShoppingsParks();
-                loadShoppingStores();
+                //loadShoppingStores();
             } else {
                 console.log("No store for this shopping");
             }
@@ -223,6 +259,8 @@ const getAllParksLastHourEntrance= function(){
         success: function(data) {
             if (data) {
                 past_info_parks = data
+                renderParksTable(parks);
+
             } else {
                 console.log("No data");
             }
@@ -278,10 +316,9 @@ const renderStoresTable = function (data) {
     $("#stores_body").empty();
     data.forEach(function(e, i) {
         let difference = 0
-        console.log("tenho info das stores"+past_info_stores)
         if (past_info_stores !== null) {
 
-                    
+            console.log("oast info stores"+past_info_stores);
             let horas_atrs = past_info_stores[e.id]["2_hours_ago"];
             let horas_atual = past_info_stores[e.id]["last_hour"];
             if (horas_atrs == 0) {
