@@ -144,7 +144,7 @@ const loadDataBySensorMonth= function(){
 
 const compareLastWeek= function(){
     $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInStoreTodayCompareWithLaskWeek/' + SessionManager.get("session").shopping.id,
+        url: consts.BASE_URL + '/api/PeopleInStoreTodayCompareWithLaskWeek/' + store_id,
         type: "GET", 
         contentType: "application/json",
         dataType: "json",
@@ -166,7 +166,7 @@ const compareLastWeek= function(){
 }
 const loadPeopleByWeek = function() {
     $.ajax({
-        url: consts.BASE_URL + '/api/ParksMovementInShoppingLast14Days/' + SessionManager.get("session").shopping.id,
+        url: consts.BASE_URL + '/api/PeopleInStoreLast14Days/' + store_id,
         type: "GET", 
         contentType: "application/json",
         dataType: "json",
