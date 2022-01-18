@@ -16,15 +16,20 @@ var storesData={};
 var shopping_id
 
 $(document).ready(function() {
-    updateView();
+    console.log(SessionManager.get("session"))
+    if (SessionManager.get("session") !== null) {
+        SessionManager.set("shopping", SessionManager.get("session").shopping.id)
+    }
     
-    getAllStoresLastHourEntrance();
-    
-    getAllParksLastHourEntrance();
-    if (SessionManager.get("shopping") == null){
+    if (SessionManager.get("shopping") === null){
         window.location.href = "./select_shopping.html";
     }
     shopping_id = SessionManager.get("shopping")
+
+    console.log(shopping_id)
+
+    getAllStoresLastHourEntrance();    
+    getAllParksLastHourEntrance();
 
     getLastWeekShoppingInfo()
     stores_table = $("#stores").DataTable({

@@ -825,7 +825,7 @@ public class SensorDataController {
             return sensorDataService.peopleInStoreWeek(pid);
         }
 
-    @GetMapping("/PeopleInParkInLastHour/{pid}")
+    @GetMapping("/PeopleInParkInLastHourInactive/{pid}")
     public HashMap<String,Integer> lastHourPeopleInPark(@PathVariable(value = "pid") int pid){
         List<SensorData> a = sensorDataService.getSensorDatas();
         Collections.reverse(a);

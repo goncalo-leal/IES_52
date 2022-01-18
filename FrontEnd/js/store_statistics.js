@@ -3,15 +3,25 @@ import SessionManager from "./session.js";
 import updateView from "./common.js"
 
 var date = new Date();
-var day =new Date(date.getTime())
+var day = new Date(date.getTime())
 day= day.getFullYear()+'-'+day.getMonth()+1+'-'+day.getDate()
 /*
     Pedir ajuda ao gonçalo
 */
-var store_id =3
+var store_id = new URLSearchParams(window.location.search).get('id');
 
 $(document).ready(function() {
     updateView();
+
+    $('#search_date').datetimepicker({
+        format: 'DD-MM-YYYY',
+    });
+    $('#search_date input').val(day.split('-').reverse().join('-'))
+
+    $('#set_date').click(function() {
+        day = $('#search_date input').val().split('-').reverse().join('-')
+        loadShoppingByHours();
+    });
 
     loadPeopleByWeek();
     compareLastWeek();

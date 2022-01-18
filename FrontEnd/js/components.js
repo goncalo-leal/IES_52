@@ -3,8 +3,12 @@ import SessionManager from "./session.js";
 
 var logged_in = SessionManager.get("session") !== null;
 var role = null;
+var store_id = null;
 if (logged_in) {
-    role = SessionManager.get("session")
+    role = SessionManager.get("session").user.authority;
+    if (role == "ROLE_STORE_MANAGER") {
+        store_id = SessionManager.get("session").store.id;
+    }
 }
 
 class Navbar extends HTMLElement {
@@ -72,7 +76,7 @@ class NavbarIndex extends HTMLElement {
                 <aside class="main-sidebar sidebar-dark-primary elevation-4">
                     <!-- Brand Logo -->
                     ${ logged_in
-                        ? ' <a href="index.html" class="brand-link text-center"> '
+                        ? ' <a href="/home.html" class="brand-link text-center"> '
                         : ' <a href="no_loggin_shopp.html" class="brand-link text-center">'
                     }
                         <span class="brand-text font-weight-bold">ShopAholytics</span>
@@ -111,41 +115,41 @@ class NavbarIndex extends HTMLElement {
                                         </p>
                                     </a>
                                 </li>
-                                <li class="nav-item" id="menu-toggle">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fa fa-circle"></i>
-                                        <p>
-                                            Management
-                                            <i class="fas fa-angle-left right"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="/user_management.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Manage Users</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="/add_user.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Add User</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="/store_management.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Manage Stores</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="/add_store.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Add Store</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
+                                    <li class="nav-item" id="menu-toggle">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon fa fa-circle"></i>
+                                            <p>
+                                                Management
+                                                <i class="fas fa-angle-left right"></i>
+                                            </p>
+                                        </a>
+                                        <ul class="nav nav-treeview">
+                                            <li class="nav-item">
+                                                <a href="/user_management.html" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>Manage Users</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="/add_user.html" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>Add User</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="/store_management.html" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>Manage Stores</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="/add_store.html" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>Add Store</p>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
                             </ul>
                             `
                             : ``
@@ -247,8 +251,17 @@ class SideBar extends HTMLElement {
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             ${ logged_in
-                ? ' <a href="index.html" class="brand-link text-center"> '
-                : ' <a href="no_loggin_shopp.html" class="brand-link text-center">'
+                
+                
+                ? `
+                    ${ role == "ROLE_STORE_MANAGER"
+                        ? ` <a href="/store.html?id=${store_id}" class="brand-link text-center"> `
+                        : ' <a href="/home.html" class="brand-link text-center"> '
+                    }
+                `
+
+
+                : ' <a href="/index.html" class="brand-link text-center">'
             }
                 <span class="brand-text font-weight-bold">ShopAholytics</span>
             </a>
@@ -271,7 +284,10 @@ class SideBar extends HTMLElement {
                         <!-- Add icons to the links using the .nav-icon class
                             with font-awesome or any other icon font library -->
                         <li class="nav-item">
-                            <a href="/home.html" class="nav-link">
+                        ${role == "ROLE_STORE_MANAGER"
+                            ? `<a href="/store.html?id=${store_id}" class="nav-link">`
+                            : '<a href="/home.html" class="nav-link">'
+                        }
                                 <i class="nav-icon fa fa-circle"></i>
                                 <p>
                                     Home
@@ -279,48 +295,55 @@ class SideBar extends HTMLElement {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/statistics.html" class="nav-link">
+                        ${role == "ROLE_STORE_MANAGER"
+                            ? `<a href="/store_statistics.html?id=${store_id}" class="nav-link">`
+                            : '<a href="/statistics.html" class="nav-link">'
+                        }
                                 <i class="nav-icon fa fa-circle"></i>
                                 <p>
                                     Statistics
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item" id="menu-toggle">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa fa-circle"></i>
-                                <p>
-                                    Management
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/user_management.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Manage Users</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/add_user.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Add User</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/store_management.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Manage Stores</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/add_store.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Add Store</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        ${role == "ROLE_SHOPPING_MANAGER"
+                            ? ` <li class="nav-item" id="menu-toggle">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fa fa-circle"></i>
+                                    <p>
+                                        Management
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/user_management.html" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Manage Users</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/add_user.html" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Add User</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/store_management.html" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Manage Stores</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/add_store.html" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Add Store</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            `
+                            : ''
+                        }
                     </ul>
                     `
                     : ``
