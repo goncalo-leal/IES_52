@@ -986,7 +986,7 @@ public class SensorDataController {
         return map;
     }
 
-    @GetMapping("/PeopleInParkInLastHour/{pid}")
+    @GetMapping("/PeopleInParkInLastHour2/{pid}")
     public HashMap<String,Integer> lastHourPeopleInParkv2(@PathVariable(value = "pid") int pid){
         Shopping s = shoppingServices.getShoppingById(pid);
         HashMap<String,Integer> map = new HashMap<>();
