@@ -27,7 +27,7 @@ public class StoreController {
         int var = shopping.getSum_shops_capacity() + s.getCapacity();
         if (s.getCapacity() > 0 && var < shopping.getCapacity()){
             shopping.setSum_shops_capacity(var);
-            return storeService.saveStore(new Store (s.getLocation(),s.getName(),s.getCapacity(),s.getOpening(),s.getClosing(),shoppingService.getShoppingById(pid)));
+            return storeService.saveStore(new Store (s.getLocation(),s.getName(),s.getCapacity(),s.getOpening(),s.getClosing(),shoppingService.getShoppingById(pid), s.getImg()));
         }
         return null;
     }

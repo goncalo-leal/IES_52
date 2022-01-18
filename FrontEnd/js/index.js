@@ -63,7 +63,7 @@ const render_shopping_info = function() {
                         open_stores += 1;
                     }
 
-                    $("#store_container").append(store_card_template(store.name, store.location, store.current_capacity, store.capacity, store.opening, store.closing))
+                    $("#store_container").append(store_card_template(store.name, store.location, store.current_capacity, store.capacity, store.opening, store.closing, store.img))
                 });
 
                 $("#sh_name").text(data.name);
@@ -84,13 +84,20 @@ const render_shopping_info = function() {
 
 
 
-const store_card_template = function(name, location, cur_cap, max_cap, opening, closing) {
+const store_card_template = function(name, location, cur_cap, max_cap, opening, closing, img) {
     return `
     <div class="col-md-3 col-sm-6 col-12">
         <div class="card">
             <div class="card-header">
-                <h3>${name}</h3>
-                <p>${location}</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>${name}</h3>
+                        <p>${location}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="${img}" class="rounded float-right img-fluid" style="height:100px">
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="col-12">

@@ -47,10 +47,13 @@ public class Store {
     @JoinColumn(name = "id_shopping", nullable = false)
     private Shopping id_shopping;
 
+    @Column(name = "img")
+    private String img;
+
     public Store() {
     }
 
-    public Store( String location, String name, int capacity, LocalTime opening, LocalTime closing ,Shopping id_shopping) {
+    public Store( String location, String name, int capacity, LocalTime opening, LocalTime closing ,Shopping id_shopping, String img) {
         
         this.location = location;
         this.name = name;
@@ -59,6 +62,7 @@ public class Store {
         this.closing = closing;
         this.id_shopping=id_shopping;
         this.current_capacity=0;
+        this.img = img;
     }
 
     public int getId() {
@@ -115,6 +119,14 @@ public class Store {
 
     public void setCurrent_capacity(int current_capacity) {
         this.current_capacity = current_capacity;
+    }
+
+    public String getImg() {
+        return this.img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     @Override
