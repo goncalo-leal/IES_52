@@ -1070,8 +1070,12 @@ public class SensorDataService {
         Park s = parkServices.getParkById(pid);
         int abertura=s.getOpening().getHour();
         int fecho =s.getClosing().getHour();
-        while (abertura != fecho+1){
-            map.put(abertura, 0);
+        int tmp =fecho +1;
+        if (tmp ==24){
+            tmp=0;
+        }
+        while (abertura != tmp){         
+               map.put(abertura, 0);
 
             abertura++;
 
@@ -1125,7 +1129,11 @@ public class SensorDataService {
         Park s = parkServices.getParkById(pid);
         int abertura=s.getOpening().getHour();
         int fecho =s.getClosing().getHour();
-        while (abertura != fecho+1){
+        int tmp =fecho +1;
+        if (tmp ==24){
+            tmp=0;
+        }
+        while (abertura != tmp){
             map.put(abertura, 0);
 
             abertura++;
@@ -1169,7 +1177,11 @@ public class SensorDataService {
         Shopping s = shoppingServices.getShoppingById(pid);
         int abertura=s.getOpening().getHour();
         int fecho =s.getClosing().getHour();
-        while (abertura != fecho+1){
+        int tmp =fecho +1;
+        if (tmp ==24){
+            tmp=0;
+        }
+        while (abertura != tmp){
             map.put(abertura, 0);
 
             abertura++;
@@ -1222,7 +1234,11 @@ public class SensorDataService {
         Store s = storeService.getStoreById(pid);
         int abertura=s.getOpening().getHour();
         int fecho =s.getClosing().getHour();
-        while (abertura != fecho+1){
+        int tmp =fecho +1;
+        if (tmp ==24){
+            tmp=0;
+        }
+        while (abertura != tmp){
             map.put(abertura, 0);
 
             abertura++;
@@ -1270,7 +1286,11 @@ public class SensorDataService {
         Store s = storeService.getStoreById(pid);
         int abertura=s.getOpening().getHour();
         int fecho =s.getClosing().getHour();
-        while (abertura != fecho+1){
+        int tmp =fecho +1;
+        if (tmp ==24){
+            tmp=0;
+        }
+        while (abertura != tmp){
             map.put(abertura, 0);
 
             abertura++;
@@ -1323,7 +1343,11 @@ public class SensorDataService {
         int abertura=s.getOpening().getHour();
         HashMap<Integer,Integer> map = new HashMap<>();
         int fecho =s.getClosing().getHour();
-        while (abertura != fecho+1){
+        int tmp =fecho +1;
+        if (tmp ==24){
+            tmp=0;
+        }
+        while (abertura != tmp){
             map.put(abertura, 0);
 
             abertura++;
