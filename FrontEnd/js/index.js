@@ -29,8 +29,6 @@ $(document).ready(function() {
 
     
     calculateParkPercentage()
-    getAllStoresLastHourEntrance();    
-    getAllParksLastHourEntrance();
 
     getLastWeekShoppingInfo()
     stores_table = $("#stores").DataTable({
@@ -73,9 +71,6 @@ $(document).ready(function() {
     loadShoppingInfo();
     getLastWeekParkInfo();
     loadShoppingEntrancesLastHour();
-    
-    
-
    
 });
 const calculateParkPercentage = function(){
@@ -214,6 +209,8 @@ const loadShoppingInfo = function() {
                 
 
                 loadShoppingsParks();
+                getAllStoresLastHourEntrance();    
+                getAllParksLastHourEntrance();
                 //loadShoppingStores();
             } else {
                 console.log("No store for this shopping");
