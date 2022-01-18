@@ -16,8 +16,6 @@ var storesData={};
 $(document).ready(function() {
     updateView();
     
-    getAllStoresLastHourEntrance();
-    past_info_parks = getAllParksLastHourEntrance();
     stores_table = $("#stores").DataTable({
         "lengthChange": false,
         "searching": true,
@@ -120,6 +118,8 @@ const loadShoppingInfo = function() {
 
                 loadShoppingsParks();
                 loadShoppingStores();
+                past_info_parks = getAllParksLastHourEntrance();
+                getAllStoresLastHourEntrance();
             } else {
                 console.log("No store for this shopping");
             }
@@ -132,6 +132,7 @@ const loadShoppingInfo = function() {
 }
 
 const loadShoppingStores = function() {
+    console.log(stores)
     for (var i = 0; i < stores.length; i++){
         if (i == 0){
             $('<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>').appendTo('#to_remove2')
