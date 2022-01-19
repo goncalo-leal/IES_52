@@ -24,7 +24,7 @@ const loadShoppingByHours = function () {
         contentType: "application/json",
         dataType: "json",
         success: function(data){
-            renderBarGraphic(data,'shoppingByHours')
+            renderLinearGraphic(data,'shoppingByHours')
         },
         error: function(){
             console.log("Error calling /api/PeopleInShoppingByhours/'")
@@ -357,6 +357,83 @@ const renderBarGraphicV2 = function (data,id) {
 
     new Chart(barChartCanvas, {
         type: 'bar',
+        data: barChartData,
+        options: barChartOptions
+    })
+}
+
+const renderLinearGraphic = function (data,id){
+    var labels = []
+    var info = []
+    for (const [key, value] of Object.entries(data)) {
+        labels.push(key)
+        info.push(value)
+    }
+
+    var areaChartData = {
+        labels  : labels,
+        datasets: [
+            {
+                label               : 'Entries',
+                backgroundColor     : '#007bff',
+                borderColor         : '#007bff',
+                data                : info
+            }
+        ]
+    }
+
+    var barChartCanvas = $('#'+id).get(0).getContext('2d');
+
+    var barChartData = $.extend(true, {}, areaChartData)
+    var mode = 'index'
+    var intersect = true
+    var ticksStyle = {
+        fontColor: '#495057',
+        fontStyle: 'bold'
+    }
+
+    var barChartOptions = {
+        responsive              : true,
+        maintainAspectRatio     : false,
+        datasetFill             : false,
+        tooltips: {
+            mode: mode,
+            intersect: intersect
+        },
+        hover: {
+            mode: mode,
+            intersect: intersect
+        },
+        legend: {
+            display: false
+        },
+        scales: {
+            scaleStartValue: 0,
+            yAxes: [{
+                // display: false,
+                gridLines: {
+                    display: true,
+                    lineWidth: '4px',
+                    color: 'rgba(0, 0, 0, .2)',
+                    zeroLineColor: 'transparent'
+                },
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            xAxes: [{
+                display: true,
+                gridLines: {
+                    display: false
+                },
+                ticks: ticksStyle
+            }],
+           
+        }
+    }
+
+    new Chart(barChartCanvas, {
+        type: 'line',
         data: barChartData,
         options: barChartOptions
     })
