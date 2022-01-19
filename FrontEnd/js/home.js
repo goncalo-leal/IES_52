@@ -12,6 +12,9 @@ var p_contador = 0;
 var stores = [];
 var parks = [];
 var storesData={};
+var stores_idDonut={}
+
+
 
 $(document).ready(function() {
     updateView();
@@ -88,6 +91,16 @@ $(document).ready(function() {
             p_contador++;
         }
     });
+
+    $("#nav-tabs-shops-occupation").click(function(e) {
+        var idToDraw = $(e.target.querySelector('p')).text();
+        var tmp_curr, tmp_cap, tmp_id;
+        [tmp_curr, tmp_cap, tmp_id] = stores_idDonut[idToDraw]
+        
+        console.log(tmp_curr, tmp_cap, tmp_id);
+        renderDonut(tmp_curr, tmp_cap, tmp_id);
+    });
+
 });
 
 const loadShoppingInfo = function() {
@@ -118,6 +131,7 @@ const loadShoppingInfo = function() {
 
                 loadShoppingsParks();
                 loadShoppingStores();
+
                 past_info_parks = getAllParksLastHourEntrance();
                 getAllStoresLastHourEntrance();
             } else {
@@ -132,7 +146,45 @@ const loadShoppingInfo = function() {
 }
 
 const loadShoppingStores = function() {
-    console.log(stores)
+    
+    for (var i=0; i<stores.length; i++){
+        if (i==0){
+            $("<li class='nav-item'><a class='nav-link active' id='nav-tabs-shops-occupation-store"+(i+1)+"-tab' data-toggle='pill' href='#nav-tabs-shops-occupation-store"+(i+1)+"' role='tab' aria-controls='store"+(i+1)+"' aria-selected='true'>"+stores[i].name+"<p style='display:none'>"+stores[i].id+"</p></a></li>").appendTo("#nav-tabs-shops-occupation");
+            $("<div class='tab-pane fade active show' id='nav-tabs-shops-occupation-store"+(i+1)+"' role='tabpanel' aria-labelledby='nav-tabs-shops-occupation-store"+(i+1)+"-tab'><canvas class='d-block w-100' heigh='200' id='donut0' ></canvas></div>").appendTo("#nav-tabs-shops-occupationContent");
+            stores_idDonut[stores[i].id]=[stores[i].current_capacity, stores[i].capacity, "donut0"];
+            var curr, cap, id;
+            [curr, cap, id] = [stores[0].current_capacity, stores[0].capacity, "donut0"]
+            renderDonut(curr, cap, id);
+        }
+        else{
+            $("<li class='nav-item'><a class='nav-link' id='nav-tabs-shops-occupation-store"+(i+1)+"-tab' data-toggle='pill' href='#nav-tabs-shops-occupation-store"+(i+1)+"' role='tab' aria-controls='store"+(i+1)+"' aria-selected='false'>"+stores[i].name+"<p style='display:none'>"+stores[i].id+"</p></a></li>").appendTo("#nav-tabs-shops-occupation");
+            $("<div class='tab-pane fade' id='nav-tabs-shops-occupation-store"+(i+1)+"' role='tabpanel' aria-labelledby='nav-tabs-shops-occupation-store"+(i+1)+"-tab'><canvas class='d-block w-100' heigh='200' id='donut"+i+"'></div>").appendTo("#nav-tabs-shops-occupationContent");
+            stores_idDonut[stores[i].id]=[stores[i].current_capacity, stores[i].capacity, "donut"+i];
+            
+        }
+    }
+
+    for (var i=0; i<parks.length; i++){
+        if (i==0){
+            $("<li class='nav-item'><a class='nav-link active' id='nav-tabs-parks-occupation-park"+(i+1)+"-tab' data-toggle='pill' href='#nav-tabs-parks-occupation-park"+(i+1)+"' role='tab' aria-controls='store"+(i+1)+"' aria-selected='true'>"+parks[i].name+"<p style='display:none'>"+parks[i].id+"</p></a></li>").appendTo("#nav-tabs-park-occupation");
+            $("<div class='tab-pane fade active show' id='nav-tabs-parks-occupation-park"+(i+1)+"' role='tabpanel' aria-labelledby='nav-tabs-parks-occupation-park"+(i+1)+"-tab'><canvas class='d-block w-100' heigh='200' id='donutPark0' ></canvas></div>").appendTo("#nav-tabs-park-occupationContent");
+        }
+        else{
+            $("<li class='nav-item'><a class='nav-link' id='nav-tabs-parks-occupation-park"+(i+1)+"-tab' data-toggle='pill' href='#nav-tabs-parks-occupation-park"+(i+1)+"' role='tab' aria-controls='store"+(i+1)+"' aria-selected='false'>"+parks[i].name+"<p style='display:none'>"+parks[i].id+"</p></a></li>").appendTo("#nav-tabs-park-occupation");
+            $("<div class='tab-pane fade' id='nav-tabs-parks-occupation-park"+(i+1)+"' role='tabpanel' aria-labelledby='nav-tabs-parks-occupation-park"+(i+1)+"-tab'><canvas class='d-block w-100' heigh='200' id='donut"+i+"'></div>").appendTo("#nav-tabs-park-occupationContent");
+        }
+    }
+    
+    
+    
+    
+    var p_curr, p_cap, p_id, p_nome 
+    [p_curr, p_cap, p_id, p_nome]= [parks[0].current_capacity, parks[0].capacity, "donutPark0", parks[0].name];
+    renderDonut(p_curr, p_cap, p_id, p_nome);
+}
+
+const loadShoppingStores2 = function() {
+    console.log("aqui "+stores[0].name)
     for (var i = 0; i < stores.length; i++){
         if (i == 0){
             $('<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>').appendTo('#to_remove2')
@@ -175,10 +227,6 @@ const loadShoppingStores = function() {
     $("#parkName0").html(p_nome);
     p_contador++;
     
-
-
-
-    storeInformation(stores);
     var curr, cap, id, nome;
     [curr, cap, id, nome] = storesData[0]
     renderDonut(curr, cap, id, nome);
@@ -188,12 +236,7 @@ const loadShoppingStores = function() {
     return;
 }
 
-const storeInformation = function(data){
-    data.forEach(function(e, i) {
-        storesData[i]=[e.current_capacity, e.capacity, 'donut'+i, e.name];
-    })
-    return;
-}
+
 
 const loadShoppingsParks = function() {
     let occupied = 0;
@@ -331,7 +374,6 @@ const renderParksTable = function (data) {
     data.forEach(function(e, i) {
         let difference = 0
         if (past_info_parks !== null) {
-            console.log("HEYYY")
             let two_hours_ago = past_info_parks[e.id]["2_hours_ago"];
             let last_hour = past_info_parks[e.id]["last_hour"];
             
@@ -437,7 +479,7 @@ const renderDonut = function (curr, total, id, title=""){
 }
 
 const renderGraphic = function (mapa) {
-    console.log(mapa);
+   
     var areaChartData = {
         labels  : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
         datasets: [
