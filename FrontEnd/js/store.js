@@ -302,7 +302,6 @@ const renderLinearGraphic = function (data,id){
         datasets: [
             {
                 label               : 'Entries',
-                backgroundColor     : '#007bff',
                 borderColor         : '#007bff',
                 data                : info
             }
