@@ -1,6 +1,7 @@
 package ies.g52.ShopAholytics.controller;
 
 import java.nio.charset.Charset;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
@@ -16,6 +17,7 @@ import ies.g52.ShopAholytics.services.StoreManagerService;
 import ies.g52.ShopAholytics.services.StoreService;
 import ies.g52.ShopAholytics.services.UserService;
 import ies.g52.ShopAholytics.services.UserStateService;
+import net.bytebuddy.utility.RandomString;
 
 
 
@@ -44,20 +46,21 @@ public class StoreManagerController {
 
     @PostMapping("/addStoreManager/{store}")
     public StoreManager newShoppingManagerWithNewUser( @PathVariable(value = "store") int store,@RequestBody User m) {
-        System.out.println("adding store mngr");
         String psw = genPass();
         Email e = new Email(EmailConsts.OUR_EMAIL ,m.getEmail());
         e.setSubject(EmailConsts.STORE_MANAGER_INVITE_SUBJECT);
-        e.setText(EmailConsts.STORE_MANAGER_INVITE_CONTENT(m.getEmail(), StoreServices.getStoreById(store).getName(), "SHOPPING", psw));
-        if (emailService.send(e)) {
 
+        //TODO: (PARA TI OH ARQUITETO) MUDAR A STRING "SHOPPING" AQUI EM BAIXO PARA O NOME DO SHOPPING A QUE A LOJA PERTENCE
+
+        e.setText(EmailConsts.STORE_MANAGER_INVITE_CONTENT(m.getEmail(), StoreServices.getStoreById(store).getName(), "SHOPPING", psw));
+
+
+        if (emailService.send(e)) {
             User user = new User(psw,m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1), "ROLE_STORE_MANAGER");
             serviceUser.saveUser(user);
-            System.out.println("email success");
             return StoreManagerServices.saveStoreManager(new StoreManager (user,StoreServices.getStoreById(store)));
         }
         else {
-            System.out.println("failed email");
             return null;
         }
     }
@@ -112,9 +115,14 @@ public class StoreManagerController {
 
 
     private String genPass() {
-        byte[] arr = new byte[15];
-        new Random().nextBytes(arr);
-        return new String(arr,Charset.forName("UTF-8"));
+        int len = 15;
+        SecureRandom sr = new SecureRandom();
+        String alnum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        StringBuilder sb = new StringBuilder(len);
+        for (int i=0; i < len; i++) {
+            sb.append(alnum.charAt(sr.nextInt(alnum.length())));
+        }
+        return sb.toString();
     }
 }
 

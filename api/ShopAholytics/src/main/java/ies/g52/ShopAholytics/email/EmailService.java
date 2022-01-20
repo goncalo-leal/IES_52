@@ -24,13 +24,13 @@ public class EmailService {
 
         properties.put("mail.smtp.user", EmailConsts.OUR_EMAIL );
         properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.port", "587");
         properties.put("mail.smtp.starttls.enable","true");
         properties.put("mail.smtp.debug", "true");
         properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.socketFactory.port", "465");
-        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        properties.put("mail.smtp.socketFactory.fallback", "false");
+        //properties.put("mail.smtp.socketFactory.port", "587");
+        //properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        //properties.put("mail.smtp.socketFactory.fallback", "false");
 
 
         session = Session.getInstance(properties, new Authenticator() {
@@ -38,8 +38,6 @@ public class EmailService {
                 return new PasswordAuthentication(EmailConsts.OUR_EMAIL, EmailConsts.PSW_EMAIL);
             }
         });
-
-        session.setDebug(true);
     }
 
     public boolean send(Email e) {
@@ -48,12 +46,12 @@ public class EmailService {
             message.setFrom(new InternetAddress(e.getFrom()));
             message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(e.getTo()));
             message.setSubject(e.getSubject());
-            message.setText(e.getText());
+            message.setContent(e.getText(), "text/html; charset=utf-8");
             message.setSentDate(new Date());
 
             
-            Transport tr = session.getTransport("smtps");
-            tr.connect("smtp.gmail.com", 465, EmailConsts.OUR_EMAIL, EmailConsts.PSW_EMAIL);
+            Transport tr = session.getTransport("smtp");
+            tr.connect("smtp.gmail.com", 587, EmailConsts.OUR_EMAIL, EmailConsts.PSW_EMAIL);
             tr.sendMessage(message, message.getAllRecipients());
             tr.close();
             return true;
