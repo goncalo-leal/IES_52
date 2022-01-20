@@ -44,7 +44,7 @@ const add_manager = function() {
         dataType: "json",
         success: function(data) {
             alert("Success! Manager added.");
-            window.location.href = "./index.html"
+            window.location.href = "./home.html"
         },
 
         error: function() {

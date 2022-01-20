@@ -13,8 +13,9 @@ var n_nome, n_email, n_pass1, n_pass2;
 
 
 const loadUserInformation = function(){
+    
     $.ajax({
-        url: consts.BASE_URL + '/api/User?id=' + SessionManager.get("session").shopping.id,
+        url: consts.BASE_URL + '/api/User?id=' + SessionManager.get("session").user.id,
         type: "GET", 
         contentType: "application/json",
         dataType: "json",
@@ -59,11 +60,9 @@ const updateData = function(){
     else{
         if (nome==n_nome && email == n_email && n_pass1 ==pass){
             alert("Nothing updated");
-            console.log(SessionManager.get("session"));
         }
         else{
-            var data = {"id":id,"password":pass,"email":n_email,"name":n_nome,"gender":gender,"birthday":birthday,"state":{"id":state_id,"description":state_desc}}
-            
+            var data = {"id":id,"password":pass,"email":n_email,"name":n_nome,"gender":gender,"birthday":birthday,"state":{"id":state_id,"description":state_desc}, "authority":SessionManager.get("session").user.authority}
 
             $.ajax({
                 url: consts.BASE_URL + '/api/updateUser',
@@ -72,7 +71,10 @@ const updateData = function(){
                 contentType: "application/json",
                 dataType: "json",
             }).done(function () {
-                alert("Updated");
+                var tmp = SessionManager.get("session");
+                tmp.user=data
+                SessionManager.set("session", tmp);
+                alert("Updated")
             })
         }
     }
