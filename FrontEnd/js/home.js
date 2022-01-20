@@ -56,9 +56,8 @@ $(document).ready(function() {
         "dom": '<"top"i>rt<"bottom"><"clear">'
     });
 
-    loadShoppingInfo();
-    loadPeopleByWeek();
-    loadShoppingEntrancesLastHour();
+    initialize();
+    setInterval(initialize, 60000);
 
     $('.select2').select2({
         theme: 'bootstrap4'
@@ -114,6 +113,13 @@ $(document).ready(function() {
         renderDonut(tmp_curr, tmp_cap, "test_canvas");
     });
 });
+
+const initialize = function() {
+    console.log("reload");
+    loadShoppingInfo();
+    loadPeopleByWeek();
+    loadShoppingEntrancesLastHour();
+}
 
 const loadShoppingInfo = function() {
     $("#s_name").text(SessionManager.get("session").shopping.name);
@@ -359,10 +365,10 @@ const loadShoppingEntrancesLastHour= function(){
                     
                 }
                 if (diferença >0){
-                    $("#shopping_capacity_percentagem").after($("<i class='ion ion-android-arrow-up text-success' ></i>").text(diferença+ "% in last hour")  )
+                    $("#shopping_capacity_percentagem").html("<i class='ion ion-android-arrow-up text-success' >"+diferença+ "% in last hour</i>")
                 }
                 else{
-                    $("#shopping_capacity_percentagem").after($("<i class='ion ion-android-arrow-down text-warning' ></i>").text(diferença+ "% in last hour")  )
+                    $("#shopping_capacity_percentagem").html("<i class='ion ion-android-arrow-down text-warning' >"+diferença+ "% in last hour</i>")
 
                 }
             } else {

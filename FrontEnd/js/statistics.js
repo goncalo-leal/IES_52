@@ -6,6 +6,11 @@ import updateView from "./common.js"
 $(document).ready(function() {
     updateView();
 
+    initialize();
+    setInterval(initialize, 60000);
+});
+
+const initialize = function() {
     loadPeopleByWeek();
     compareLastWeek();
     loadDataBySensorLastHour();
@@ -13,9 +18,7 @@ $(document).ready(function() {
     loadDataBySensorWeek();
     loadDataBySensorMonth();
     loadShoppingByHours();
-
-    
-});
+}
 
 const loadShoppingByHours = function () {  
     $.ajax({

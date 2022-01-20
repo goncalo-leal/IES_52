@@ -27,10 +27,6 @@ $(document).ready(function() {
     }
     shopping_id = SessionManager.get("shopping")
 
-    
-    calculateParkPercentage()
-
-    getLastWeekShoppingInfo()
     stores_table = $("#stores").DataTable({
         "lengthChange": false,
         "searching": true,
@@ -68,11 +64,19 @@ $(document).ready(function() {
         "dom": '<"top"i>rt<"bottom"><"clear">'
     });
 
+    initialize();
+    setInterval(initialize, 60000);
+});
+
+const initialize = function() {
+    console.log("reload");
+    calculateParkPercentage();
+    getLastWeekShoppingInfo();
     loadShoppingInfo();
     getLastWeekParkInfo();
     loadShoppingEntrancesLastHour();
-   
-});
+}
+
 const calculateParkPercentage = function(){
     $.ajax({
         url: consts.BASE_URL + '/api/PeopleInParkInLastHour2/' + shopping_id,
@@ -92,10 +96,10 @@ const calculateParkPercentage = function(){
                     percentagem = Math.abs(percentagem);
                 }
                 if (percentagem>0){
-                    $("#park_capacity_percentagem").append('<i class="ion ion-android-arrow-up text-success">'+percentagem+'% in last hour</i>');
+                    $("#park_capacity_percentagem").html('<i class="ion ion-android-arrow-up text-success">'+percentagem+'% in last hour</i>');
                 }
                 else{
-                    $("#park_capacity_percentagem").append('<i class="ion ion-android-arrow-up text-warning">'+percentagem+'% in last hour</i>');
+                    $("#park_capacity_percentagem").html('<i class="ion ion-android-arrow-up text-warning">'+percentagem+'% in last hour</i>');
                 }
 
             } else {
@@ -289,10 +293,10 @@ const loadShoppingEntrancesLastHour= function(){
                     
                 }
                 if (diferença >0){
-                    $("#shopping_capacity_percentagem").after($("<i class='ion ion-android-arrow-up text-success' ></i>").text(diferença+ "% in last hour")  )
+                    $("#shopping_capacity_percentagem").html("<i class='ion ion-android-arrow-up text-success' >"+diferença+ "% in last hour</i>")
                 }
                 else{
-                    $("#shopping_capacity_percentagem").after($("<i class='ion ion-android-arrow-down text-warning' ></i>").text(diferença+ "% in last hour")  )
+                    $("#shopping_capacity_percentagem").html("<i class='ion ion-android-arrow-down text-warning' >"+diferença+ "% in last hour</i>")
 
                 }
             } else {
