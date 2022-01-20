@@ -6,7 +6,8 @@ var shopping_manager_pages=["login.html","home.html", "statistics.html", "user_m
 var users =["login.html","index.html", "select_shopping.html"];
 
 $(document).ready(function() {
-    $("#login").click(function() {
+    $("#login").click(function(e) {
+        e.preventDefault();
         login();
     })
 });

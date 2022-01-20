@@ -31,9 +31,9 @@ $(document).ready(function() {
     
     $("#add_store").click(function(){
         var data_complete = {"location":$("#location").val(), "name":$("#store_name").val(),
-            "capacity":$("#capacity").val(), "opening":$("#opening").val(), "closing":$("#closing").val()};
+            "capacity":$("#capacity").val(), "opening":$("#opening").val(), "closing":$("#closing").val(), "img":$("#img_url").val()};
         
-        if ($("#location").val()!="" && $("#store_name").val()!="" && $("#capacity").val()!="" && $("#opening").val()!="" && $("#closing").val()!="")
+        if ($("#location").val()!="" && $("#store_name").val()!="" && $("#capacity").val()!="" && $("#opening").val()!="" && $("#closing").val()!="" && $("#img_url").val()!="")
             $.ajax({
                 url: consts.BASE_URL + '/api/addStore/' + SessionManager.get("session").shopping.id,
                 type: "POST", 

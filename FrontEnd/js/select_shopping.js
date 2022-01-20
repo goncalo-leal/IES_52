@@ -8,7 +8,6 @@ $(document).ready(function() {
 
     $("#choose_shopping").click(function() {
         $("#error_msg").text("");
-        console.log("aquiii")
         let shopping_id = $("#shoppings_select").val();
 
         if (shopping_id == -1) {
