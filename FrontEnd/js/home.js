@@ -13,6 +13,7 @@ var stores = [];
 var parks = [];
 var storesData={};
 var stores_idDonut={}
+var park_idDonut={}
 
 
 
@@ -111,6 +112,14 @@ $(document).ready(function() {
         
         // renderDonut(tmp_curr, tmp_cap, tmp_id);
         renderDonut(tmp_curr, tmp_cap, "test_canvas");
+    });
+
+    $("#nav-tabs-parks-occupation-select").change(function(e) {
+        var tmp_curr, tmp_cap, tmp_id;
+        [tmp_curr, tmp_cap, tmp_id] = park_idDonut[this.value]
+        
+        // renderDonut(tmp_curr, tmp_cap, tmp_id);
+        renderDonut(tmp_curr, tmp_cap, "test_canvas_park");
     });
 });
 
@@ -212,21 +221,53 @@ const loadShoppingStores = function() {
 
     for (var i=0; i<parks.length; i++){
         if (i==0){
+            /*
             $("<li class='nav-item'><a class='nav-link active' id='nav-tabs-parks-occupation-park"+(i+1)+"-tab' data-toggle='pill' href='#nav-tabs-parks-occupation-park"+(i+1)+"' role='tab' aria-controls='store"+(i+1)+"' aria-selected='true'>"+parks[i].name+"<p style='display:none'>"+parks[i].id+"</p></a></li>").appendTo("#nav-tabs-park-occupation");
             $("<div class='tab-pane fade active show' id='nav-tabs-parks-occupation-park"+(i+1)+"' role='tabpanel' aria-labelledby='nav-tabs-parks-occupation-park"+(i+1)+"-tab'><canvas class='d-block w-100' heigh='200' id='donutPark0' ></canvas></div>").appendTo("#nav-tabs-park-occupationContent");
+            */
+           console.log(parks);
+            $("#nav-tabs-parks-occupation-select").html(""+
+                "<option selected='selected' value="+parks[i].id+">"+parks[i].name+"</option>"
+            );
+
+            park_idDonut[parks[i].id]=[parks[i].current_capacity, parks[i].capacity, "donutPark0"];
+            let curr, cap, id;
+            [curr, cap, id] = [parks[0].current_capacity, parks[0].capacity, "donutPark0"]
+            //renderDonut(curr, cap, id);
+            renderDonut(curr, cap, "test_canvas_park");
         }
         else{
+            /*
             $("<li class='nav-item'><a class='nav-link' id='nav-tabs-parks-occupation-park"+(i+1)+"-tab' data-toggle='pill' href='#nav-tabs-parks-occupation-park"+(i+1)+"' role='tab' aria-controls='store"+(i+1)+"' aria-selected='false'>"+parks[i].name+"<p style='display:none'>"+parks[i].id+"</p></a></li>").appendTo("#nav-tabs-park-occupation");
             $("<div class='tab-pane fade' id='nav-tabs-parks-occupation-park"+(i+1)+"' role='tabpanel' aria-labelledby='nav-tabs-parks-occupation-park"+(i+1)+"-tab'><canvas class='d-block w-100' heigh='200' id='donut"+i+"'></div>").appendTo("#nav-tabs-park-occupationContent");
+            */
+            $("#nav-tabs-parks-occupation-select").html($("#nav-tabs-parks-occupation-select").html()+
+                "<option value="+parks[i].id+">"+parks[i].name+"</option>"
+            );
+
+            park_idDonut[parks[i].id]=[parks[i].current_capacity, parks[i].capacity, "donutPark"+i];
+            let curr, cap, id;
+            [curr, cap, id] = [parks[i].current_capacity, parks[i].capacity, "donutPark"+i]
         }
+    }
+
+    for (var i=0; i<parks.length; i++){
+        park_idDonut[parks[i].id]=[parks[i].current_capacity, parks[i].capacity, "donutPark"+i];
+        let curr, cap, id;
+        [curr, cap, id] = [parks[i].current_capacity, parks[i].capacity, "donutPark"+i]
+        $("#test_div_donut_Park"+i).css("display", "none");
+    }
+
+    for (var i=1; i<parks.length; i++){
+        $("#test_div_donut_Park"+i).css("display", "none");
     }
     
     
     
-    
+    /*
     var p_curr, p_cap, p_id, p_nome 
     [p_curr, p_cap, p_id, p_nome]= [parks[0].current_capacity, parks[0].capacity, "donutPark0", parks[0].name];
-    renderDonut(p_curr, p_cap, p_id, p_nome);
+    renderDonut(p_curr, p_cap, p_id, p_nome);*/
 }
 
 const loadShoppingStores2 = function() {
