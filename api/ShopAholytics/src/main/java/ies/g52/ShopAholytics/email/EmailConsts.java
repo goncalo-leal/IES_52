@@ -9,7 +9,7 @@ public class EmailConsts {
     public static String STORE_MANAGER_INVITE_CONTENT(String email, String store, String shopping, String password) {
         return String.format("<h2>Hello, %s</h2><br>"
                             + "<p>You are invited to be the manager of <b>%s</b> at <b>%s</b></p>"
-                            + "<p>To accept the invite, simply go to <a>http://192.168.160.238:8000/login</a> and login with this email and the password:</p>"
+                            + "<p>To accept the invite, simply click <a href='http://192.168.160.238:8000/login.html'>here</a> and login with this email and the password:</p>"
                             + "<h3>%s</h3>"
                             , email, store, shopping, password);
     }  
