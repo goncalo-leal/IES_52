@@ -42,7 +42,7 @@ $(document).ready(function() {
                 dataType: "json",
                 success: function() {
                     console.log("Store added");
-                    window.location.replace("index.html");
+                    window.location.replace("home.html");
                 },
         
                 error: function() {

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShopAholytics | Management</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- daterange picker -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/daterangepicker/daterangepicker.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/dist/css/adminlte.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+</head>
+<!--
+`body` tag options:
+
+  Apply one or more of the following classes to to the body tag
+  to get the desired effect
+
+  * sidebar-collapse
+  * sidebar-mini
+-->
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <h2 class="brand-text font-weight-bold">ShopAholytics</h2>
+    </div>
+
+  <!-- Navbar -->
+  <main-nav></main-nav>
+  <side-nav></side-nav>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Edit Park</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="card d-flex mt-5 justify-content-center mx-auto" style="width:900px">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Park Information</p>
+    
+                <form>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Name" id="park_name">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-signature"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Location" id="location">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-location-arrow"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- /.col -->
+                        <div class="input-group mb col-4">
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group">
+                                    <label>Opening:</label>
+              
+                                    <div class="input-group date" id="opening_timepicker" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" id="opening" data-target="#opening_timepicker"  onkeydown="return false;"/>
+                                        <div class="input-group-append" data-target="#opening_timepicker" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
+                                    <!-- /.input group -->
+                                </div>
+                                <!-- /.form group -->
+                            </div>
+                        </div>
+                        <!-- /.col -->
+
+                        <div class="input-group mb col-4">
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group">
+                                    <label>Closing:</label>
+              
+                                    <div class="input-group date" id="closing_timepicker" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" id="closing" data-target="#closing_timepicker" onkeydown="return false;"/>
+                                        <div class="input-group-append" data-target="#closing_timepicker" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
+                                    <!-- /.input group -->
+                                </div>
+                                <!-- /.form group -->
+                            </div>
+                        </div>
+
+                        <div class="input-group mb col-4">
+                            <div class="form-group">
+                                <label>Capacity:</label>
+
+                                <div class="input-group">
+                                    <input type="number" class="form-control" placeholder="Capacity" id="capacity" min="1" max="2000">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text"><i class="fas fa-warehouse"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="justify-content-center d-flex mx-auto">
+                        <button id="edit_park" type="button" class="btn btn-primary btn-block" style="width:200px">Save</button>
+                    </div>
+                </form>
+
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+
+   
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+
+  <!-- Main Footer -->
+  <main-foot></main-foot>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="./AdminLTE-3.1.0/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="./AdminLTE-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE -->
+<script src="./AdminLTE-3.1.0/dist/js/adminlte.js"></script>
+<!-- Bootstrap 4 -->
+<script src="./AdminLTE-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/moment/moment.min.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<!-- OPTIONAL SCRIPTS -->
+<script src="./AdminLTE-3.1.0/plugins/chart.js/Chart.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="./AdminLTE-3.1.0/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/jszip/jszip.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script type="module" src="./js/edit_park.js"></script>
+<script type="module" src="./js/components.js"></script>
+</body>
+</html>

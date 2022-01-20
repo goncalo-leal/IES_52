@@ -148,6 +148,18 @@ class NavbarIndex extends HTMLElement {
                                                     <p>Add Store</p>
                                                 </a>
                                             </li>
+                                            <li class="nav-item">
+                                                <a href="/park_management.html" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>Manage Parks</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="/add_park.html" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>Add Park</p>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </li>
                             </ul>
@@ -231,7 +243,7 @@ class NavbarIndex extends HTMLElement {
 
     update_sidebar_selected_item() {
         var page = window.location.pathname;
-        if (["/add_store.html", "/store_management.html", "/add_user.html", "/user_management.html"].includes(page)) {
+        if (["/add_store.html", "/store_management.html", "/add_user.html", "/user_management.html", "/add_park.html"].includes(page)) {
             $("#menu-toggle").addClass("menu-open");
             $(`a[href="#"]`).addClass("active");
         }
@@ -339,6 +351,18 @@ class SideBar extends HTMLElement {
                                             <p>Add Store</p>
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="/park_management.html" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Manage Parks</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/add_park.html" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Add Park</p>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             `
@@ -383,7 +407,7 @@ class SideBar extends HTMLElement {
 
     update_sidebar_selected_item() {
         var page = window.location.pathname;
-        if (["/add_store.html", "/store_management.html", "/add_user.html", "/user_management.html"].includes(page)) {
+        if (["/add_store.html", "/store_management.html", "/add_user.html", "/user_management.html", "/add_park.html"].includes(page)) {
             $("#menu-toggle").addClass("menu-open");
             $(`a[href="#"]`).addClass("active");
         }
