@@ -128,20 +128,38 @@ const changeState = function () {
         var textSelected   = optionSelected.text();
         var idToUpdate = $(this).attr('id').replace('user_', '');
 
+        console.log(textSelected)
         if (textSelected === 'Approved'){
+            console.log(idToUpdate)
             $.ajax({
                 url: consts.BASE_URL + '/api/updateAcceptStoreManager/'+idToUpdate,
-                type: "PUT", 
-            })
-            location.reload();
+                type: "PUT",
+                contentType: "application/json",
+                dataType: "json",
+                success: function(data) {
+                    loadTable();
+                },
+                error: function() {
+                    console.log("erro na call");
+                }
+            });
+            //location.reload();
         }
 
         if (textSelected === 'Blocked'){
             $.ajax({
                 url: consts.BASE_URL + '/api/updateBlockStoreManager/'+idToUpdate,
-                type: "PUT", 
-            })
-            location.reload();
+                type: "PUT",
+                contentType: "application/json",
+                dataType: "json",
+                success: function(data) {
+                    loadTable();
+                },
+                error: function() {
+                    console.log("erro na call");
+                }
+            });
+            // location.reload();
         }
         
     });

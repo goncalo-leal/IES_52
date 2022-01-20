@@ -60,6 +60,10 @@ $(document).ready(function() {
     loadPeopleByWeek();
     loadShoppingEntrancesLastHour();
 
+    $('.select2').select2({
+        theme: 'bootstrap4'
+    });
+
     $("#stores_search_txt").on('input', function() {
         stores_table.search($('#stores_search_txt').val()).draw();
     });
@@ -91,16 +95,24 @@ $(document).ready(function() {
             p_contador++;
         }
     });
-
+    /*
     $("#nav-tabs-shops-occupation").click(function(e) {
         var idToDraw = $(e.target.querySelector('p')).text();
         var tmp_curr, tmp_cap, tmp_id;
         [tmp_curr, tmp_cap, tmp_id] = stores_idDonut[idToDraw]
         
-        console.log(tmp_curr, tmp_cap, tmp_id);
-        renderDonut(tmp_curr, tmp_cap, tmp_id);
+        console.log("aqui",tmp_curr, tmp_cap, tmp_id);
+        // renderDonut(tmp_curr, tmp_cap, tmp_id);
+        renderDonut(tmp_curr, tmp_cap, "test_canvas");
     });
-
+    */
+    $("#nav-tabs-shops-occupation-select").change(function(e) {
+        var tmp_curr, tmp_cap, tmp_id;
+        [tmp_curr, tmp_cap, tmp_id] = stores_idDonut[this.value]
+        
+        // renderDonut(tmp_curr, tmp_cap, tmp_id);
+        renderDonut(tmp_curr, tmp_cap, "test_canvas");
+    });
 });
 
 const loadShoppingInfo = function() {
@@ -149,19 +161,47 @@ const loadShoppingStores = function() {
     
     for (var i=0; i<stores.length; i++){
         if (i==0){
+            /*
             $("<li class='nav-item'><a class='nav-link active' id='nav-tabs-shops-occupation-store"+(i+1)+"-tab' data-toggle='pill' href='#nav-tabs-shops-occupation-store"+(i+1)+"' role='tab' aria-controls='store"+(i+1)+"' aria-selected='true'>"+stores[i].name+"<p style='display:none'>"+stores[i].id+"</p></a></li>").appendTo("#nav-tabs-shops-occupation");
             $("<div class='tab-pane fade active show' id='nav-tabs-shops-occupation-store"+(i+1)+"' role='tabpanel' aria-labelledby='nav-tabs-shops-occupation-store"+(i+1)+"-tab'><canvas class='d-block w-100' heigh='200' id='donut0' ></canvas></div>").appendTo("#nav-tabs-shops-occupationContent");
+            */
+
+            $("#nav-tabs-shops-occupation-select").html(""+
+                "<option selected='selected' value="+stores[i].id+">"+stores[i].name+"</option>"
+            );
+
             stores_idDonut[stores[i].id]=[stores[i].current_capacity, stores[i].capacity, "donut0"];
-            var curr, cap, id;
+            let curr, cap, id;
             [curr, cap, id] = [stores[0].current_capacity, stores[0].capacity, "donut0"]
-            renderDonut(curr, cap, id);
+            //renderDonut(curr, cap, id);
+            renderDonut(curr, cap, "test_canvas");
         }
         else{
+            /*
             $("<li class='nav-item'><a class='nav-link' id='nav-tabs-shops-occupation-store"+(i+1)+"-tab' data-toggle='pill' href='#nav-tabs-shops-occupation-store"+(i+1)+"' role='tab' aria-controls='store"+(i+1)+"' aria-selected='false'>"+stores[i].name+"<p style='display:none'>"+stores[i].id+"</p></a></li>").appendTo("#nav-tabs-shops-occupation");
             $("<div class='tab-pane fade' id='nav-tabs-shops-occupation-store"+(i+1)+"' role='tabpanel' aria-labelledby='nav-tabs-shops-occupation-store"+(i+1)+"-tab'><canvas class='d-block w-100' heigh='200' id='donut"+i+"'></div>").appendTo("#nav-tabs-shops-occupationContent");
+            */
+
+            $("#nav-tabs-shops-occupation-select").html($("#nav-tabs-shops-occupation-select").html()+
+                "<option value="+stores[i].id+">"+stores[i].name+"</option>"
+            );
+
             stores_idDonut[stores[i].id]=[stores[i].current_capacity, stores[i].capacity, "donut"+i];
-            
+            let curr, cap, id;
+            [curr, cap, id] = [stores[i].current_capacity, stores[i].capacity, "donut"+i]
+            //renderDonut(curr, cap, id);
         }
+    }
+
+    for (var i=0; i<stores.length; i++){
+        stores_idDonut[stores[i].id]=[stores[i].current_capacity, stores[i].capacity, "donut"+i];
+        let curr, cap, id;
+        [curr, cap, id] = [stores[i].current_capacity, stores[i].capacity, "donut"+i]
+        $("#test_div_donut"+i).css("display", "none");
+    }
+
+    for (var i=1; i<stores.length; i++){
+        $("#test_div_donut"+i).css("display", "none");
     }
 
     for (var i=0; i<parks.length; i++){
@@ -450,6 +490,7 @@ const loadPeopleByWeek = function() {
 const renderDonut = function (curr, total, id, title=""){
     var donutChartCanvas = $('#'+id).get(0).getContext('2d')
     //var donutChartCanvas = $('#donut1').get(0).getContext('2d')
+
     
     var donutData = {        
         labels: [

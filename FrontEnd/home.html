@@ -13,6 +13,9 @@
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="./AdminLTE-3.1.0/dist/css/adminlte.min.css">
   <!-- DataTables -->
@@ -150,15 +153,22 @@
                 <!-- TODO: Tabs vou por aqui as tabs-->
                 <div class="col-12 col-sm-6">
                     <div class="card card-primary card-tabs">
-                        <div class="card-header p-0 pt-1">
-                            <ul class="nav nav-tabs" id="nav-tabs-shops-occupation" role="tablist">
+                        <div class="card-header p-2 pt-1">
+                            <ul class="nav" id="nav-tabs-shops-occupation" role="tablist">
                                 <li class="pt-2 px-3"><h3 class="card-title">Shops Occupation</h3></li>
-                                
                             </ul>
                         </div>
                         <div class="card-body">
+                            <!--
                             <div class="tab-content" id="nav-tabs-shops-occupationContent">
                                 
+                            </div>
+                            -->
+
+                            <select id="nav-tabs-shops-occupation-select" class="form-control select2 mt-1 mb-1" style="width: 100%;"></select>
+
+                            <div class="position-relative mb-4 mt-4">
+                                <canvas class='d-block w-100' heigh='200' id='test_canvas' ></canvas>
                             </div>
                         </div>
                     </div>
@@ -272,6 +282,8 @@
 <!-- Bootstrap 4 -->
 <script src="./AdminLTE-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/moment/moment.min.js"></script>
+<!-- Select2 -->
+<script src="./AdminLTE-3.1.0/plugins/select2/js/select2.full.min.js"></script>
 <!-- Tempusdominus Bootstrap 4 -->
 <script src="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 
