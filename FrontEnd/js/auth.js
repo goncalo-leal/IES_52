@@ -12,7 +12,7 @@ $(document).ready(function() {
 const login = function() {
     var email = $("#email").val();
     var psw = $("#psw").val();
-
+    $("#login_error").text("");
     $.ajax({
         url: consts.BASE_URL + '/auth/login/?email=' + email + "&password=" + psw,
         type: "POST",
@@ -30,11 +30,13 @@ const login = function() {
                 }
             } else {
                 console.log("nao autenticado");
+                $("#login_error").text("Invalid login, please try again.");
             }
         },
 
         error: function() {
             console.log("erro na call");
+            $("#login_error").text("Invalid login, please try again.");
         }
     })
 }
