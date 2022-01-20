@@ -14,12 +14,14 @@ const login = function() {
     var psw = $("#psw").val();
 
     $.ajax({
-        url: consts.BASE_URL + '/auth/login/?email=' + email + "&password=" + psw,
+        url: consts.BASE_URL + '/auth/login/',
         type: "POST",
         contentType: "application/json",
         dataType: "json",
+        data: JSON.stringify({"email": email, "password": password}),
         success: function(data) {
             if (data) {
+                console.log(data);
                 SessionManager.set("session", data);
                 window.location.href = "./index.html";
             } else {

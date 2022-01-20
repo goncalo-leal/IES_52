@@ -1,6 +1,5 @@
 package ies.g52.ShopAholytics.auth;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,15 +17,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
-
-import ies.g52.ShopAholytics.auth.UserDetailsServiceImpl;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import ies.g52.ShopAholytics.repository.UserRepository;
 
 
 @EnableWebSecurity
-public class AuthConfig extends WebSecurityConfigurerAdapter {
+@Configuration
+public class AuthConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
     private UserDetailsServiceImpl userDetailsServiceImpl;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -48,7 +47,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, AuthConsts.LOG_IN_URL).permitAll()
-                .antMatchers(AuthConsts.SHOPPING_MANAGER_PROTECTED_ENDPOINTS).hasAuthority("ROLE_SHOPPING_MANAGER")
+                .antMatchers(AuthConsts.SHOPPING_MANAGER_PROTECTED_ENDPOINTS).hasAuthority(AuthConsts.SHOPPING_MANAGER)
                 .anyRequest().authenticated()
                 .and()
 
@@ -79,9 +78,19 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
                 )
                 .and()
 
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(), this.userRepository))
-                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+                .addFilterBefore(new JWTAuthenticationFilter(authenticationManager(), this.userRepository), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTAuthorizationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                    .allowedHeaders("*")
+                    .allowedOrigins("*")
+                    .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
+                    .maxAge(168000)
+                    .allowCredentials(true);
     }
 }
