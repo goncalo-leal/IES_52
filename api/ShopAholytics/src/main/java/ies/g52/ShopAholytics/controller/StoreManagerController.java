@@ -1,10 +1,15 @@
 package ies.g52.ShopAholytics.controller;
 
+import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import ies.g52.ShopAholytics.email.Email;
+import ies.g52.ShopAholytics.email.EmailConsts;
+import ies.g52.ShopAholytics.email.EmailService;
 import ies.g52.ShopAholytics.models.StoreManager;
 import ies.g52.ShopAholytics.models.User;
 import ies.g52.ShopAholytics.services.StoreManagerService;
@@ -29,6 +34,9 @@ public class StoreManagerController {
     @Autowired
     private UserStateService userStateService;
 
+    @Autowired
+    private EmailService emailService;
+
     @PostMapping("/addStoreManager/{pid}/{store}")
     public StoreManager newStoreManager(@PathVariable(value = "pid") int pid, @PathVariable(value = "store") int store) {
         return StoreManagerServices.saveStoreManager(new StoreManager (serviceUser.getUserById(pid),StoreServices.getStoreById(store)));
@@ -36,11 +44,22 @@ public class StoreManagerController {
 
     @PostMapping("/addStoreManager/{store}")
     public StoreManager newShoppingManagerWithNewUser( @PathVariable(value = "store") int store,@RequestBody User m) {
+        System.out.println("adding store mngr");
+        String psw = genPass();
+        Email e = new Email(EmailConsts.OUR_EMAIL ,m.getEmail());
+        e.setSubject(EmailConsts.STORE_MANAGER_INVITE_SUBJECT);
+        e.setText(EmailConsts.STORE_MANAGER_INVITE_CONTENT(m.getEmail(), StoreServices.getStoreById(store).getName(), "SHOPPING", psw));
+        if (emailService.send(e)) {
 
-        User user = new User(m.getPassword(),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1), "ROLE_STORE_MANAGER");
-        serviceUser.saveUser(user);
-
-        return StoreManagerServices.saveStoreManager(new StoreManager (user,StoreServices.getStoreById(store)));
+            User user = new User(psw,m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1), "ROLE_STORE_MANAGER");
+            serviceUser.saveUser(user);
+            System.out.println("email success");
+            return StoreManagerServices.saveStoreManager(new StoreManager (user,StoreServices.getStoreById(store)));
+        }
+        else {
+            System.out.println("failed email");
+            return null;
+        }
     }
     
 
@@ -63,7 +82,7 @@ public class StoreManagerController {
     }
 
     // Os updates são feitos na no store e no user
-    @CrossOrigin(origins = "http://192.168.160.238:8000")
+    @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping("/updateAcceptStoreManager/{user}")
     public User updateAcceptStoreManager(@PathVariable(value = "user") StoreManager user) {
         StoreManager a = StoreManagerServices.getStoreManagerById(user.getId());
@@ -72,7 +91,7 @@ public class StoreManagerController {
         return serviceUser.updateUser(u);
     }
 
-    @CrossOrigin(origins = "http://192.168.160.238:8000")
+    @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping("/updateBlockStoreManager/{user}")
     public User updateBlockStoreManager( @PathVariable(value = "user") StoreManager user) {
         StoreManager a = StoreManagerServices.getStoreManagerById(user.getId());
@@ -89,6 +108,13 @@ public class StoreManagerController {
     @GetMapping("/StoreManagerShopping/{id}")
     public List<StoreManager> findAllStoreManagersShopping(@PathVariable int id) {
         return StoreManagerServices.storeManagersOfShopping(id);
+    }
+
+
+    private String genPass() {
+        byte[] arr = new byte[15];
+        new Random().nextBytes(arr);
+        return new String(arr,Charset.forName("UTF-8"));
     }
 }
 

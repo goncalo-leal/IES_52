@@ -20,7 +20,7 @@ public class StoreController {
     private ShoppingServices shoppingService;
 
 
-    @CrossOrigin(origins = "http://192.168.160.238:8000")
+    @CrossOrigin(origins = "http://localhost:8000")
     @PostMapping("/addStore/{pid}")
     public Store newStore( @RequestBody Store s,  @PathVariable(value = "pid") int pid) {
         Shopping shopping = shoppingService.getShoppingById(pid);
@@ -43,7 +43,7 @@ public class StoreController {
         
     }
 
-    @CrossOrigin(origins = "http://192.168.160.238:8000")
+    @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping("/updateStore")
     public Store updateStore(@RequestBody Store store) {
         return storeService.updateStore(store);
