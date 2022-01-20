@@ -2,7 +2,8 @@ import consts from "./consts.js";
 import SessionManager from "./session.js";
 
 $(document).ready(function() {
-    $("#login").click(function() {
+    $("#login").click(function(e) {
+        e.preventDefault();
         login();
     })
 });
