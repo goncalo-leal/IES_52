@@ -46,13 +46,30 @@ const loadShoppingByHoursDay = function () {
     
     console.log(day)
     $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInStoreByhours/' + SessionManager.get("session").shopping.id +'/'+day,
+        url: consts.BASE_URL + '/api/PeopleInShoppingSensorDay/' + SessionManager.get("session").shopping.id +'/'+day,
         type: "GET", 
         contentType: "application/json",
         dataType: "json",
         success: function(data){
-            console.log(data)
-            renderLinearGraphic(data,'shoppingByHoursDb')
+            console.log("OKKK",data)
+            var shopping=data["Shopping"]
+            var park = data["Park"]
+            var total = 0
+            for (const [key, value] of Object.entries(park)) {
+                total=total+value
+            }
+            for (const [key, value] of Object.entries(shopping)) {
+                total=total+value
+            }
+            if (total != 0){
+                for (const [key, value] of Object.entries(park)) {
+                    park[key]=value *100/total
+                }
+                for (const [key, value] of Object.entries(shopping)) {
+                    shopping[key]=value *100/total                } 
+            }
+           
+        renderLinearGraphicwith2(shopping,park,'shoppingByHoursDb')
         },
         error: function(){
             console.log("Error calling /api/PeopleInShoppingByhours/'")
@@ -541,7 +558,89 @@ const renderBarGraphic = function (data,id) {
         options: barChartOptions
     })
 }
+const renderLinearGraphicwith2= function (data1,data2,id) {
+    var info1 = []
+    var info2=[]
+    var labels=[]
+    for (const [key, value] of Object.entries(data1)) {
+        labels.push(key)
+        info1.push(value)
+    }
+    for (const [key, value] of Object.entries(data2)) {
+        info2.push(value)
+    }
 
+    var areaChartData = {
+        labels  : labels,
+        datasets: [
+            {
+                label               : 'Shopping',
+                borderColor         : '#007bff',
+                data                : info1
+            },
+            {
+                label               : 'Park',
+                borderColor         : '#ced4da',
+                data                : info2
+            },
+        ]
+    }
+
+    var barChartCanvas = $('#'+id).get(0).getContext('2d');
+
+    var barChartData = $.extend(true, {}, areaChartData)
+    var temp0 = areaChartData.datasets[0]
+    var temp1 = areaChartData.datasets[1]
+    barChartData.datasets[0] = temp1
+    barChartData.datasets[1] = temp0
+    var mode = 'index'
+    var intersect = true
+    var ticksStyle = {
+        fontColor: '#495057',
+        fontStyle: 'bold'
+    }
+
+    var barChartOptions = {
+        responsive              : true,
+        maintainAspectRatio     : false,
+        datasetFill             : false,
+        tooltips: {
+            mode: mode,
+            intersect: intersect
+        },
+        hover: {
+            mode: mode,
+            intersect: intersect
+        },
+        legend: {
+            display: false
+        },
+        scales: {
+            yAxes: [{
+                // display: false,
+                gridLines: {
+                    display: true,
+                    lineWidth: '4px',
+                    color: 'rgba(0, 0, 0, .2)',
+                    zeroLineColor: 'transparent'
+                },
+            }],
+            xAxes: [{
+                display: true,
+                gridLines: {
+                    display: false
+                },
+                ticks: ticksStyle
+            }]
+        }
+    }
+
+    new Chart(barChartCanvas, {
+        type: 'line',
+        data: barChartData,
+        options: barChartOptions
+    })
+}
 
 
 const renderGraphic = function (mapa) {
