@@ -191,6 +191,50 @@
                 </div>
             </div>
         </div>
+
+
+        
+        <div class="col-12 col-lg-6">
+            <div class="card card-primary card-tabs">
+                <div class="card-header p-2 pt-1">
+                    <ul class="nav" id="nav-tabs-entranceSensor" role="tablist">
+                        <li class="pt-2 px-3"><h3 class="card-title">Entrances by Sensor</h3></li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <select id="nav-tabs-entranceSensor-select" class="form-control select2 mt-1 mb-1" style="width: 100%;">
+                        <option selected='selected' value="lastHour">Last Hour</option>
+                        <option value="today">Today</option>
+                        <option value="lastWeek">Last Week</option>
+                        <option value="lastMonth">Last Month</option>                        
+                    </select>
+                    <div class="position-relative mb-4 mt-4">
+                        <canvas class='d-block w-100' heigh='200' id='test_canvas' ></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="card card-primary card-tabs">
+                <div class="card-header p-2 pt-1">
+                    <ul class="nav" id="nav-tabs-entranceShopping" role="tablist">
+                        <li class="pt-2 px-3"><h3 class="card-title">Entraces by Shopping vs by Park</h3></li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <select id="nav-tabs-entranceShopping-select" class="form-control select2 mt-1 mb-1" style="width: 100%;">
+                        <option selected='selected' value="lastHour">Last Hour</option>
+                        <option value="today">Today</option>
+                        <option value="lastWeek">Last Week</option>
+                        <option value="lastMonth">Last Month</option>     
+                    </select>
+                    <div class="position-relative mb-4 mt-4">
+                        <canvas class='d-block w-100' heigh='200' id='test_canvas_shopping' ></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </div>
 <!-- -------------------------------------------------------------------------------------------------------------- -->
 <!--
