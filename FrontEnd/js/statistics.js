@@ -9,6 +9,11 @@ day= day.getFullYear()+'-'+day.getMonth()+1+'-'+day.getDate()
 $(document).ready(function() {
     updateView();
 
+    initialize();
+    setInterval(initialize, 60000);
+});
+
+const initialize = function() {
     loadPeopleByWeek();
     compareLastWeek();
     loadDataBySensorLastHour();
@@ -16,9 +21,11 @@ $(document).ready(function() {
     loadDataBySensorWeek();
     loadDataBySensorMonth();
     loadShoppingByHours();
-    loadShoppingByHoursDay()
+
+    loadShoppingByHoursDay();
     
-});
+}
+
 
 const loadShoppingByHours = function () {  
     $.ajax({

@@ -14,6 +14,7 @@ var peopletoday;
 $(document).ready(function() {
     updateView();
     updateStoreViews();
+    setInterval(updateStoreViews, 60000);
 })
 
 const updateStoreViews = function() {

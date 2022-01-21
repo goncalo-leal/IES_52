@@ -43,7 +43,7 @@ public class ParkController {
     }
 
 
-
+    @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping("/updatePark")
     public Park updatePark(@RequestBody Park Park) {
         return parkService.updatePark(Park);

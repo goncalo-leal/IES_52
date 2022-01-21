@@ -2,27 +2,45 @@ import consts from "./consts.js";
 import SessionManager from "./session.js";
 import updateView from "./common.js"
 
+
 var date = new Date();
 var day = new Date(date.getTime())
 day= day.getFullYear()+'-'+day.getMonth()+1+'-'+day.getDate()
-/*
-    Pedir ajuda ao gonçalo
-*/
+
 var store_id = new URLSearchParams(window.location.search).get('id');
 
 $(document).ready(function() {
     updateView();
 
-    $('#search_date').datetimepicker({
-        format: 'DD-MM-YYYY',
-    });
-    $('#search_date input').val(day.split('-').reverse().join('-'))
+    if (store_id == null) {
+        SweetAlert.fire(
+            'Error!',
+            'Invalid URL',
+            'error'
+        ).then((result) => {
+            console.log("ok")
+            window.location.href = "./home.html"
+        });
+    }
+    else {
+        $('#search_date').datetimepicker({
+            format: 'DD-MM-YYYY',
+        });
+        $('#search_date input').val(day.split('-').reverse().join('-'))
+    
+        $('#set_date').click(function() {
+            day = $('#search_date input').val().split('-').reverse().join('-')
+            loadShoppingByHours();
+        });
+    
+        initialize();
+        setInterval(initialize, 60000);
+    }
+    
+});
 
-    $('#set_date').click(function() {
-        day = $('#search_date input').val().split('-').reverse().join('-')
-        loadShoppingByHours();
-    });
-
+const initialize = function() {
+    console.log("reload");
     loadPeopleByWeek();
     compareLastWeek();
     loadDataBySensorLastHour();
@@ -30,9 +48,7 @@ $(document).ready(function() {
     loadDataBySensorWeek();
     loadDataBySensorMonth();
     loadShoppingByHours();
-
-    
-});
+}
 
 const loadShoppingByHours = function () {  
     

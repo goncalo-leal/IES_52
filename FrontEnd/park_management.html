@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ShopAholytics | Home</title>
+  <title>ShopAholytics | Management</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -11,14 +11,15 @@
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/fontawesome-free/css/all.min.css">
   <!-- IonIcons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="./AdminLTE-3.1.0/dist/css/adminlte.min.css">
   <!-- DataTables -->
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 </head>
 <!--
 `body` tag options:
@@ -29,47 +30,67 @@
   * sidebar-collapse
   * sidebar-mini
 -->
-<body class="hold-transition layout-top-nav" >
+<body class="hold-transition sidebar-mini">
 <div class="wrapper">
     <div class="preloader flex-column justify-content-center align-items-center">
         <h2 class="brand-text font-weight-bold">ShopAholytics</h2>
     </div>
 
-    <index-nav></index-nav>
+    <main-nav></main-nav>
+    <side-nav></side-nav>
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-12">
-                        <h1 class="text-center">Select a Shopping</h1>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-        <!-- /.content-header -->
-        <!-- Main content -->
-        <div class="content">
-            <div class="card d-flex mt-5 justify-content-center mx-auto" style="height: 20vh;">
-                <div class="card-body login-card-body">
-                    <select class="form-control" name="" id="shoppings_select">
-                        <option value="-1"></option>
-                    </select>
-                    <p class="text-danger" id="error_msg"></p>
-                </div>
-                <div class="card-footer">
-                    <div class="text-center">
-                        <a id="choose_shopping" class="btn btn-primary btn-lg mb-0">Next</a>
-                    </div>
-                  </div>
-            </div>
-                
-        </div>
-        <!-- /.content -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Manage Parks</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
     </div>
-    <!-- /.content-wrapper -->
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body table-responsive">
+                            <div class="row">
+                                <div class="pl-4 pr-4 col-12">
+                                    <input type="text" id="mySearchText" class="form-control form-control-sm" width="90%" placeholder="Search...">
+                                </div>
+                            </div>
+                            <table id="parks" class="table table-striped table-valign-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th class="text-center">Location</th>
+                                        <th class="text-center">Capacity</th>
+                                        <th class="text-center">Opening</th>
+                                        <th class="text-center">Closing</th>
+                                        <th class="text-right">Edit</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="parks_body">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
@@ -90,11 +111,7 @@
 <script src="./AdminLTE-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE -->
 <script src="./AdminLTE-3.1.0/dist/js/adminlte.js"></script>
-<!-- Bootstrap 4 -->
-<script src="./AdminLTE-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/moment/moment.min.js"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 
 <!-- OPTIONAL SCRIPTS -->
 <script src="./AdminLTE-3.1.0/plugins/chart.js/Chart.js"></script>
@@ -111,8 +128,9 @@
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<script type="module" src="./js/select_shopping.js"></script>
-<script type="module" src="./js/components.js"></script>
-
+<!-- Bootstrap Switch -->
+<script src="./AdminLTE-3.1.0/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<script type="module" src="js/park_management.js"></script>
+<script type="module" src="js/components.js"></script>
 </body>
 </html>

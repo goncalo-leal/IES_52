@@ -31,9 +31,9 @@ $(document).ready(function() {
     
     $("#add_store").click(function(){
         var data_complete = {"location":$("#location").val(), "name":$("#store_name").val(),
-            "capacity":$("#capacity").val(), "opening":$("#opening").val(), "closing":$("#closing").val()};
+            "capacity":$("#capacity").val(), "opening":$("#opening").val(), "closing":$("#closing").val(), "img":$("#img_url").val()};
         
-        if ($("#location").val()!="" && $("#store_name").val()!="" && $("#capacity").val()!="" && $("#opening").val()!="" && $("#closing").val()!="")
+        if ($("#location").val()!="" && $("#store_name").val()!="" && $("#capacity").val()!="" && $("#opening").val()!="" && $("#closing").val()!="" && $("#img_url").val()!="")
             $.ajax({
                 url: consts.BASE_URL + '/api/addStore/' + SessionManager.get("session").shopping.id,
                 type: "POST", 
@@ -41,12 +41,23 @@ $(document).ready(function() {
                 contentType: "application/json",
                 dataType: "json",
                 success: function() {
-                    console.log("Store added");
-                    window.location.replace("index.html");
+                    SweetAlert.fire(
+                        'Store Added!',
+                        'You added a new store to the shopping!',
+                        'success'
+                    ).then(function() {
+                        window.location.href = "./home.html"
+                    })
                 },
         
                 error: function() {
-                    console.log("erro na call");
+                    SweetAlert.fire(
+                        'Error!',
+                        'Error adding the store!',
+                        'error'
+                    ).then(function() {
+                        window.location.href = "./add_store.html"
+                    })
                 }
             });
     })
@@ -69,7 +80,13 @@ const loadMaxStoreCapacity = function() {
         },
 
         error: function() {
-            console.log("erro na call");
+            SweetAlert.fire(
+                'Error!',
+                'Error calling the method! ' + consts.BASE_URL + '/api/Shopping?id=' + SessionManager.get("session").shopping.id ,
+                'error'
+            ).then(function() {
+                window.location.href = "./add_store.html"
+            })
         }
     })
     return;

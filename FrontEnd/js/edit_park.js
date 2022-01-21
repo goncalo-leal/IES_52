@@ -4,16 +4,16 @@ import updateView from "./common.js";
 
 var shoppingCapacity;
 var maxCapacity;
-var store_id
+var park_id
 
 $(document).ready(function () {
     updateView();
 
-    store_id = new URLSearchParams(window.location.search).get('id');
-    if (store_id === null) {
-        window.location.href = "./store_management.html";
+    park_id = new URLSearchParams(window.location.search).get('id');
+    if (park_id === null) {
+        window.location.href = "./park_management.html";
     }
-    loadStore(store_id)
+    loadPark(park_id)
 
     $('#opening_timepicker').datetimepicker({
         format: 'HH:mm',
@@ -29,17 +29,15 @@ $(document).ready(function () {
         $(this).val($(this).val().replace(/[^0-9]/g, ''));
     });
 
-    // carregar o máximo de capacidade que a loja pode ter
-    loadMaxStoreCapacity()
 
-    $("#edit_store").click(function() {
-        let store_name = $("#store_name").val(); // document.getElementById("store_name").value()
+    $("#edit_park").click(function() {
+        let park_name = $("#park_name").val(); // document.getElementById("store_name").value()
         let location = $("#location").val();
         let capacity = $("#capacity").val();
         let opening = $("#opening").val().split(":");
         let closing = $("#closing").val().split(":");
 
-        if (store_name === "" || location === "" || capacity === "" || opening === "" || closing === "") {
+        if (park_name === "" || location === "" || capacity === "" || opening === "" || closing === "") {
             // erro: "All fields must be filled"
             SweetAlert.fire(
                 'Error!',
@@ -58,8 +56,8 @@ $(document).ready(function () {
         }
         else {
             var data = {
-                "id":       store_id,
-                "name":     store_name,
+                "id":       park_id,
+                "name":     park_name,
                 "location": location,
                 "capacity": capacity,
                 "opening":  [parseInt(opening[0]), parseInt(opening[1])],
@@ -67,37 +65,35 @@ $(document).ready(function () {
             };
 
             $.ajax({
-                url: consts.BASE_URL + '/api/updateStore',
+                url: consts.BASE_URL + '/api/updatePark',
                 type: "PUT", 
                 data: JSON.stringify(data),
                 contentType: "application/json",
                 dataType: "json",
                 success: function() {
                     SweetAlert.fire(
-                        'Store Updated!',
-                        'You updated the store!',
+                        'Park Updated!',
+                        'You updated the park!',
                         'success'
                     ).then(function() {
-                        window.location.href = "./store_management.html"
+                        window.location.href = "./park_management.html"
                     })
                 },        
                 error: function() {
                     SweetAlert.fire(
                         'Error!',
-                        'Error editing the store!',
+                        'Error updating the park!',
                         'error'
-                    ).then(function() {
-                        window.location.href = "./add_store.html"
-                    })
+                    )
                 }
             });
         }
     });
 });
 
-const loadStore = function(store_id) {
+const loadPark = function(park_id) {
     $.ajax({
-        url: consts.BASE_URL + '/api/Store?id=' + store_id,
+        url: consts.BASE_URL + '/api/Park?id=' + park_id,
         type: "GET", 
         contentType: "application/json",
         dataType: "json",
@@ -105,7 +101,7 @@ const loadStore = function(store_id) {
             if (data) {
                 console.log(data);
 
-                $("#store_name").val(data.name);
+                $("#park_name").val(data.name);
                 $("#location").val(data.location);
                 $("#capacity").val(data.capacity);
 
@@ -134,52 +130,9 @@ const loadStore = function(store_id) {
         error: function() {
             SweetAlert.fire(
                 'Error!',
-                'Error loading store data!',
+                'Error loading park data!',
                 'error'
             )
         }
     });
-}
-
-const loadMaxStoreCapacity = function() {
-    $.ajax({
-        url: consts.BASE_URL + '/api/Shopping?id=' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                shoppingCapacity = data.capacity;
-                storesCapacity(data.stores);
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            SweetAlert.fire(
-                'Error!',
-                'Error loading shopping data!',
-                'error'
-            )
-        }
-    })
-    return;
-}
-
-const storesCapacity = function(data) {
-    var total_stores = 0;
-    data.forEach(function(e, i) {
-        total_stores += e.capacity;
-    });
-
-    maxCapacity = shoppingCapacity - total_stores
-    
-    $("#capacity").attr({
-        "max" : shoppingCapacity - total_stores,
-        "min" : 1
-    });
-
-    return;
 }

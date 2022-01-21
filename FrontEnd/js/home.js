@@ -12,6 +12,10 @@ var p_contador = 0;
 var stores = [];
 var parks = [];
 var storesData={};
+var stores_idDonut={}
+var park_idDonut={}
+
+
 
 $(document).ready(function() {
     updateView();
@@ -53,9 +57,12 @@ $(document).ready(function() {
         "dom": '<"top"i>rt<"bottom"><"clear">'
     });
 
-    loadShoppingInfo();
-    loadPeopleByWeek();
-    loadShoppingEntrancesLastHour();
+    initialize();
+    setInterval(initialize, 60000);
+
+    $('.select2').select2({
+        theme: 'bootstrap4'
+    });
 
     $("#stores_search_txt").on('input', function() {
         stores_table.search($('#stores_search_txt').val()).draw();
@@ -88,7 +95,40 @@ $(document).ready(function() {
             p_contador++;
         }
     });
+    /*
+    $("#nav-tabs-shops-occupation").click(function(e) {
+        var idToDraw = $(e.target.querySelector('p')).text();
+        var tmp_curr, tmp_cap, tmp_id;
+        [tmp_curr, tmp_cap, tmp_id] = stores_idDonut[idToDraw]
+        
+        console.log("aqui",tmp_curr, tmp_cap, tmp_id);
+        // renderDonut(tmp_curr, tmp_cap, tmp_id);
+        renderDonut(tmp_curr, tmp_cap, "test_canvas");
+    });
+    */
+    $("#nav-tabs-shops-occupation-select").change(function(e) {
+        var tmp_curr, tmp_cap, tmp_id;
+        [tmp_curr, tmp_cap, tmp_id] = stores_idDonut[this.value]
+        
+        // renderDonut(tmp_curr, tmp_cap, tmp_id);
+        renderDonut(tmp_curr, tmp_cap, "test_canvas");
+    });
+
+    $("#nav-tabs-parks-occupation-select").change(function(e) {
+        var tmp_curr, tmp_cap, tmp_id;
+        [tmp_curr, tmp_cap, tmp_id] = park_idDonut[this.value]
+        
+        // renderDonut(tmp_curr, tmp_cap, tmp_id);
+        renderDonut(tmp_curr, tmp_cap, "test_canvas_park");
+    });
 });
+
+const initialize = function() {
+    console.log("reload");
+    loadShoppingInfo();
+    loadPeopleByWeek();
+    loadShoppingEntrancesLastHour();
+}
 
 const loadShoppingInfo = function() {
     $("#s_name").text(SessionManager.get("session").shopping.name);
@@ -118,6 +158,7 @@ const loadShoppingInfo = function() {
 
                 loadShoppingsParks();
                 loadShoppingStores();
+
                 past_info_parks = getAllParksLastHourEntrance();
                 getAllStoresLastHourEntrance();
             } else {
@@ -132,7 +173,105 @@ const loadShoppingInfo = function() {
 }
 
 const loadShoppingStores = function() {
-    console.log(stores)
+    
+    for (var i=0; i<stores.length; i++){
+        if (i==0){
+            /*
+            $("<li class='nav-item'><a class='nav-link active' id='nav-tabs-shops-occupation-store"+(i+1)+"-tab' data-toggle='pill' href='#nav-tabs-shops-occupation-store"+(i+1)+"' role='tab' aria-controls='store"+(i+1)+"' aria-selected='true'>"+stores[i].name+"<p style='display:none'>"+stores[i].id+"</p></a></li>").appendTo("#nav-tabs-shops-occupation");
+            $("<div class='tab-pane fade active show' id='nav-tabs-shops-occupation-store"+(i+1)+"' role='tabpanel' aria-labelledby='nav-tabs-shops-occupation-store"+(i+1)+"-tab'><canvas class='d-block w-100' heigh='200' id='donut0' ></canvas></div>").appendTo("#nav-tabs-shops-occupationContent");
+            */
+
+            $("#nav-tabs-shops-occupation-select").html(""+
+                "<option selected='selected' value="+stores[i].id+">"+stores[i].name+"</option>"
+            );
+
+            stores_idDonut[stores[i].id]=[stores[i].current_capacity, stores[i].capacity, "donut0"];
+            let curr, cap, id;
+            [curr, cap, id] = [stores[0].current_capacity, stores[0].capacity, "donut0"]
+            //renderDonut(curr, cap, id);
+            renderDonut(curr, cap, "test_canvas");
+        }
+        else{
+            /*
+            $("<li class='nav-item'><a class='nav-link' id='nav-tabs-shops-occupation-store"+(i+1)+"-tab' data-toggle='pill' href='#nav-tabs-shops-occupation-store"+(i+1)+"' role='tab' aria-controls='store"+(i+1)+"' aria-selected='false'>"+stores[i].name+"<p style='display:none'>"+stores[i].id+"</p></a></li>").appendTo("#nav-tabs-shops-occupation");
+            $("<div class='tab-pane fade' id='nav-tabs-shops-occupation-store"+(i+1)+"' role='tabpanel' aria-labelledby='nav-tabs-shops-occupation-store"+(i+1)+"-tab'><canvas class='d-block w-100' heigh='200' id='donut"+i+"'></div>").appendTo("#nav-tabs-shops-occupationContent");
+            */
+
+            $("#nav-tabs-shops-occupation-select").html($("#nav-tabs-shops-occupation-select").html()+
+                "<option value="+stores[i].id+">"+stores[i].name+"</option>"
+            );
+
+            stores_idDonut[stores[i].id]=[stores[i].current_capacity, stores[i].capacity, "donut"+i];
+            let curr, cap, id;
+            [curr, cap, id] = [stores[i].current_capacity, stores[i].capacity, "donut"+i]
+            //renderDonut(curr, cap, id);
+        }
+    }
+
+    for (var i=0; i<stores.length; i++){
+        stores_idDonut[stores[i].id]=[stores[i].current_capacity, stores[i].capacity, "donut"+i];
+        let curr, cap, id;
+        [curr, cap, id] = [stores[i].current_capacity, stores[i].capacity, "donut"+i]
+        $("#test_div_donut"+i).css("display", "none");
+    }
+
+    for (var i=1; i<stores.length; i++){
+        $("#test_div_donut"+i).css("display", "none");
+    }
+
+    for (var i=0; i<parks.length; i++){
+        if (i==0){
+            /*
+            $("<li class='nav-item'><a class='nav-link active' id='nav-tabs-parks-occupation-park"+(i+1)+"-tab' data-toggle='pill' href='#nav-tabs-parks-occupation-park"+(i+1)+"' role='tab' aria-controls='store"+(i+1)+"' aria-selected='true'>"+parks[i].name+"<p style='display:none'>"+parks[i].id+"</p></a></li>").appendTo("#nav-tabs-park-occupation");
+            $("<div class='tab-pane fade active show' id='nav-tabs-parks-occupation-park"+(i+1)+"' role='tabpanel' aria-labelledby='nav-tabs-parks-occupation-park"+(i+1)+"-tab'><canvas class='d-block w-100' heigh='200' id='donutPark0' ></canvas></div>").appendTo("#nav-tabs-park-occupationContent");
+            */
+           console.log(parks);
+            $("#nav-tabs-parks-occupation-select").html(""+
+                "<option selected='selected' value="+parks[i].id+">"+parks[i].name+"</option>"
+            );
+
+            park_idDonut[parks[i].id]=[parks[i].current_capacity, parks[i].capacity, "donutPark0"];
+            let curr, cap, id;
+            [curr, cap, id] = [parks[0].current_capacity, parks[0].capacity, "donutPark0"]
+            //renderDonut(curr, cap, id);
+            renderDonut(curr, cap, "test_canvas_park");
+        }
+        else{
+            /*
+            $("<li class='nav-item'><a class='nav-link' id='nav-tabs-parks-occupation-park"+(i+1)+"-tab' data-toggle='pill' href='#nav-tabs-parks-occupation-park"+(i+1)+"' role='tab' aria-controls='store"+(i+1)+"' aria-selected='false'>"+parks[i].name+"<p style='display:none'>"+parks[i].id+"</p></a></li>").appendTo("#nav-tabs-park-occupation");
+            $("<div class='tab-pane fade' id='nav-tabs-parks-occupation-park"+(i+1)+"' role='tabpanel' aria-labelledby='nav-tabs-parks-occupation-park"+(i+1)+"-tab'><canvas class='d-block w-100' heigh='200' id='donut"+i+"'></div>").appendTo("#nav-tabs-park-occupationContent");
+            */
+            $("#nav-tabs-parks-occupation-select").html($("#nav-tabs-parks-occupation-select").html()+
+                "<option value="+parks[i].id+">"+parks[i].name+"</option>"
+            );
+
+            park_idDonut[parks[i].id]=[parks[i].current_capacity, parks[i].capacity, "donutPark"+i];
+            let curr, cap, id;
+            [curr, cap, id] = [parks[i].current_capacity, parks[i].capacity, "donutPark"+i]
+        }
+    }
+
+    for (var i=0; i<parks.length; i++){
+        park_idDonut[parks[i].id]=[parks[i].current_capacity, parks[i].capacity, "donutPark"+i];
+        let curr, cap, id;
+        [curr, cap, id] = [parks[i].current_capacity, parks[i].capacity, "donutPark"+i]
+        $("#test_div_donut_Park"+i).css("display", "none");
+    }
+
+    for (var i=1; i<parks.length; i++){
+        $("#test_div_donut_Park"+i).css("display", "none");
+    }
+    
+    
+    
+    /*
+    var p_curr, p_cap, p_id, p_nome 
+    [p_curr, p_cap, p_id, p_nome]= [parks[0].current_capacity, parks[0].capacity, "donutPark0", parks[0].name];
+    renderDonut(p_curr, p_cap, p_id, p_nome);*/
+}
+
+const loadShoppingStores2 = function() {
+    console.log("aqui "+stores[0].name)
     for (var i = 0; i < stores.length; i++){
         if (i == 0){
             $('<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>').appendTo('#to_remove2')
@@ -175,10 +314,6 @@ const loadShoppingStores = function() {
     $("#parkName0").html(p_nome);
     p_contador++;
     
-
-
-
-    storeInformation(stores);
     var curr, cap, id, nome;
     [curr, cap, id, nome] = storesData[0]
     renderDonut(curr, cap, id, nome);
@@ -188,12 +323,7 @@ const loadShoppingStores = function() {
     return;
 }
 
-const storeInformation = function(data){
-    data.forEach(function(e, i) {
-        storesData[i]=[e.current_capacity, e.capacity, 'donut'+i, e.name];
-    })
-    return;
-}
+
 
 const loadShoppingsParks = function() {
     let occupied = 0;
@@ -276,10 +406,10 @@ const loadShoppingEntrancesLastHour= function(){
                     
                 }
                 if (diferença >0){
-                    $("#shopping_capacity_percentagem").after($("<i class='ion ion-android-arrow-up text-success' ></i>").text(diferença+ "% in last hour")  )
+                    $("#shopping_capacity_percentagem").html("<i class='ion ion-android-arrow-up text-success' >"+diferença+ "% in last hour</i>")
                 }
                 else{
-                    $("#shopping_capacity_percentagem").after($("<i class='ion ion-android-arrow-down text-warning' ></i>").text(diferença+ "% in last hour")  )
+                    $("#shopping_capacity_percentagem").html("<i class='ion ion-android-arrow-down text-warning' >"+diferença+ "% in last hour</i>")
 
                 }
             } else {
@@ -331,7 +461,6 @@ const renderParksTable = function (data) {
     data.forEach(function(e, i) {
         let difference = 0
         if (past_info_parks !== null) {
-            console.log("HEYYY")
             let two_hours_ago = past_info_parks[e.id]["2_hours_ago"];
             let last_hour = past_info_parks[e.id]["last_hour"];
             
@@ -408,6 +537,7 @@ const loadPeopleByWeek = function() {
 const renderDonut = function (curr, total, id, title=""){
     var donutChartCanvas = $('#'+id).get(0).getContext('2d')
     //var donutChartCanvas = $('#donut1').get(0).getContext('2d')
+
     
     var donutData = {        
         labels: [
@@ -437,7 +567,7 @@ const renderDonut = function (curr, total, id, title=""){
 }
 
 const renderGraphic = function (mapa) {
-    console.log(mapa);
+   
     var areaChartData = {
         labels  : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
         datasets: [

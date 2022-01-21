@@ -69,9 +69,9 @@ public class ShopAholyticsApplication {
 				LocalTime aberturav2 = LocalTime.of(9,00,00);  
 				LocalTime fechov2 = LocalTime.of(22,00,00);  
 
-				Store zara = new Store("Piso 0, 3 loja da direita","Zara",500,aberturav2,fechov2,new_shopping);
-				Store jumbo=new Store ("Piso 0, lado esquerdo","Jumbo",2500,abertura,fecho,new_shopping);
-				Store hm=new Store ("Piso 1","H&M",125,aberturav2,fechov2,new_shopping);
+				Store zara = new Store("Piso 0, 3 loja da direita","Zara",500,aberturav2,fechov2,new_shopping, "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/ee966d75834063.5c5854ad70bf0.jpg");
+				Store jumbo=new Store ("Piso 0, lado esquerdo","Jumbo",2500,abertura,fecho,new_shopping, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHXvCi22c_FXjQZTNiMuaBfqeBFjWQmSUS5A&usqp=CAU");
+				Store hm=new Store ("Piso 1","H&M",125,aberturav2,fechov2,new_shopping, "https://www2.hm.com/hm-logo.png");
 				storeService.saveStore(zara);
 				storeService.saveStore(jumbo);
 				storeService.saveStore(hm);
