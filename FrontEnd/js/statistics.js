@@ -8,6 +8,18 @@ day= day.getFullYear()+'-'+day.getMonth()+1+'-'+day.getDate()
 
 $(document).ready(function() {
     updateView();
+    $('#search_date').datetimepicker({
+        format: 'DD-MM-YYYY',
+    });
+    $('#search_date input').val(day.split('-').reverse().join('-'))
+
+    $('#set_date').click(function() {
+        day = $('#search_date input').val().split('-').reverse().join('-')
+        console.log(day)
+        loadShoppingByHours();
+    });
+
+   
 
     initialize();
     setInterval(initialize, 60000);
