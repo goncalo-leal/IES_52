@@ -2,6 +2,9 @@ import consts from "./consts.js";
 import SessionManager from "./session.js";
 import updateView from "./common.js"
 
+var date = new Date();
+var day = new Date(date.getTime())
+day= day.getFullYear()+'-'+day.getMonth()+1+'-'+day.getDate()
 
 $(document).ready(function() {
     updateView();
@@ -13,7 +16,7 @@ $(document).ready(function() {
     loadDataBySensorWeek();
     loadDataBySensorMonth();
     loadShoppingByHours();
-
+    loadShoppingByHoursDay()
     
 });
 
@@ -32,6 +35,23 @@ const loadShoppingByHours = function () {
     })
 }
 
+const loadShoppingByHoursDay = function () {  
+    
+    console.log(day)
+    $.ajax({
+        url: consts.BASE_URL + '/api/PeopleInStoreByhours/' + SessionManager.get("session").shopping.id +'/'+day,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data){
+            console.log(data)
+            renderLinearGraphic(data,'shoppingByHoursDb')
+        },
+        error: function(){
+            console.log("Error calling /api/PeopleInShoppingByhours/'")
+        }
+    })
+}
 
 const loadDataBySensorToday= function(){
     $.ajax({

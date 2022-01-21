@@ -230,6 +230,10 @@ public class SensorDataController {
      
         return tmp;
     }
+    @GetMapping("/PeopleInShoppingSensorDay/{pid}")
+    public HashMap<String,HashMap<Integer,Integer>> allSensorsWeekx2(@PathVariable(value = "pid") int pid,@PathVariable(value = "day") String day){
+        return sensorDataService.PeopleInShoppingSensor(pid,day);
+    }
 
     @GetMapping("/AllSensorsForThatShoppingWeek/{pid}")
     public HashMap<String,HashMap<String,Integer>> allSensorsWeek(@PathVariable(value = "pid") int pid){

@@ -248,6 +248,47 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header border-0">
+                <div class="row">
+                    <div class="col-12 col-md-4">
+                        <div class="d-flex justify-content-between">
+                            <h3 class="card-title">Store Movement by Hours</h3>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <div class="row">
+                            <div class="col-12 col-md-2 float-right">
+                                <p class="text-right"><label>Choose a date:</label></p>
+                            </div>
+                            <div class="col-12 col-md-8">
+                                <div class="form-group">
+                                    <div class="input-group date" id="search_date" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#search_date">
+                                        <div class="input-group-append" data-target="#search_date" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <div class="input-group">
+                                    <a class="btn btn-primary" id="set_date">Render</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="position-relative mb-4">
+                    <canvas id="shoppingByHoursDb" height="350"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header border-0">
                 <div class="d-flex justify-content-between">
                     <h3 class="card-title">Parks Visitors</h3>
                     <!--<a href="javascript:void(0);">View Report</a>-->
