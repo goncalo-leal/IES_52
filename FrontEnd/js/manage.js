@@ -63,7 +63,11 @@ const userStates = function() {
             }
         },
         error: function() {
-            console.log("erro na call");
+            SweetAlert.fire(
+                'Error!',
+                'Error loading users information!',
+                'error'
+            )
         }
     })
 }
@@ -84,7 +88,11 @@ const loadTable = function() {
         },
 
         error: function() {
-            console.log("erro na call");
+            SweetAlert.fire(
+                'Error!',
+                'Error loading users information!',
+                'error'
+            )
         }
     })
 }
@@ -140,7 +148,11 @@ const changeState = function () {
                     loadTable();
                 },
                 error: function() {
-                    console.log("erro na call");
+                    SweetAlert.fire(
+                        'Error!',
+                        'Error updating user`s information!',
+                        'error'
+                    )
                 }
             });
             //location.reload();
@@ -156,7 +168,11 @@ const changeState = function () {
                     loadTable();
                 },
                 error: function() {
-                    console.log("erro na call");
+                    SweetAlert.fire(
+                        'Error!',
+                        'Error updating user`s information!',
+                        'error'
+                    )
                 }
             });
             // location.reload();

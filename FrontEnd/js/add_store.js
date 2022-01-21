@@ -41,12 +41,23 @@ $(document).ready(function() {
                 contentType: "application/json",
                 dataType: "json",
                 success: function() {
-                    console.log("Store added");
-                    window.location.replace("home.html");
+                    SweetAlert.fire(
+                        'Store Added!',
+                        'You added a new store to the shopping!',
+                        'success'
+                    ).then(function() {
+                        window.location.href = "./home.html"
+                    })
                 },
         
                 error: function() {
-                    console.log("erro na call");
+                    SweetAlert.fire(
+                        'Error!',
+                        'Error adding the store!',
+                        'error'
+                    ).then(function() {
+                        window.location.href = "./add_store.html"
+                    })
                 }
             });
     })
@@ -69,7 +80,13 @@ const loadMaxStoreCapacity = function() {
         },
 
         error: function() {
-            console.log("erro na call");
+            SweetAlert.fire(
+                'Error!',
+                'Error calling the method! ' + consts.BASE_URL + '/api/Shopping?id=' + SessionManager.get("session").shopping.id ,
+                'error'
+            ).then(function() {
+                window.location.href = "./add_store.html"
+            })
         }
     })
     return;

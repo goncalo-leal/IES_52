@@ -39,10 +39,20 @@ $(document).ready(function () {
 
         if (park_name === "" || location === "" || capacity === "" || opening === "" || closing === "") {
             // erro: "All fields must be filled"
+            SweetAlert.fire(
+                'Error!',
+                'All fields must be filled!',
+                'error'
+            )
         }
         else if (parseInt(opening[0]) > parseInt(closing[0]) || 
         (parseInt(opening[0]) == parseInt(closing[0]) && parseInt(opening[1]) > parseInt(closing[1]))) {
             // erro: "Closing must be after opening hours" 
+            SweetAlert.fire(
+                'Error!',
+                'Closing must be after opening hours!',
+                'error'
+            )
         }
         else {
             var data = {
@@ -61,11 +71,20 @@ $(document).ready(function () {
                 contentType: "application/json",
                 dataType: "json",
                 success: function() {
-                    console.log("Park added");
-                    window.location.replace("park_management.html");
+                    SweetAlert.fire(
+                        'Park Updated!',
+                        'You updated the park!',
+                        'success'
+                    ).then(function() {
+                        window.location.href = "./park_management.html"
+                    })
                 },        
                 error: function() {
-                    console.log("erro na call");
+                    SweetAlert.fire(
+                        'Error!',
+                        'Error updating the park!',
+                        'error'
+                    )
                 }
             });
         }
@@ -109,7 +128,11 @@ const loadPark = function(park_id) {
             }
         },
         error: function() {
-            console.log("erro na call");
+            SweetAlert.fire(
+                'Error!',
+                'Error loading park data!',
+                'error'
+            )
         }
     });
 }

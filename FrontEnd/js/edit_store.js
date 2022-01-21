@@ -41,10 +41,20 @@ $(document).ready(function () {
 
         if (store_name === "" || location === "" || capacity === "" || opening === "" || closing === "") {
             // erro: "All fields must be filled"
+            SweetAlert.fire(
+                'Error!',
+                'All fields must be filled!',
+                'error'
+            )
         }
         else if (parseInt(opening[0]) > parseInt(closing[0]) || 
         (parseInt(opening[0]) == parseInt(closing[0]) && parseInt(opening[1]) > parseInt(closing[1]))) {
             // erro: "Closing must be after opening hours" 
+            SweetAlert.fire(
+                'Error!',
+                'Closing must be after opening hours!',
+                'error'
+            )
         }
         else {
             var data = {
@@ -63,11 +73,22 @@ $(document).ready(function () {
                 contentType: "application/json",
                 dataType: "json",
                 success: function() {
-                    console.log("Store added");
-                    window.location.replace("store_management.html");
+                    SweetAlert.fire(
+                        'Store Updated!',
+                        'You updated the store!',
+                        'success'
+                    ).then(function() {
+                        window.location.href = "./store_management.html"
+                    })
                 },        
                 error: function() {
-                    console.log("erro na call");
+                    SweetAlert.fire(
+                        'Error!',
+                        'Error editing the store!',
+                        'error'
+                    ).then(function() {
+                        window.location.href = "./add_store.html"
+                    })
                 }
             });
         }
@@ -111,7 +132,11 @@ const loadStore = function(store_id) {
             }
         },
         error: function() {
-            console.log("erro na call");
+            SweetAlert.fire(
+                'Error!',
+                'Error loading store data!',
+                'error'
+            )
         }
     });
 }
@@ -133,7 +158,11 @@ const loadMaxStoreCapacity = function() {
         },
 
         error: function() {
-            console.log("erro na call");
+            SweetAlert.fire(
+                'Error!',
+                'Error loading shopping data!',
+                'error'
+            )
         }
     })
     return;

@@ -34,7 +34,7 @@ const add_manager = function() {
         "store": store
     };
 
-    console.log(data);
+    
 
     $.ajax({
         url: consts.BASE_URL + '/api/addStoreManager/' + store,
@@ -43,12 +43,23 @@ const add_manager = function() {
         data: JSON.stringify(data),
         dataType: "json",
         success: function(data) {
-            alert("Success! Manager added.");
-            window.location.href = "./home.html"
+            SweetAlert.fire(
+                'Store Manager Added!',
+                'You added a new store manager!',
+                'success'
+            ).then(function() {
+                window.location.href = "./user_management.html"
+            })
         },
 
         error: function() {
-            console.log("erro");
+            SweetAlert.fire(
+                "Can't add store manager!",
+                'Error adding new store manager',
+                'error'
+            ).then(function() {
+                window.location.href = "./add_user.html"
+            })
         }
 
     })
@@ -71,7 +82,13 @@ const loadStores = function() {
         },
 
         error: function() {
-            console.log("erro na call");
+            SweetAlert.fire(
+                "Error!",
+                'Cannot load data!',
+                'error'
+            ).then(function() {
+                window.location.href = "./add_user.html"
+            })
         }
     })
 }

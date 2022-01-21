@@ -36,12 +36,21 @@ $(document).ready(function() {
                 contentType: "application/json",
                 dataType: "json",
                 success: function() {
-                    alert("Park added");
-                    window.location.replace("home.html");
+                    SweetAlert.fire(
+                        'Park Added!',
+                        'You added a new park to the shopping!',
+                        'success'
+                    ).then(function() {
+                        window.location.href = "./home.html"
+                    })
                 },
         
                 error: function() {
-                    console.log("erro na call");
+                    SweetAlert.fire(
+                        'Error!',
+                        'Error while adding a new park to the shopping!',
+                        'error'
+                    )
                 }
             });
     })

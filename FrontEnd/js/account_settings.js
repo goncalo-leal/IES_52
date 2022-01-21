@@ -36,6 +36,7 @@ const loadUserInformation = function(){
                 $("#dateTimePicker").val(data.birthday);
                 $("#dateTimePicker").attr('readonly', 'readonly');
                 
+                
 
             } else {
                 console.log("No store for this shopping");
@@ -43,7 +44,11 @@ const loadUserInformation = function(){
         },
 
         error: function() {
-            console.log("erro na call");
+            SweetAlert.fire(
+                'Error!',
+                'Error loading user`s information!',
+                'error'
+            )
         }
     })
 }
@@ -55,27 +60,56 @@ const updateData = function(){
     n_pass2=$("#confirm_password").val();
     
     if (n_pass1!=n_pass2){
-        alert("Passwords doesn't match!");
+        SweetAlert.fire(
+            'Error!',
+            'Passwords doesn\'t match',
+            'error'
+        )
     }
     else{
         if (nome==n_nome && email == n_email && n_pass1 ==pass){
-            alert("Nothing updated");
+            SweetAlert.fire(
+                'Error!',
+                'User\'s information not updated',
+                'error'
+            )
+        }
+        else if(n_nome==="" || n_email==="" || n_pass1==="" || n_pass2===""){
+            SweetAlert.fire(
+                'Error!',
+                'All fields must be filled',
+                'error'
+            )
         }
         else{
             var data = {"id":id,"password":pass,"email":n_email,"name":n_nome,"gender":gender,"birthday":birthday,"state":{"id":state_id,"description":state_desc}, "authority":SessionManager.get("session").user.authority}
-
+            
             $.ajax({
                 url: consts.BASE_URL + '/api/updateUser',
                 type: "PUT", 
                 data: JSON.stringify(data), 
                 contentType: "application/json",
                 dataType: "json",
-            }).done(function () {
-                var tmp = SessionManager.get("session");
-                tmp.user=data
-                SessionManager.set("session", tmp);
-                alert("Updated")
+                success: function(){
+                    var tmp = SessionManager.get("session");
+                    tmp.user=data
+                    SessionManager.set("session", tmp);
+                    SweetAlert.fire(
+                        'Updated!',
+                        'Users information updated',
+                        'success'
+                    )
+                },
+                error: function(){
+                    SweetAlert.fire(
+                        'Error!',
+                        'Users information not updated',
+                        'error'
+                    )
+                }
+
             })
+         
         }
     }
 
