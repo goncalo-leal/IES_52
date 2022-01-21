@@ -14,11 +14,11 @@ const login = function() {
     var psw = $("#psw").val();
 
     $.ajax({
-        url: consts.BASE_URL + '/auth/login/',
+        url: consts.BASE_URL + '/auth/login',
         type: "POST",
         contentType: "application/json",
-        dataType: "json",
-        data: JSON.stringify({"email": email, "password": password}),
+        crossDomain: true,
+        data: JSON.stringify({"email": email, "password": psw}),
         success: function(data) {
             if (data) {
                 console.log(data);

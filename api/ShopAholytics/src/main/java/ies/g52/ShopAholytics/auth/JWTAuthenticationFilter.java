@@ -40,6 +40,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
+        System.out.println("bleh");
         try {
             User creds = new ObjectMapper().readValue(req.getInputStream(), User.class);
             List<SimpleGrantedAuthority> auths = new ArrayList<>();
