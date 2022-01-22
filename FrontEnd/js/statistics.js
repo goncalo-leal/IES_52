@@ -33,6 +33,7 @@ $(document).ready(function() {
                 break;
             case "lastMonth":
                 [shop,park] = info['lastMonth_donut']
+                console.log(shop, park)
                 renderDonut(shop,park, "test_canvas_shopping", "Shopping vs Park")
                 break;
             case "lastHour":
@@ -46,16 +47,16 @@ $(document).ready(function() {
     $("#nav-tabs-entranceSensor-select").change(function(e) {
         switch (this.value) {
             case "today":
-                renderBarGraphicV2(info['today_donut'],'test_canvas')
+                renderBarGraphicV2(info['today_bar'],'test_canvas')
                 break;
             case "lastWeek":
-                renderBarGraphicV2(info['lastWeek_donut'],'test_canvas')
+                renderBarGraphicV2(info['lastWeek_bar'],'test_canvas')
                 break;
             case "lastMonth":
-                renderBarGraphicV2(info['lastMonth_donut'],'test_canvas')
+                renderBarGraphicV2(info['lastMonth_bar'],'test_canvas')
                 break;
             case "lastHour":
-                renderBarGraphicV2(info['lastHour_donut'],'test_canvas')
+                renderBarGraphicV2(info['lastHour_bar'],'test_canvas')
                 break;
         }
     })
