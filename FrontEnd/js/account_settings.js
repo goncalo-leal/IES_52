@@ -59,10 +59,12 @@ const updateData = function(){
     else{
         if (nome==n_nome && email == n_email && n_pass1 ==pass){
             alert("Nothing updated");
+            console.log(SessionManager.get("session"));
         }
         else{
             var data = {"id":id,"password":pass,"email":n_email,"name":n_nome,"gender":gender,"birthday":birthday,"state":{"id":state_id,"description":state_desc}}
             
+
             $.ajax({
                 url: consts.BASE_URL + '/api/updateUser',
                 type: "PUT", 

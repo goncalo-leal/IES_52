@@ -1,6 +1,9 @@
 ## Requirements:
     https://realpython.com/pysimplegui-python/
 
+### Instalação
+    ./install.sh (pode ser necessário dar permissões a este ficheiro)
+
 O PySimpleGUI tem vários port's, neste caso vamos usar o tkinter. As dependências são:
 
 ### Python3

@@ -60,7 +60,6 @@ const userStates = function() {
                 for (var i=0; i< estados.length; i++){
                     states.push(estados[i].description);
                 }
-                console.log(states)
             }
         },
         error: function() {
@@ -94,7 +93,6 @@ const loadUserStates = function(number, description) {
     var selectVal='';
     var selectInput='';
     
-    console.log(states)
     for (var i=0; i< states.length; i++){
         selectVal = states[i];
         if (selectVal == description){
@@ -106,7 +104,6 @@ const loadUserStates = function(number, description) {
             }
         }
     }
-    console.log(selectInput)
     return selectInput;
 }
 
@@ -117,7 +114,7 @@ const renderTable = function (data) {
     $("#managers_body").empty();
     data.forEach(function(e, i) {
         var options = loadUserStates(number++, e.user.state.description);
-        table_data.push([e.user.name, '<p class="text-center">'+e.user.email+'</p>', '<p class="text-center">'+e.store.name+'</p>', '<p class="text-center" ><select id="user_'+ e.user.id +'" name="states'+ i +'" class="browser-default custom-select" style="max-width:200px;">'+ options +'</select></p>']); //onchange="changeState('+ e.user.id +')"
+        table_data.push(['<p>'+e.user.name+'</p>', '<p class="text-center">'+e.user.email+'</p>', '<p class="text-center">'+e.store.name+'</p>', '<p class="text-center" ><select id="user_'+ e.user.id +'" name="states'+ i +'" class="browser-default custom-select" style="max-width:200px;">'+ options +'</select></p>']); //onchange="changeState('+ e.user.id +')"
     })
    
     table.clear();
@@ -131,19 +128,38 @@ const changeState = function () {
         var textSelected   = optionSelected.text();
         var idToUpdate = $(this).attr('id').replace('user_', '');
 
-        console.log(textSelected, idToUpdate)
+        console.log(textSelected)
         if (textSelected === 'Approved'){
+            console.log(idToUpdate)
             $.ajax({
                 url: consts.BASE_URL + '/api/updateAcceptStoreManager/'+idToUpdate,
-                type: "PUT", 
-            })
+                type: "PUT",
+                contentType: "application/json",
+                dataType: "json",
+                success: function(data) {
+                    loadTable();
+                },
+                error: function() {
+                    console.log("erro na call");
+                }
+            });
+            //location.reload();
         }
 
         if (textSelected === 'Blocked'){
             $.ajax({
                 url: consts.BASE_URL + '/api/updateBlockStoreManager/'+idToUpdate,
-                type: "PUT", 
-            })
+                type: "PUT",
+                contentType: "application/json",
+                dataType: "json",
+                success: function(data) {
+                    loadTable();
+                },
+                error: function() {
+                    console.log("erro na call");
+                }
+            });
+            // location.reload();
         }
         
     });
@@ -177,7 +193,6 @@ const search = function () {
     var input = $("#mySearchText").val().toLowerCase();
     var temp = [];
 
-    console.log(users[0]);
     users.forEach(function(e, i) {
         var name = e.user.name.toLowerCase();
         if (name != null && name.includes(input)) {

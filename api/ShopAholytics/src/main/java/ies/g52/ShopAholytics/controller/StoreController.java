@@ -21,14 +21,14 @@ public class StoreController {
     private ShoppingServices shoppingService;
 
 
-
+    @CrossOrigin(origins = "http://localhost:8000")
     @PostMapping("/addStore/{pid}")
     public Store newStore( @RequestBody Store s,  @PathVariable(value = "pid") int pid) {
         Shopping shopping = shoppingService.getShoppingById(pid);
         int var = shopping.getSum_shops_capacity() + s.getCapacity();
         if (s.getCapacity() > 0 && var < shopping.getCapacity()){
             shopping.setSum_shops_capacity(var);
-            return storeService.saveStore(new Store (s.getLocation(),s.getName(),s.getCapacity(),s.getOpening(),s.getClosing(),shoppingService.getShoppingById(pid)));
+            return storeService.saveStore(new Store (s.getLocation(),s.getName(),s.getCapacity(),s.getOpening(),s.getClosing(),shoppingService.getShoppingById(pid), s.getImg()));
         }
         return null;
     }
@@ -44,9 +44,10 @@ public class StoreController {
         
     }
 
+    @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping("/updateStore")
-    public Store updateStore(@RequestBody Store user) {
-        return storeService.updateStore(user);
+    public Store updateStore(@RequestBody Store store) {
+        return storeService.updateStore(store);
     }
 
     @DeleteMapping("/deleteStore/{id}")

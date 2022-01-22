@@ -45,10 +45,10 @@ public class User {
     @ManyToOne(optional = false)
     @JoinColumn(name = "state", nullable = false)
     private UserState state;
-    
 
     @Column(name = "authority")
     private String authority;
+    
     
     public User(){
 

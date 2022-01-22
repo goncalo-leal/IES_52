@@ -71,9 +71,9 @@ public class ShopAholyticsApplication {
 				LocalTime aberturav2 = LocalTime.of(9,00,00);  
 				LocalTime fechov2 = LocalTime.of(22,00,00);  
 
-				Store zara = new Store("Piso 0, 3 loja da direita","Zara",500,aberturav2,fechov2,new_shopping);
-				Store jumbo=new Store ("Piso 0, lado esquerdo","Jumbo",2500,abertura,fecho,new_shopping);
-				Store hm=new Store ("Piso 1","H&M",125,aberturav2,fechov2,new_shopping);
+				Store zara = new Store("Piso 0, 3 loja da direita","Zara",500,aberturav2,fechov2,new_shopping, "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/ee966d75834063.5c5854ad70bf0.jpg");
+				Store jumbo=new Store ("Piso 0, lado esquerdo","Jumbo",2500,abertura,fecho,new_shopping, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHXvCi22c_FXjQZTNiMuaBfqeBFjWQmSUS5A&usqp=CAU");
+				Store hm=new Store ("Piso 1","H&M",125,aberturav2,fechov2,new_shopping, "https://www2.hm.com/hm-logo.png");
 				storeService.saveStore(zara);
 				storeService.saveStore(jumbo);
 				storeService.saveStore(hm);
@@ -103,19 +103,27 @@ public class ShopAholyticsApplication {
 
 				Sensor gli_exit3= new Sensor(SensorEnum.EXIT.toString(),"Sensor de saida do glicinias 3");
 				Sensor gli_enter3 = new Sensor(SensorEnum.ENTRACE.toString(), "Sensor de entrada do glicinias 3");
+				
+				Sensor linkpark1= new Sensor(SensorEnum.ENTRACE.toString(),"Sensor de entrada pelo park 1");
+				Sensor linkpark2 = new Sensor(SensorEnum.ENTRACE.toString(), "Sensor de entrada pelo park 2");
 
-				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_exit1));
-				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_exit2));
-				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_exit3));
-				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_enter1));
-				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_enter2));
-				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_enter3));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_exit1,false));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_exit2,false));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_exit3,false));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_enter1,false));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_enter2,false));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,gli_enter3,false));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,linkpark1,true));
+				SensorShoppingServices.saveSensorShopping(new SensorShopping( new_shopping,linkpark2,true));
 				sensorService.saveSensor(gli_exit1);
 				sensorService.saveSensor(gli_exit2);
 				sensorService.saveSensor(gli_exit3);
 				sensorService.saveSensor(gli_enter1);
 				sensorService.saveSensor(gli_enter2);
 				sensorService.saveSensor(gli_enter3);
+
+				sensorService.saveSensor(linkpark1);
+				sensorService.saveSensor(linkpark2);
 
 				SensorStoreServices.saveSensorStore(new SensorStore(zara,zara_exit));
 				SensorStoreServices.saveSensorStore(new SensorStore(zara,zara_enter));

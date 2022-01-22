@@ -37,94 +37,39 @@
 
     <index-nav></index-nav>
 
-  <!-- Content Wrapper. Contains page content -->
+    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 id="s_name" class="m-0"></h1>
+                    <div class="col-sm-12">
+                        <h1 class="text-center">Select a Shopping</h1>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
         </div>
         <!-- /.content-header -->
-
         <!-- Main content -->
         <div class="content">
-            <div class="container-fluid">
-                <div class="col-12">
-                    <h1 id="sh_name"></h1>
-                    <div class="row">
-                        <div class="col-md-3 col-sm-6 col-12">
-                            <div class="info-box">
-                                <span class="info-box-icon bg-info"><i class="fas fa-user-friends"></i></span>
-                
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Capacity</span>
-                                    <span id="capacity" class="info-box-number">0/0</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                            <!-- /.info-box -->
-                        </div>
-                        <div class="col-md-3 col-sm-6 col-12">
-                            <div class="info-box">
-                                <span class="info-box-icon bg-info"><i class="fas fa-clock"></i></span>
-                
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Schedule</span>
-                                    <span id="schedule" class="info-box-number">00:00</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                            <!-- /.info-box -->
-                        </div>
-                        <div class="col-md-3 col-sm-6 col-12">
-                            <div class="info-box">
-                                <span class="info-box-icon bg-info"><i class="fas fa-car"></i></span>
-                
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Parking</span>
-                                    <span id="parking" class="info-box-number">0/0</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                            <!-- /.info-box -->
-                        </div>
-                        <div class="col-md-3 col-sm-6 col-12">
-                            <div class="info-box">
-                                <span class="info-box-icon bg-info"><i class="fas fa-shopping-cart"></i></span>
-                
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Stores open</span>
-                                    <span id="stores" class="info-box-number">3</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                            <!-- /.info-box -->
-                        </div>
-                    </div>
+            <div class="card d-flex mt-5 justify-content-center mx-auto" style="height: 20vh;">
+                <div class="card-body login-card-body">
+                    <select class="form-control" name="" id="shoppings_select">
+                        <option value="-1"></option>
+                    </select>
+                    <p class="text-danger" id="error_msg"></p>
                 </div>
-                <!-- /.col-md-6 -->
-                <!-- /.row -->
-                <div class="container-fluid">
-                    <h3><b>Stores</b></h3>
-                    <div id="store_container" class="row">
+                <div class="card-footer">
+                    <div class="text-center">
+                        <a id="choose_shopping" class="btn btn-primary btn-lg mb-0">Next</a>
                     </div>
-                </div>
-                <div class="container-fluid">
-                    <h3><b>Parks</b></h3>
-                    <div id="park_container" class="row">
-                    </div>
-                </div>
+                  </div>
             </div>
-            <!-- /.container-fluid -->
+                
         </div>
         <!-- /.content -->
     </div>
-  <!-- /.content-wrapper -->
+    <!-- /.content-wrapper -->
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
@@ -166,7 +111,7 @@
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<script type="module" src="./js/index.js"></script>
+<script type="module" src="./js/select_shopping.js"></script>
 <script type="module" src="./js/components.js"></script>
 
 </body>

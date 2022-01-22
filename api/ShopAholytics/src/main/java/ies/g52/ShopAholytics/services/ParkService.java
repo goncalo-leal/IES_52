@@ -1,17 +1,25 @@
 package ies.g52.ShopAholytics.services;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ies.g52.ShopAholytics.enumFolder.SensorEnum;
 import ies.g52.ShopAholytics.models.Park;
+import ies.g52.ShopAholytics.models.SensorPark;
+import ies.g52.ShopAholytics.services.SensorParkService;
+
 import ies.g52.ShopAholytics.repository.ParkRepository;
 
 @Service
 public class ParkService {
     @Autowired
     private ParkRepository repository;
+
+    @Autowired
+    private SensorParkService SensorParkService;
 
     public Park savePark(Park Park) {
         return repository.save(Park);
@@ -20,7 +28,19 @@ public class ParkService {
     public List<Park> savePark(List<Park> Park) {
         return repository.saveAll(Park);
     }
+    public HashMap<String,Integer> getAllSensorsAssociatedPark(int id){
+       
+        HashMap<String,Integer> map = new HashMap<>();
 
+        List<SensorPark>a = SensorParkService.getSensorParks();
+        for ( SensorPark s : a){
+            if (s.getPark().getId() == id && s.getSensor().getType().equals(SensorEnum.ENTRACE.toString())){
+                map.put(s.getSensor().getName(),s.getId());
+            }
+        }
+
+        return map;
+    }
     public List<Park> getParks() {
         return repository.findAll();
     }
@@ -43,6 +63,7 @@ public class ParkService {
         existingPark.setName(Park.getName());
         existingPark.setLocation(Park.getLocation());
         existingPark.setCapacity(Park.getCapacity());
+        existingPark.setCurrent_capacity(Park.getCurrent_capacity());
         existingPark.setOpening(Park.getOpening());
         existingPark.setClosing(Park.getClosing());
         return repository.save(existingPark);
