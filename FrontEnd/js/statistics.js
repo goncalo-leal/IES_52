@@ -216,6 +216,11 @@ const loadDataBySensorLastHour= function(){
         success: function(data) {
             if (data) {
                 renderBarGraphicV2(data,'test_canvas')
+                $("#nav-tabs-entranceShopping-select").prop("selectedIndex", 0);
+                $("#nav-tabs-entranceSensor-select").prop("selectedIndex", 0);
+                
+
+                
                 info['lastHour_bar']=data;
                 var shopping =data["Shopping"]
                 var park=data["Park"]
