@@ -76,8 +76,17 @@ class NavbarIndex extends HTMLElement {
                 <aside class="main-sidebar sidebar-dark-primary elevation-4">
                     <!-- Brand Logo -->
                     ${ logged_in
-                        ? ' <a href="/home.html" class="brand-link text-center"> '
-                        : ' <a href="no_loggin_shopp.html" class="brand-link text-center">'
+                        
+                        
+                        ? `
+                            ${ role == "ROLE_STORE_MANAGER"
+                                ? ` <a href="/store.html?id=${store_id}" class="brand-link text-center"> `
+                                : ' <a href="/index.html" class="brand-link text-center"> '
+                            }
+                        `
+        
+        
+                        : ' <a href="/index.html" class="brand-link text-center">'
                     }
                         <span class="brand-text font-weight-bold">ShopAholytics</span>
                     </a>
@@ -100,7 +109,10 @@ class NavbarIndex extends HTMLElement {
                                 <!-- Add icons to the links using the .nav-icon class
                                     with font-awesome or any other icon font library -->
                                 <li class="nav-item">
-                                    <a href="/home.html" class="nav-link">
+                                ${role == "ROLE_STORE_MANAGER"
+                                    ? `<a href="/store.html?id=${store_id}" class="nav-link">`
+                                    : '<a href="/home.html" class="nav-link">'
+                                }
                                         <i class="nav-icon fa fa-circle"></i>
                                         <p>
                                             Home
@@ -108,14 +120,18 @@ class NavbarIndex extends HTMLElement {
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/statistics.html" class="nav-link">
+                                ${role == "ROLE_STORE_MANAGER"
+                                    ? `<a href="/store_statistics.html?id=${store_id}" class="nav-link">`
+                                    : '<a href="/statistics.html" class="nav-link">'
+                                }
                                         <i class="nav-icon fa fa-circle"></i>
                                         <p>
                                             Statistics
                                         </p>
                                     </a>
                                 </li>
-                                    <li class="nav-item" id="menu-toggle">
+                                ${role == "ROLE_SHOPPING_MANAGER"
+                                    ? ` <li class="nav-item" id="menu-toggle">
                                         <a href="#" class="nav-link">
                                             <i class="nav-icon fa fa-circle"></i>
                                             <p>
@@ -162,6 +178,9 @@ class NavbarIndex extends HTMLElement {
                                             </li>
                                         </ul>
                                     </li>
+                                    `
+                                    : ''
+                                }
                             </ul>
                             `
                             : ``
@@ -268,7 +287,7 @@ class SideBar extends HTMLElement {
                 ? `
                     ${ role == "ROLE_STORE_MANAGER"
                         ? ` <a href="/store.html?id=${store_id}" class="brand-link text-center"> `
-                        : ' <a href="/home.html" class="brand-link text-center"> '
+                        : ' <a href="/index.html" class="brand-link text-center"> '
                     }
                 `
 

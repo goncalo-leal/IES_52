@@ -1,3 +1,4 @@
+from time import sleep
 import PySimpleGUI as sg
 import datetime
 
@@ -112,6 +113,7 @@ def show_sensors_list(shopping, sensors_list):
             sensor = s["sensor"]
 
             sensors_dic[sensor["id"]] = sensor
+            limit = api.get_sensor_limit(sensor["id"])
 
             sensors.append([
                 sg.Column(
@@ -121,7 +123,7 @@ def show_sensors_list(shopping, sensors_list):
                 ), 
                 sg.Column(
                     [
-                        [sg.Text("Limit: "+str(sensor["limit"]), justification="left")]
+                        [sg.Text("Limit: "+str(limit), justification="left")]
                     ], justification="left"
                 ), 
                 sg.Column(
@@ -130,8 +132,6 @@ def show_sensors_list(shopping, sensors_list):
                     ], justification="right"
                 )
             ])
-
-    print(sensors_dic)
 
     layout.append([sg.Column(sensors, scrollable=True, size=(800, 550))])
 
@@ -170,40 +170,51 @@ def show_sensors_list(shopping, sensors_list):
                     if text == '':
                         sg.popup('You must write a number!', title="Error!", font=14)
                     else:
-                        try:
-                            number = int(text)
-                            # mostrar ecrã de generating e mandar mensagens pelo sender
+                        #try:
+                        number = int(text)
+                        # mostrar ecrã de generating e mandar mensagens pelo sender
 
-                            if int(sensors_dic[int(sensor_id)]["limit"]) < number:
-                                sg.popup('Limit is '+ str(sensors_dic[int(sensor_id)]["limit"]) +'!', title="Error!", font=14)
+                        if sensors_dic[int(sensor_id)]["limit"] < number:
+                            sg.popup('Limit is '+ str(sensors_dic[int(sensor_id)]["limit"]) +'!', title="Error!", font=14)
 
-                            else:
+                        else:
 
-                                layout_loading = [
-                                    [sg.Column([[sg.Text("Generating...", justification="center", font=(14))]], justification="center", vertical_alignment="center")]
-                                ]
+                            layout_loading = [
+                                [sg.Column([[sg.Text("Generating...", justification="center", font=(14))]], justification="center", vertical_alignment="center")]
+                            ]
 
-                                window_generating = sg.Window("ShopAholytics", layout_loading, size=(300, 50), finalize=True)
+                            window_generating = sg.Window("ShopAholytics", layout_loading, size=(300, 50), finalize=True)
+                            
+                            sender = Sender()
+                            while True:
                                 
-                                sender = Sender()
-                                while True:
-                                    
-                                    for i in range(number):
-                                        ct = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-                                        print(ct)
+                                for i in range(number):
+                                    ct = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
-                                        msg = {"sensor_id": sensor_id, "data": ct}
-                                        sender.send(msg)
-
-                                    break
-
-                                sender.close_connection()
-                                window_generating.close()
+                                    msg = {"sensor_id": sensor_id, "data": ct}
+                                    sender.send(msg)
 
                                 break
-                        except:
-                            sg.popup('You must write a number!', title="Error!", font=14)
-            window_generate.close()
+
+                            sender.close_connection()
+                            window_generating.close()
+                            window_generate.close()
+                            window.close()
+
+                            layout_loading = [
+                                [sg.Column([[sg.Text("Loading...", justification="center", font=(14))]], justification="center", vertical_alignment="center")]
+                            ]
+
+                            window = sg.Window("ShopAholytics", layout_loading, size=(300, 50), finalize=True)
+                            sleep(2)
+                            window.close()
+
+                            show_sensors_list(shopping, sensors_list)
+
+                            break
+                        # except:
+                        #     sg.popup('You must write a number!', title="Error!", font=14)
+    window.close()
 
 # primeiro passo, carregar os shoppings e mostrar a lista
 shoppings = get_shoppings_list()

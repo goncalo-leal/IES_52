@@ -52,7 +52,23 @@ const render_shopping_info = function() {
                     total_parking_capacity += park.capacity;
                     current_parking_capacity += park.current_capacity;
 
-                    $("#park_container").append(park_card_template(park.name, park.location, park.current_capacity, park.capacity, park.opening, park.closing))
+                    let opening_hours = park.opening[0]
+                    if (opening_hours < 10)
+                        opening_hours = "0" + opening_hours
+
+                    let opening_minutes = park.opening[1]
+                    if (opening_minutes < 10)
+                        opening_minutes = "0" + opening_minutes
+
+                    let closing_hours = park.closing[0]
+                    if (closing_hours < 10)
+                        closing_hours = "0" + closing_hours
+
+                    let closing_minutes = park.closing[1]
+                    if (closing_minutes < 10)
+                        closing_minutes = "0" + closing_minutes
+
+                    $("#park_container").append(park_card_template(park.name, park.location, park.current_capacity, park.capacity, opening_hours+":"+opening_minutes, closing_hours+":"+closing_minutes))
                 })
 
                 stores.forEach(function(store) {
@@ -61,7 +77,23 @@ const render_shopping_info = function() {
                         open_stores += 1;
                     }
 
-                    $("#store_container").append(store_card_template(store.name, store.location, store.current_capacity, store.capacity, store.opening, store.closing, store.img))
+                    let opening_hours = store.opening[0]
+                    if (opening_hours < 10)
+                        opening_hours = "0" + opening_hours
+
+                    let opening_minutes = store.opening[1]
+                    if (opening_minutes < 10)
+                        opening_minutes = "0" + opening_minutes
+
+                    let closing_hours = store.closing[0]
+                    if (closing_hours < 10)
+                        closing_hours = "0" + closing_hours
+
+                    let closing_minutes = store.closing[1]
+                    if (closing_minutes < 10)
+                        closing_minutes = "0" + closing_minutes
+
+                    $("#store_container").append(store_card_template(store.name, store.location, store.current_capacity, store.capacity, opening_hours+":"+opening_minutes, closing_hours+":"+closing_minutes, store.img))
                 });
 
                 $("#sh_name").text(data.name);
@@ -95,7 +127,7 @@ const clear_view = function() {
 
 const store_card_template = function(name, location, cur_cap, max_cap, opening, closing, img) {
     return `
-    <div class="col-md-3 col-sm-6 col-12">
+    <div class="col-lg-3 col-sm-6 col-12">
         <div class="card">
             <div class="card-header">
                 <div class="row">
@@ -120,7 +152,7 @@ const store_card_template = function(name, location, cur_cap, max_cap, opening, 
                 </div>
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-md-6 col-sm-6 col-12">
+                        <div class="col-lg-6 col-md-12 col-12">
                             <div class="info-box bg-info">
                                 <span class="info-box-icon"><i class="fas fa-clock"></i></span>
                 
@@ -130,7 +162,7 @@ const store_card_template = function(name, location, cur_cap, max_cap, opening, 
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-6 col-12">
+                        <div class="col-lg-6 col-md-12 col-12">
                             <div class="info-box bg-info">
                                 <span class="info-box-icon"><i class="fas fa-door-closed"></i></span>
                 
