@@ -5,6 +5,7 @@ import updateView from "./common.js"
 var date = new Date();
 var day = new Date(date.getTime())
 day= day.getFullYear()+'-'+day.getMonth()+1+'-'+day.getDate()
+var info={};
 
 $(document).ready(function() {
     updateView();
@@ -19,6 +20,49 @@ $(document).ready(function() {
         loadShoppingByHours();
     });
 
+    $("#nav-tabs-entranceShopping-select").change(function(e) {
+        var shop, park
+        switch (this.value) {
+            case "today":
+                [shop,park] = info['today_donut']
+                renderDonut(shop,park, "test_canvas_shopping", "Shopping vs Park")
+                break;
+            case "lastWeek":
+                [shop,park] = info['lastWeek_donut']
+                renderDonut(shop,park, "test_canvas_shopping", "Shopping vs Park")
+                break;
+            case "lastMonth":
+                [shop,park] = info['lastMonth_donut']
+                renderDonut(shop,park, "test_canvas_shopping", "Shopping vs Park")
+                break;
+            case "lastHour":
+                [shop,park] = info['lastHour_donut']
+                renderDonut(shop,park, "test_canvas_shopping", "Shopping vs Park")
+                break;
+        }
+    })
+
+
+    $("#nav-tabs-entranceSensor-select").change(function(e) {
+        switch (this.value) {
+            case "today":
+                renderBarGraphicV2(info['today_donut'],'test_canvas')
+                break;
+            case "lastWeek":
+                renderBarGraphicV2(info['lastWeek_donut'],'test_canvas')
+                break;
+            case "lastMonth":
+                renderBarGraphicV2(info['lastMonth_donut'],'test_canvas')
+                break;
+            case "lastHour":
+                renderBarGraphicV2(info['lastHour_donut'],'test_canvas')
+                break;
+        }
+    })
+
+        
+        // renderDonut(tmp_curr, tmp_cap, tmp_id);
+    
    
 
     initialize();
@@ -28,12 +72,13 @@ $(document).ready(function() {
 const initialize = function() {
     loadPeopleByWeek();
     compareLastWeek();
+
     loadDataBySensorLastHour();
     loadDataBySensorToday();
     loadDataBySensorWeek();
     loadDataBySensorMonth();
-    loadShoppingByHours();
 
+    loadShoppingByHours();
     loadShoppingByHoursDay();
     
 }
@@ -98,7 +143,8 @@ const loadDataBySensorToday= function(){
         success: function(data) {
             if (data) {
                 
-                renderBarGraphicV2(data,'barChartToday')
+                //renderBarGraphicV2(data,'test_canvas')
+                info['today_bar']=data;
                 var shopping =data["Shopping"]
                 var park=data["Park"]
                 var var_shop=0
@@ -109,7 +155,8 @@ const loadDataBySensorToday= function(){
                 for (const [key, value] of Object.entries(park)) {
                     var_park+=value
                   }
-                renderDonut(var_shop,var_park, "donutChartParkvsShopping", "Shopping vs Park")
+                info['today_donut']=[var_shop, var_park]
+                //renderDonut(var_shop,var_park, "test_canvas_shopping", "Shopping vs Park")
 
             } else {
                 console.log("No data");
@@ -131,8 +178,8 @@ const loadDataBySensorWeek= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                renderBarGraphicV2(data,'barChartWeek')
-
+                //renderBarGraphicV2(data,'test_canvas')
+                info['lastWeek_bar']=data;
                 var shopping =data["Shopping"]
                 var park=data["Park"]
                 var var_shop=0
@@ -143,7 +190,9 @@ const loadDataBySensorWeek= function(){
                 for (const [key, value] of Object.entries(park)) {
                     var_park+=value
                   }
-                renderDonut(var_shop,var_park, "donutChartParkvsShoppinglastWeek", "Shopping vs Park")
+                info['lastWeek_donut']=[var_shop, var_park];
+                
+                //renderDonut(var_shop,var_park, "test_canvas_shopping", "Shopping vs Park")
 
 
             } else {
@@ -165,8 +214,8 @@ const loadDataBySensorLastHour= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                renderBarGraphicV2(data,'barChartLastHour')
-
+                renderBarGraphicV2(data,'test_canvas')
+                info['lastHour_bar']=data;
                 var shopping =data["Shopping"]
                 var park=data["Park"]
                 var var_shop=0
@@ -177,7 +226,8 @@ const loadDataBySensorLastHour= function(){
                 for (const [key, value] of Object.entries(park)) {
                     var_park+=value
                   }
-                renderDonut(var_shop,var_park, "donutChartLastHour", "Shopping vs Park")
+                info['lastHour_donut']=[var_shop, var_park]
+                renderDonut(var_shop,var_park, "test_canvas_shopping", "Shopping vs Park")
 
 
             } else {
@@ -199,7 +249,8 @@ const loadDataBySensorMonth= function(){
         dataType: "json",
         success: function(data) {
             if (data) {
-                renderBarGraphicV2(data,'barChartMonth')
+                //renderBarGraphicV2(data,'test_canvas')
+                info['lastMonth_bar']=data;
                 var shopping =data["Shopping"]
                 var park=data["Park"]
                 var var_shop=0
@@ -210,7 +261,8 @@ const loadDataBySensorMonth= function(){
                 for (const [key, value] of Object.entries(park)) {
                     var_park+=value
                   }
-                renderDonut(var_shop,var_park, "donutChartParkvsShoppinglastMonth", "Shopping vs Park")
+                info['lastMonth_donut']=[var_shop, var_park];
+                //renderDonut(var_shop,var_park, "test_canvas_shopping", "Shopping vs Park")
 
 
             } else {

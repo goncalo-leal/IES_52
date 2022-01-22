@@ -176,10 +176,7 @@ const loadShoppingStores = function() {
     
     for (var i=0; i<stores.length; i++){
         if (i==0){
-            /*
-            $("<li class='nav-item'><a class='nav-link active' id='nav-tabs-shops-occupation-store"+(i+1)+"-tab' data-toggle='pill' href='#nav-tabs-shops-occupation-store"+(i+1)+"' role='tab' aria-controls='store"+(i+1)+"' aria-selected='true'>"+stores[i].name+"<p style='display:none'>"+stores[i].id+"</p></a></li>").appendTo("#nav-tabs-shops-occupation");
-            $("<div class='tab-pane fade active show' id='nav-tabs-shops-occupation-store"+(i+1)+"' role='tabpanel' aria-labelledby='nav-tabs-shops-occupation-store"+(i+1)+"-tab'><canvas class='d-block w-100' heigh='200' id='donut0' ></canvas></div>").appendTo("#nav-tabs-shops-occupationContent");
-            */
+            
 
             $("#nav-tabs-shops-occupation-select").html(""+
                 "<option selected='selected' value="+stores[i].id+">"+stores[i].name+"</option>"
@@ -188,7 +185,6 @@ const loadShoppingStores = function() {
             stores_idDonut[stores[i].id]=[stores[i].current_capacity, stores[i].capacity, "donut0"];
             let curr, cap, id;
             [curr, cap, id] = [stores[0].current_capacity, stores[0].capacity, "donut0"]
-            //renderDonut(curr, cap, id);
             renderDonut(curr, cap, "test_canvas");
         }
         else{
