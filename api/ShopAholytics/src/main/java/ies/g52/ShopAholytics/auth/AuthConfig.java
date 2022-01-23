@@ -3,6 +3,9 @@ package ies.g52.ShopAholytics.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ies.g52.ShopAholytics.repository.UserRepository;
+import ies.g52.ShopAholytics.services.ShoppingManagerService;
+import ies.g52.ShopAholytics.services.StoreManagerService;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -40,6 +43,8 @@ import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -53,10 +58,14 @@ public class AuthConfig extends WebSecurityConfigurerAdapter implements WebMvcCo
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private UserRepository userRepository;
+    private StoreManagerService storeManagerService;
+    private ShoppingManagerService shoppingManagerService;
 
-    public AuthConfig(UserDetailsServiceImpl userDetailsServiceImpl, UserRepository userRepository) {
+    public AuthConfig(UserDetailsServiceImpl userDetailsServiceImpl, UserRepository userRepository, StoreManagerService storeManagerService, ShoppingManagerService shoppingManagerService) {
         this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.userRepository = userRepository;
+        this.storeManagerService = storeManagerService;
+        this.shoppingManagerService = shoppingManagerService;
     }
 
     @Override
@@ -66,16 +75,28 @@ public class AuthConfig extends WebSecurityConfigurerAdapter implements WebMvcCo
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
+        final CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8000"));
+        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowCredentials(false);
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setExposedHeaders(Arrays.asList("X-Auth-Token", "Authorization", "Access-Control-Allow-Origin",
+                "Access-Control-Allow-Credentials"));
+
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
+        http.cors().configurationSource(corsConfigurationSource()).and().csrf().disable()
                 .authorizeRequests()
+
+                //PUBLIC
                 .antMatchers(HttpMethod.POST, AuthConsts.LOG_IN_URL).permitAll()
+                .antMatchers(AuthConsts.PUBLIC_ENDPOINTS).permitAll()
+
                 .antMatchers(AuthConsts.SHOPPING_MANAGER_PROTECTED_ENDPOINTS).hasAuthority(AuthConsts.SHOPPING_MANAGER)
                 .anyRequest().authenticated()
                 .and()
@@ -84,7 +105,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter implements WebMvcCo
                 .authenticationEntryPoint(
                     (req, res, ex) -> {
                         Map<String, Object> body = new HashMap<>();
-                        body.put("message", "Access denied");
+                        body.put("error", "Access denied");
                         body.put("timestamp", new Date().toString());
                         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
 
@@ -96,7 +117,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter implements WebMvcCo
                 .accessDeniedHandler(
                     (req, res, ex) -> {
                         Map<String, Object> body = new HashMap<>();
-                        body.put("message", "Forbidden resource");
+                        body.put("error", "Forbidden resource");
                         body.put("timestamp", new Date().toString());
                         body.put("status", HttpServletResponse.SC_FORBIDDEN);
                                         
@@ -107,7 +128,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter implements WebMvcCo
                 )
                 .and()
 
-                .addFilterBefore(new JWTAuthenticationFilter(authenticationManager(), this.userRepository), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTAuthenticationFilter(authenticationManager(), this.userRepository, this.storeManagerService, this.shoppingManagerService), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTAuthorizationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
@@ -153,12 +174,10 @@ public class AuthConfig extends WebSecurityConfigurerAdapter implements WebMvcCo
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")    // Paths that allow cross domain access
                 .allowedOrigins("*")    // Sources that allow cross domain access
-                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")    // Allow request method
+                .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")    // Allow request method
                 .maxAge(168000)    // Pre inspection interval
                 .allowedHeaders("*")  // Allow head setting
                 .allowCredentials(false);
-
-                //.allowedOriginPatterns("http://127.0.0.1:8000"); // Send cookie
     }
 
     @Override

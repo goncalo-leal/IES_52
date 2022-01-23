@@ -15,7 +15,7 @@ import ies.g52.ShopAholytics.services.UserService;
 import ies.g52.ShopAholytics.services.UserStateService;
 
 
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/storemanagers")
 public class StoreManagerController {
@@ -68,7 +68,6 @@ public class StoreManagerController {
     }
 
     // Os updates são feitos na no store e no user
-    @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping("/updateAcceptStoreManager/{user}")
     public User updateAcceptStoreManager(@PathVariable(value = "user") StoreManager user) {
         StoreManager a = StoreManagerServices.getStoreManagerById(user.getId());
@@ -77,7 +76,6 @@ public class StoreManagerController {
         return serviceUser.updateUser(u);
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping("/updateBlockStoreManager/{user}")
     public User updateBlockStoreManager( @PathVariable(value = "user") StoreManager user) {
         StoreManager a = StoreManagerServices.getStoreManagerById(user.getId());

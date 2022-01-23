@@ -11,6 +11,7 @@ import ies.g52.ShopAholytics.services.UserStateService;
 import java.util.List;
 import javax.validation.Valid;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/users")
 public class UserController {

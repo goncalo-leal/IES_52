@@ -1,6 +1,6 @@
 import consts from "./consts.js";
 import SessionManager from "./session.js";
-import updateView from "./common.js"
+import { updateView, requestWithToken } from "./common.js"
 
 
 var date = new Date();
@@ -53,178 +53,101 @@ const initialize = function() {
 const loadShoppingByHours = function () {  
     
     console.log(day)
-    $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInStoreByhours/' + store_id +'/'+day,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data){
-            renderLinearGraphic(data,'shoppingByHours')
-        },
-        error: function(){
-            console.log("Error calling /api/PeopleInShoppingByhours/'")
-        }
+    requestWithToken("GET", '/api/sensorsdata/PeopleInStoreByhours/' + store_id +'/'+day, function(data) {
+        renderLinearGraphic(data,'shoppingByHours')
     })
 }
 
 
 const loadDataBySensorToday= function(){
-    $.ajax({
-        url: consts.BASE_URL + '/api/AllSensorsForThatStoreToday/' + store_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                renderBarGraphic(data,'barChartToday')
-             
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log(" erro na call");
+    requestWithToken("GET", '/api/sensorsdata/AllSensorsForThatStoreToday/' + store_id, function(data) {
+        if (data) {
+            renderBarGraphic(data,'barChartToday')
+         
+        } else {
+            console.log("No data");
         }
     })
 }
 
 const loadDataBySensorWeek= function(){
-    $.ajax({
-        url: consts.BASE_URL + '/api/AllSensorsForThatStoreWeek/' + store_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                renderBarGraphic(data,'barChartWeek')
-
-            
-
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log(" erro na call");
+    requestWithToken("GET", '/api/sensorsdata/AllSensorsForThatStoreWeek/' + store_id, function(data) {
+        if (data) {
+            renderBarGraphic(data,'barChartWeek')
+        } else {
+            console.log("No data");
         }
     })
 }
+
 const loadDataBySensorLastHour= function(){
-    $.ajax({
-        url: consts.BASE_URL + '/api/AllSensorsForThatStoreHour/' +store_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                renderBarGraphic(data,'barChartLastHour')
-                
-           
-
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log(" erro na call");
+    requestWithToken("GET", '/api/sensorsdata/AllSensorsForThatStoreHour/' +store_id, function(data) {
+        if (data) {
+            renderBarGraphic(data,'barChartLastHour')
+        } else {
+            console.log("No data");
         }
     })
 }
+
+
 const loadDataBySensorMonth= function(){
-    $.ajax({
-        url: consts.BASE_URL + '/api/AllSensorsForThatStoreMonth/' + store_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                renderBarGraphic(data,'barChartMonth')
-                
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log(" erro na call");
+    requestWithToken("GET",  '/api/sensorsdata/AllSensorsForThatStoreMonth/' + store_id, function(data) {
+        if (data) {
+            renderBarGraphic(data,'barChartMonth')
+            
+        } else {
+            console.log("No data");
         }
     })
 }
 
 const compareLastWeek= function(){
-    $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInStoreTodayCompareWithLaskWeek/' + store_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                var dif = data["Today"] 
-                var dif2 = data["LastWeek"]
-                $("#TextoComparatorioSemanaPassada").text("Last week around this time " +dif2+ " people entered. \n Today "+ dif +" people entered")
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log(" erro na call");
+    requestWithToken("GET", '/api/sensorsdata/PeopleInStoreTodayCompareWithLaskWeek/' + store_id, function(data) {
+        if (data) {
+            var dif = data["Today"] 
+            var dif2 = data["LastWeek"]
+            $("#TextoComparatorioSemanaPassada").text("Last week around this time " +dif2+ " people entered. \n Today "+ dif +" people entered")
+        } else {
+            console.log("No data");
         }
     })
 }
+
 const loadPeopleByWeek = function() {
-    $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInStoreLast14Days/' + store_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                var number = [data.mapa["MONDAY"], data.mapa["TUESDAY"], data.mapa["WEDNESDAY"], data.mapa["THURSDAY"], data.mapa["FRIDAY"], data.mapa["SATURDAY"], data.mapa["SUNDAY"]];
-                var total_visitors = 0;
-                for (var i=0; i<number.length; i++){
-                    total_visitors =total_visitors + number[i];
-                }
-                var numbers = [data.mapa["LAST_MONDAY"], data.mapa["LAST_TUESDAY"], data.mapa["LAST_WEDNESDAY"], data.mapa["LAST_THURSDAY"], data.mapa["LAST_FRIDAY"], data.mapa["LAST_SATURDAY"], data.mapa["LAST_SUNDAY"]];
-                var total_visitors_last = 0;
-                for (var x=0; x<numbers.length; x++){
-                    total_visitors_last = total_visitors_last + numbers[x];
-                }
-                $("#shopping_capacity").html(total_visitors);
-                let diferença=0
-                if (total_visitors_last ==0 ){
-                    diferença=(total_visitors- total_visitors_last)*100
-               
-                }
-                else{
-                    diferença=(( total_visitors- total_visitors_last)/total_visitors_last)*100
-                    
-                }
-                diferença=diferença.toFixed(2)
-                if (diferença > 0){
-                    $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-up text-success' ></i> " + diferença + "% Since last week")
-                }
-                else{
-                    $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-down text-warning' ></i> " + diferença+ "% Since last week")
-
-                }
-                renderGraphic(data.mapa);
-            } else {
-                console.log("No data");
+    requestWithToken("GET", '/api/sensorsdata/PeopleInStoreLast14Days/' + store_id, function(data) {
+        if (data) {
+            var number = [data.mapa["MONDAY"], data.mapa["TUESDAY"], data.mapa["WEDNESDAY"], data.mapa["THURSDAY"], data.mapa["FRIDAY"], data.mapa["SATURDAY"], data.mapa["SUNDAY"]];
+            var total_visitors = 0;
+            for (var i=0; i<number.length; i++){
+                total_visitors =total_visitors + number[i];
             }
+            var numbers = [data.mapa["LAST_MONDAY"], data.mapa["LAST_TUESDAY"], data.mapa["LAST_WEDNESDAY"], data.mapa["LAST_THURSDAY"], data.mapa["LAST_FRIDAY"], data.mapa["LAST_SATURDAY"], data.mapa["LAST_SUNDAY"]];
+            var total_visitors_last = 0;
+            for (var x=0; x<numbers.length; x++){
+                total_visitors_last = total_visitors_last + numbers[x];
+            }
+            $("#shopping_capacity").html(total_visitors);
+            let diferença=0
+            if (total_visitors_last ==0 ){
+                diferença=(total_visitors- total_visitors_last)*100
+           
+            }
+            else{
+                diferença=(( total_visitors- total_visitors_last)/total_visitors_last)*100
+                
+            }
+            diferença=diferença.toFixed(2)
+            if (diferença > 0){
+                $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-up text-success' ></i> " + diferença + "% Since last week")
+            }
+            else{
+                $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-down text-warning' ></i> " + diferença+ "% Since last week")
 
-        },
-
-        error: function() {
-            console.log("erro na call");
+            }
+            renderGraphic(data.mapa);
+        } else {
+            console.log("No data");
         }
     })
 }

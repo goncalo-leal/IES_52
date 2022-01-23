@@ -1,6 +1,6 @@
 import consts from "./consts.js";
 import SessionManager from "./session.js";
-import updateView from "./common.js";
+import { updateView, requestWithToken } from "./common.js";
 
 var shoppingCapacity;
 var complete_data;
@@ -33,43 +33,22 @@ $(document).ready(function() {
         var data_complete = {"location":$("#location").val(), "name":$("#store_name").val(),
             "capacity":$("#capacity").val(), "opening":$("#opening").val(), "closing":$("#closing").val(), "img":$("#img_url").val()};
         
-        if ($("#location").val()!="" && $("#store_name").val()!="" && $("#capacity").val()!="" && $("#opening").val()!="" && $("#closing").val()!="" && $("#img_url").val()!="")
-            $.ajax({
-                url: consts.BASE_URL + '/api/addStore/' + SessionManager.get("session").shopping.id,
-                type: "POST", 
-                data: JSON.stringify(data_complete),
-                contentType: "application/json",
-                dataType: "json",
-                success: function() {
-                    console.log("Store added");
-                    window.location.replace("home.html");
-                },
-        
-                error: function() {
-                    console.log("erro na call");
-                }
-            });
+        if ($("#location").val()!="" && $("#store_name").val()!="" && $("#capacity").val()!="" && $("#opening").val()!="" && $("#closing").val()!="" && $("#img_url").val()!="") {
+            requestWithToken("POST", '/api/stores/addStore/' + SessionManager.get("session").shopping.id, function(data) {
+                console.log("Store added");
+                window.location.replace("home.html");
+            }, data_complete)
+        }
     })
 });
 
 const loadMaxStoreCapacity = function() {
-    $.ajax({
-        url: consts.BASE_URL + '/api/Shopping?id=' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                shoppingCapacity = data.capacity;
-                storesCapacity(data.stores);
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log("erro na call");
+    requestWithToken("GET", '/api/shoppings/Shopping?id=' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            shoppingCapacity = data.capacity;
+            storesCapacity(data.stores);
+        } else {
+            console.log("No data");
         }
     })
     return;

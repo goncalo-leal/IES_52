@@ -1,6 +1,6 @@
 import consts from "./consts.js";
 import SessionManager from "./session.js";
-import updateView from "./common.js"
+import {updateView, requestWithToken} from "./common.js"
 
 var store_id = new URLSearchParams(window.location.search).get('id');
 
@@ -27,134 +27,76 @@ const updateStoreViews = function() {
 }
 
 const fetchStore = function() {
-    $.ajax({
-        url: consts.BASE_URL + '/api/Store?id=' + store_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                store = data;
-                var percent = Math.round((store.current_capacity / store.capacity) * 100);
-                var color = "bg-success";
-                if (percent > 80 && percent < 90) {
-                    color = "bg-warning";
-                } 
-                else if (percent >= 90) {
-                    color = "bg-danger";
-                }
-                $('#cur_ocup_box').addClass(color);
-                $('#cur_ocup_num').text(percent + ' %');
-                $('#cur_ocup_bar').width(percent + '%');  
-
-                $('#store_name').text(store.name);
-                $('#store_location').text(store.location);
-            
-                var cur_cap = store.current_capacity;
-                var cap = store.capacity;
-            
-                $("#storecurcap").text(cur_cap);
-                $("#storemaxcap").text(cap);
-                renderDonut(cur_cap, cap, "donutStore");
+    requestWithToken("GET", '/api/stores/Store?id=' + store_id, function(data) {
+        if (data) {
+            store = data;
+            var percent = Math.round((store.current_capacity / store.capacity) * 100);
+            var color = "bg-success";
+            if (percent > 80 && percent < 90) {
+                color = "bg-warning";
+            } 
+            else if (percent >= 90) {
+                color = "bg-danger";
             }
-        },
+            $('#cur_ocup_box').addClass(color);
+            $('#cur_ocup_num').text(percent + ' %');
+            $('#cur_ocup_bar').width(percent + '%');  
 
-        error: function() {
-            console.log(" erro na call");
-        }
-    });
-}
-
-const fetchTodayInfo = function() {
-    $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInStoreToday/'+ store_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            peopletoday = data;
-            $('#peopletoday').text(peopletoday);
-        },
-
-        error: function() {
-            console.log(" erro na call");
-        }
-    });
-}
-
-const fetchLastWeek = function() {
-    $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInStoreLast7Days/'+ store_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            
-            $('#peopletoday').text(peopletoday);
-        },
-
-        error: function() {
-            console.log(" erro na call");
+            $('#store_name').text(store.name);
+            $('#store_location').text(store.location);
+        
+            var cur_cap = store.current_capacity;
+            var cap = store.capacity;
+        
+            $("#storecurcap").text(cur_cap);
+            $("#storemaxcap").text(cap);
+            renderDonut(cur_cap, cap, "donutStore");
         }
     })
 }
-const customersToday = function(){
-    $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInStoreToday/'+ store_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            
-            $('#peopletoday').text(data);
-        },
 
-        error: function() {
-            console.log(" erro na call");
-        }
+const fetchTodayInfo = function() {
+    requestWithToken("GET", '/api/sensorsdata/PeopleInStoreToday/'+ store_id, function(data) {
+        peopletoday = data;
+        $('#peopletoday').text(peopletoday);
+    })
+}
+
+const customersToday = function(){
+    requestWithToken("GET",'/api/sensorsdata/PeopleInStoreToday/'+ store_id , function(data) {
+        $('#peopletoday').text(data);
     })
 }
 
 const loadPeopleByWeek = function() {
-    $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInStoreLast14Days/' + store_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                var number = [data.mapa["MONDAY"], data.mapa["TUESDAY"], data.mapa["WEDNESDAY"], data.mapa["THURSDAY"], data.mapa["FRIDAY"], data.mapa["SATURDAY"], data.mapa["SUNDAY"]];
-                var total_visitors = 0;
-                for (var i=0; i<number.length; i++){
-                    total_visitors =total_visitors + number[i];
-                }
-                var numbers = [data.mapa["LAST_MONDAY"], data.mapa["LAST_TUESDAY"], data.mapa["LAST_WEDNESDAY"], data.mapa["LAST_THURSDAY"], data.mapa["LAST_FRIDAY"], data.mapa["LAST_SATURDAY"], data.mapa["LAST_SUNDAY"]];
-                var total_visitors_last = 0;
-                for (var x=0; x<numbers.length; x++){
-                    total_visitors_last = total_visitors_last + numbers[x];
-                }
-               
-                let diferença=0
-                if (total_visitors_last ==0 ){
-                    diferença=(total_visitors- total_visitors_last)*100
-               
-                }
-                else{
-                    diferença=(( total_visitors- total_visitors_last)/total_visitors_last)*100
-    
-                }
-                diferença=diferença.toFixed(0)
-                $("#Weekly_grouth").text(diferença+"%")
-               
-                renderGraphic(data.mapa);
-            } else {
-                console.log("No data");
+    requestWithToken("GET", '/api/sensorsdata/PeopleInStoreLast14Days/' + store_id, function(data) {
+        if (data) {
+            var number = [data.mapa["MONDAY"], data.mapa["TUESDAY"], data.mapa["WEDNESDAY"], data.mapa["THURSDAY"], data.mapa["FRIDAY"], data.mapa["SATURDAY"], data.mapa["SUNDAY"]];
+            var total_visitors = 0;
+            for (var i=0; i<number.length; i++){
+                total_visitors =total_visitors + number[i];
             }
+            var numbers = [data.mapa["LAST_MONDAY"], data.mapa["LAST_TUESDAY"], data.mapa["LAST_WEDNESDAY"], data.mapa["LAST_THURSDAY"], data.mapa["LAST_FRIDAY"], data.mapa["LAST_SATURDAY"], data.mapa["LAST_SUNDAY"]];
+            var total_visitors_last = 0;
+            for (var x=0; x<numbers.length; x++){
+                total_visitors_last = total_visitors_last + numbers[x];
+            }
+           
+            let diferença=0
+            if (total_visitors_last ==0 ){
+                diferença=(total_visitors- total_visitors_last)*100
+           
+            }
+            else{
+                diferença=(( total_visitors- total_visitors_last)/total_visitors_last)*100
 
-        },
-
-        error: function() {
-            console.log("erro na call");
+            }
+            diferença=diferença.toFixed(0)
+            $("#Weekly_grouth").text(diferença+"%")
+           
+            renderGraphic(data.mapa);
+        } else {
+            console.log("No data");
         }
     })
 }
@@ -195,24 +137,13 @@ const getLastWeekShoppingInfo= function(){
     var date = new Date();
     date.setDate(date.getDate() - 7);
     var finalDate = date.getFullYear()+'-'+ (date.getMonth()+1)+'-' +date.getDate()
-    $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInStoreByhours/' + store_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                renderLinearGraphic(data,"barChartStoreTodayHours")
-            } else {
-                console.log("No data");
-            }
-        },
-
-        error: function() {
-            console.log(" erro na call");
+    requestWithToken("GET", '/api/sensorsdata/PeopleInStoreByhours/' + store_id, function(data) {
+        if (data) {
+            renderLinearGraphic(data,"barChartStoreTodayHours")
+        } else {
+            console.log("No data");
         }
-    });
-
+    })
 }
 
 const renderGraphic = function (mapa) {

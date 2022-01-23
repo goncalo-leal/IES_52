@@ -1,6 +1,6 @@
 import consts from "./consts.js";
 import SessionManager from "./session.js";
-import updateView from "./common.js"
+import { updateView, requestWithToken } from "./common.js"
 
 $(document).ready(function() {
 
@@ -36,42 +36,22 @@ const add_manager = function() {
 
     console.log(data);
 
-    $.ajax({
-        url: consts.BASE_URL + '/api/addStoreManager/' + store,
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        dataType: "json",
-        success: function(data) {
-            alert("Success! Manager added.");
-            window.location.href = "./index.html"
-        },
 
-        error: function() {
-            console.log("erro");
-        }
-
-    })
+    requestWithToken("POST", '/api/storemanagers/addStoreManager/' + store, function(data) {
+        alert("Success! Manager added.");
+        window.location.href = "./home.html"
+    }, data)
 }
 
 const loadStores = function() {
-    $.ajax({
-        url: consts.BASE_URL + '/api/storesShopping/' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                data.forEach(function(e, i) {
-                    $("#store").append($("<option></option>").val(e.id).text(e.name));
-                })
-            } else {
-                console.log("No stores for this shopping");
-            }
-        },
 
-        error: function() {
-            console.log("erro na call");
+    requestWithToken("GET", '/api/shoppings/storesShopping/' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            data.forEach(function(e, i) {
+                $("#store").append($("<option></option>").val(e.id).text(e.name));
+            })
+        } else {
+            console.log("No stores for this shopping");
         }
     })
 }

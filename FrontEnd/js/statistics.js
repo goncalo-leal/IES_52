@@ -1,6 +1,6 @@
 import consts from "./consts.js";
 import SessionManager from "./session.js";
-import updateView from "./common.js"
+import { updateView, requestWithToken } from "./common.js"
 
 
 $(document).ready(function() {
@@ -21,224 +21,149 @@ const initialize = function() {
 }
 
 const loadShoppingByHours = function () {  
-    $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInShoppingByhours/' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data){
-            renderLinearGraphic(data,'shoppingByHours')
-        },
-        error: function(){
-            console.log("Error calling /api/PeopleInShoppingByhours/'")
-        }
+    requestWithToken("GET", '/api/sensorsdata/PeopleInShoppingByhours/' + SessionManager.get("session").shopping.id, function(data) {
+        renderLinearGraphic(data,'shoppingByHours')
     })
 }
 
 
 const loadDataBySensorToday= function(){
-    $.ajax({
-        url: consts.BASE_URL + '/api/AllSensorsForThatShoppingToday/' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
+    requestWithToken("GET", '/api/sensorsdata/AllSensorsForThatShoppingToday/' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
                 
-                renderBarGraphicV2(data,'barChartToday')
-                var shopping =data["Shopping"]
-                var park=data["Park"]
-                var var_shop=0
-                var var_park=0
-                for (const [key, value] of Object.entries(shopping)) {
-                    var_shop+=value
-                  }
-                for (const [key, value] of Object.entries(park)) {
-                    var_park+=value
-                  }
-                renderDonut(var_shop,var_park, "donutChartParkvsShopping", "Shopping vs Park")
+            renderBarGraphicV2(data,'barChartToday')
+            var shopping =data["Shopping"]
+            var park=data["Park"]
+            var var_shop=0
+            var var_park=0
+            for (const [key, value] of Object.entries(shopping)) {
+                var_shop+=value
+              }
+            for (const [key, value] of Object.entries(park)) {
+                var_park+=value
+              }
+            renderDonut(var_shop,var_park, "donutChartParkvsShopping", "Shopping vs Park")
 
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log(" erro na call");
+        } else {
+            console.log("No data");
         }
     })
 }
 
 const loadDataBySensorWeek= function(){
-    $.ajax({
-        url: consts.BASE_URL + '/api/AllSensorsForThatShoppingWeek/' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                renderBarGraphicV2(data,'barChartWeek')
+    requestWithToken("GET", '/api/sensorsdata/AllSensorsForThatShoppingWeek/' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            renderBarGraphicV2(data,'barChartWeek')
 
-                var shopping =data["Shopping"]
-                var park=data["Park"]
-                var var_shop=0
-                var var_park=0
-                for (const [key, value] of Object.entries(shopping)) {
-                    var_shop+=value
-                  }
-                for (const [key, value] of Object.entries(park)) {
-                    var_park+=value
-                  }
-                renderDonut(var_shop,var_park, "donutChartParkvsShoppinglastWeek", "Shopping vs Park")
+            var shopping =data["Shopping"]
+            var park=data["Park"]
+            var var_shop=0
+            var var_park=0
+            for (const [key, value] of Object.entries(shopping)) {
+                var_shop+=value
+              }
+            for (const [key, value] of Object.entries(park)) {
+                var_park+=value
+              }
+            renderDonut(var_shop,var_park, "donutChartParkvsShoppinglastWeek", "Shopping vs Park")
 
 
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log(" erro na call");
+        } else {
+            console.log("No data");
         }
     })
 }
 const loadDataBySensorLastHour= function(){
-    $.ajax({
-        url: consts.BASE_URL + '/api/lastHourShoppingAndParksbySensor/' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                renderBarGraphicV2(data,'barChartLastHour')
+    requestWithToken("GET", '/api/sensorsdata/lastHourShoppingAndParksbySensor/' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            renderBarGraphicV2(data,'barChartLastHour')
 
-                var shopping =data["Shopping"]
-                var park=data["Park"]
-                var var_shop=0
-                var var_park=0
-                for (const [key, value] of Object.entries(shopping)) {
-                    var_shop+=value
-                  }
-                for (const [key, value] of Object.entries(park)) {
-                    var_park+=value
-                  }
-                renderDonut(var_shop,var_park, "donutChartLastHour", "Shopping vs Park")
+            var shopping =data["Shopping"]
+            var park=data["Park"]
+            var var_shop=0
+            var var_park=0
+            for (const [key, value] of Object.entries(shopping)) {
+                var_shop+=value
+              }
+            for (const [key, value] of Object.entries(park)) {
+                var_park+=value
+              }
+            renderDonut(var_shop,var_park, "donutChartLastHour", "Shopping vs Park")
 
 
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log(" erro na call");
+        } else {
+            console.log("No data");
         }
     })
 }
 const loadDataBySensorMonth= function(){
-    $.ajax({
-        url: consts.BASE_URL + '/api/AllSensorsForThatShoppingMonth/' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                renderBarGraphicV2(data,'barChartMonth')
-                var shopping =data["Shopping"]
-                var park=data["Park"]
-                var var_shop=0
-                var var_park=0
-                for (const [key, value] of Object.entries(shopping)) {
-                    var_shop+=value
-                  }
-                for (const [key, value] of Object.entries(park)) {
-                    var_park+=value
-                  }
-                renderDonut(var_shop,var_park, "donutChartParkvsShoppinglastMonth", "Shopping vs Park")
+    requestWithToken("GET", '/api/sensorsdata/AllSensorsForThatShoppingMonth/' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            renderBarGraphicV2(data,'barChartMonth')
+            var shopping =data["Shopping"]
+            var park=data["Park"]
+            var var_shop=0
+            var var_park=0
+            for (const [key, value] of Object.entries(shopping)) {
+                var_shop+=value
+              }
+            for (const [key, value] of Object.entries(park)) {
+                var_park+=value
+              }
+            renderDonut(var_shop,var_park, "donutChartParkvsShoppinglastMonth", "Shopping vs Park")
 
 
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log(" erro na call");
+        } else {
+            console.log("No data");
         }
     })
 }
 
 const compareLastWeek= function(){
-    $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInShoppingTodayCompareWithLaskWeek/' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                var dif = data["Today"] 
-                var dif2 = data["LastWeek"]
-                $("#TextoComparatorioSemanaPassada").text("Last week around this time " +dif2+ " people entered. \n Today "+ dif +" people entered")
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log(" erro na call");
+    requestWithToken("GET", '/api/sensorsdata/PeopleInShoppingTodayCompareWithLaskWeek/' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            var dif = data["Today"] 
+            var dif2 = data["LastWeek"]
+            $("#TextoComparatorioSemanaPassada").text("Last week around this time " +dif2+ " people entered. \n Today "+ dif +" people entered")
+        } else {
+            console.log("No data");
         }
     })
 }
 const loadPeopleByWeek = function() {
-    $.ajax({
-        url: consts.BASE_URL + '/api/ParksMovementInShoppingLast14Days/' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                var number = [data.mapa["MONDAY"], data.mapa["TUESDAY"], data.mapa["WEDNESDAY"], data.mapa["THURSDAY"], data.mapa["FRIDAY"], data.mapa["SATURDAY"], data.mapa["SUNDAY"]];
-                var total_visitors = 0;
-                for (var i=0; i<number.length; i++){
-                    total_visitors =total_visitors + number[i];
-                }
-                var numbers = [data.mapa["LAST_MONDAY"], data.mapa["LAST_TUESDAY"], data.mapa["LAST_WEDNESDAY"], data.mapa["LAST_THURSDAY"], data.mapa["LAST_FRIDAY"], data.mapa["LAST_SATURDAY"], data.mapa["LAST_SUNDAY"]];
-                var total_visitors_last = 0;
-                for (var x=0; x<numbers.length; x++){
-                    total_visitors_last = total_visitors_last + numbers[x];
-                }
-                $("#shopping_capacity").html(total_visitors);
-                let diferença=0
-                if (total_visitors_last ==0 ){
-                    diferença=(total_visitors- total_visitors_last)*100
-               
-                }
-                else{
-                    diferença=(( total_visitors- total_visitors_last)/total_visitors_last)*100
-                    
-                }
-                diferença=diferença.toFixed(2)
-                if (diferença > 0){
-                    $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-up text-success' ></i> " + diferença + "% Since last week")
-                }
-                else{
-                    $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-down text-warning' ></i> " + diferença+ "% Since last week")
-
-                }
-                renderGraphic(data.mapa);
-            } else {
-                console.log("No data");
+    requestWithToken("GET", '/api/sensorsdata/ParksMovementInShoppingLast14Days/' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            var number = [data.mapa["MONDAY"], data.mapa["TUESDAY"], data.mapa["WEDNESDAY"], data.mapa["THURSDAY"], data.mapa["FRIDAY"], data.mapa["SATURDAY"], data.mapa["SUNDAY"]];
+            var total_visitors = 0;
+            for (var i=0; i<number.length; i++){
+                total_visitors =total_visitors + number[i];
             }
+            var numbers = [data.mapa["LAST_MONDAY"], data.mapa["LAST_TUESDAY"], data.mapa["LAST_WEDNESDAY"], data.mapa["LAST_THURSDAY"], data.mapa["LAST_FRIDAY"], data.mapa["LAST_SATURDAY"], data.mapa["LAST_SUNDAY"]];
+            var total_visitors_last = 0;
+            for (var x=0; x<numbers.length; x++){
+                total_visitors_last = total_visitors_last + numbers[x];
+            }
+            $("#shopping_capacity").html(total_visitors);
+            let diferença=0
+            if (total_visitors_last ==0 ){
+                diferença=(total_visitors- total_visitors_last)*100
+           
+            }
+            else{
+                diferença=(( total_visitors- total_visitors_last)/total_visitors_last)*100
+                
+            }
+            diferença=diferença.toFixed(2)
+            if (diferença > 0){
+                $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-up text-success' ></i> " + diferença + "% Since last week")
+            }
+            else{
+                $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-down text-warning' ></i> " + diferença+ "% Since last week")
 
-        },
-
-        error: function() {
-            console.log("erro na call");
+            }
+            renderGraphic(data.mapa);
+        } else {
+            console.log("No data");
         }
     })
 }

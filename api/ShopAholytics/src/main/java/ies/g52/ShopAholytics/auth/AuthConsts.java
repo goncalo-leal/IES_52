@@ -4,7 +4,7 @@ public class AuthConsts {
 
     // JWT PARAMS
     public static final String SECRET = "TESTE";
-    public static final long EXPIRATION = 900_000;
+    public static final long EXPIRATION = 900_000 * 60;
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_KEY = "Authorization";
     public static final String JWT_ROLE_CLAIM = "ROLE";
@@ -15,6 +15,13 @@ public class AuthConsts {
 
     // ENDPOINT MANAGEMENT
     public static final String LOG_IN_URL = "/auth/login";
+
+    public static final String[] PUBLIC_ENDPOINTS = {
+        "/api/shoppings/Shoppings",
+        "/api/shoppings/Shopping"
+    };
+
+
     public static final String[] SHOPPING_MANAGER_PROTECTED_ENDPOINTS = {
         "/mq/*",
         "/api/parks/*",
@@ -30,21 +37,22 @@ public class AuthConsts {
         "/api/storemanagers/StoreManagers",
         "/api/storemanagers/StoreManagerShopping/{id}",
         "/api/storemanagers/deleteStoreManager/{id}",
+        "/api/storemanagers/updateAcceptStoreManager/{user}",
+        "api/updateBlockStoreManager/{user}",
 
         "/api/stores/addStore/{pid}",
         "/api/stores/Stores",
 
         "/api/shoppingmanangers/*",
 
-        "/api/shoppings/*",
+        "/api/shoppings/updateShopping",
+        "/api/shoppings/deleteShopping/{id}",
 
         "/api/sensorsstore/*",
 
         "/api/sensorsshopping/*",
 
         "/api/sensorspark/*",
-
-        "/api/sensorsdata/*",
 
         "/api/sensors/deleteSensor/{id}"
     };

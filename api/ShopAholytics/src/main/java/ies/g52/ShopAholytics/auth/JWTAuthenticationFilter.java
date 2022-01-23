@@ -15,6 +15,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,17 +26,24 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import ies.g52.ShopAholytics.models.StoreManager;
 import ies.g52.ShopAholytics.models.User;
 import ies.g52.ShopAholytics.repository.UserRepository;
+import ies.g52.ShopAholytics.services.ShoppingManagerService;
+import ies.g52.ShopAholytics.services.StoreManagerService;
 import ies.g52.ShopAholytics.auth.AuthConsts;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
     private UserRepository userRepository;
+    private StoreManagerService storeManagerService;
+    private ShoppingManagerService shoppingManagerService;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, UserRepository userRepository, StoreManagerService storeManagerService, ShoppingManagerService shoppingManagerService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
+        this.storeManagerService = storeManagerService;
+        this.shoppingManagerService = shoppingManagerService;
         setFilterProcessesUrl(AuthConsts.LOG_IN_URL);
     }
 
@@ -64,9 +73,24 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                         .sign(Algorithm.HMAC512(AuthConsts.SECRET.getBytes()));
 
         Map<String, Object> body = new HashMap<>();
+        Map<String, Object> userDTO = new HashMap<>();
+        Map<String, Object> workDTO = new HashMap<>();
 
-        body.put("id", u.getId());
-        body.put("email", u.getEmail());
+        userDTO.put("id", u.getId());
+        userDTO.put("authority", u.getAuthority());
+        userDTO.put("name", u.getName());
+
+
+        StoreManager user = storeManagerService.getStoreManagerById(u.getId());
+        if ( user == null) {
+            workDTO.put("id", shoppingManagerService.getShoppingManagerById(u.getId()).getShopping().getId());
+            body.put("shopping", workDTO);
+        } else {
+            workDTO.put("id", user.getStore().getId());
+            body.put("store", workDTO);
+        }
+
+        body.put("user", userDTO);
         body.put("token", token);
 
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);

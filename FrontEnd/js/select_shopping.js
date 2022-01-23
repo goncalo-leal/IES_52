@@ -1,6 +1,6 @@
 import consts from "./consts.js";
 import SessionManager from "./session.js";
-import updateView from "./common.js";
+import { updateView, requestWithToken } from "./common.js";
 
 $(document).ready(function() {
 
@@ -23,7 +23,7 @@ $(document).ready(function() {
 
 const populateSelect = function() {
     $.ajax({
-        url: consts.BASE_URL + '/api/Shoppings',
+        url: consts.BASE_URL + '/api/shoppings/Shoppings',
         type: "GET", 
         contentType: "application/json",
         dataType: "json",

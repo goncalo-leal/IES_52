@@ -1,6 +1,6 @@
 import consts from "./consts.js";
 import SessionManager from "./session.js";
-import updateView from "./common.js";
+import { updateView, requestWithToken } from "./common.js";
 
 var shoppingCapacity;
 var maxCapacity;
@@ -56,87 +56,56 @@ $(document).ready(function () {
                 "closing":  [parseInt(closing[0]), parseInt(closing[1])]
             };
 
-            $.ajax({
-                url: consts.BASE_URL + '/api/updateStore',
-                type: "PUT", 
-                data: JSON.stringify(data),
-                contentType: "application/json",
-                dataType: "json",
-                success: function() {
-                    console.log("Store added");
-                    window.location.replace("store_management.html");
-                },        
-                error: function() {
-                    console.log("erro na call");
-                }
-            });
+            requestWithToken("PUT", '/api/stores/updateStore', function(data) {
+                console.log("Store added");
+                window.location.replace("store_management.html");
+            }, data)
         }
     });
 });
 
 const loadStore = function(store_id) {
-    $.ajax({
-        url: consts.BASE_URL + '/api/Store?id=' + store_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                console.log(data);
+    requestWithToken("GET", '/api/stores/Store?id=' + store_id, function(data) {
+        if (data) {
+            console.log(data);
 
-                $("#store_name").val(data.name);
-                $("#location").val(data.location);
-                $("#capacity").val(data.capacity);
+            $("#store_name").val(data.name);
+            $("#location").val(data.location);
+            $("#capacity").val(data.capacity);
 
-                let opening_hours = data.opening[0]
-                if (opening_hours < 10)
-                    opening_hours = "0" + opening_hours
+            let opening_hours = data.opening[0]
+            if (opening_hours < 10)
+                opening_hours = "0" + opening_hours
 
-                let opening_minutes = data.opening[1]
-                if (opening_minutes < 10)
-                    opening_minutes = "0" + opening_minutes
+            let opening_minutes = data.opening[1]
+            if (opening_minutes < 10)
+                opening_minutes = "0" + opening_minutes
 
-                let closing_hours = data.closing[0]
-                if (closing_hours < 10)
-                    closing_hours = "0" + closing_hours
+            let closing_hours = data.closing[0]
+            if (closing_hours < 10)
+                closing_hours = "0" + closing_hours
 
-                let closing_minutes = data.closing[1]
-                if (closing_minutes < 10)
-                    closing_minutes = "0" + closing_minutes
+            let closing_minutes = data.closing[1]
+            if (closing_minutes < 10)
+                closing_minutes = "0" + closing_minutes
 
-                $("#opening").val(opening_hours + ":" + opening_minutes)
-                $("#closing").val(closing_hours + ":" + closing_minutes)
-            } else {
-                console.log("No data");
-            }
-        },
-        error: function() {
-            console.log("erro na call");
+            $("#opening").val(opening_hours + ":" + opening_minutes)
+            $("#closing").val(closing_hours + ":" + closing_minutes)
+        } else {
+            console.log("No data");
         }
-    });
+    })
 }
 
 const loadMaxStoreCapacity = function() {
-    $.ajax({
-        url: consts.BASE_URL + '/api/Shopping?id=' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                shoppingCapacity = data.capacity;
-                storesCapacity(data.stores);
-            } else {
-                console.log("No data");
-            }
-
-        },
-
-        error: function() {
-            console.log("erro na call");
+    requestWithToken("GET", '/api/shoppings/Shopping?id=' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            shoppingCapacity = data.capacity;
+            storesCapacity(data.stores);
+        } else {
+            console.log("No data");
         }
     })
-    return;
 }
 
 const storesCapacity = function(data) {

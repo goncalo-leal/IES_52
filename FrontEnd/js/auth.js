@@ -24,6 +24,7 @@ const login = function() {
             if (data) {
                 console.log(data)
                 SessionManager.set("session", data);
+                SessionManager.set("token", data.token);
                 
                 if (SessionManager.get("session").user.authority == "ROLE_SHOPPING_MANAGER") {
                     window.location.href = "./home.html";

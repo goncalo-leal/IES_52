@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import org.hibernate.event.spi.SaveOrUpdateEventListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,6 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.boot.CommandLineRunner;
 @SpringBootApplication
+@EnableAutoConfiguration
 public class ShopAholyticsApplication {
 	
 	
