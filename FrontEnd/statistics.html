@@ -17,7 +17,8 @@
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-  
+   <!-- daterange picker -->
+ <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/daterangepicker/daterangepicker.css">
    <!-- Tempusdominus Bootstrap 4 -->
    <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 </head>
@@ -64,132 +65,51 @@
         </div>
     </div>    
     <div class="row mr-1 ml-1">
+       
+        
+
+        
         <div class="col-12 col-lg-6">
-            <div class="card">
-                <div class="card-header border-0">
-                    <div class="d-flex justify-content-between">
-                        <h3 class="card-title">Entrances by Sensor</h3>
+            <div class="card card-primary card-tabs">
+                <div class="card-header p-2 pt-1">
+                    <ul class="nav" id="nav-tabs-entranceSensor" role="tablist">
+                        <li class="pt-2 px-3"><h3 class="card-title">Entrances by Sensor</h3></li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <select id="nav-tabs-entranceSensor-select" class="form-control select2 mt-1 mb-1" style="width: 100%;">
+                        <option selected='selected' value="lastHour">Last Hour</option>
+                        <option value="today">Today</option>
+                        <option value="lastWeek">Last Week</option>
+                        <option value="lastMonth">Last Month</option>                        
+                    </select>
+                    <div class="position-relative mb-4 mt-4">
+                        <canvas class='d-block w-100' heigh='200' id='test_canvas' ></canvas>
                     </div>
                 </div>
-
+            </div>
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="card card-primary card-tabs">
+                <div class="card-header p-2 pt-1">
+                    <ul class="nav" id="nav-tabs-entranceShopping" role="tablist">
+                        <li class="pt-2 px-3"><h3 class="card-title">Entraces by Shopping vs by Park</h3></li>
+                    </ul>
+                </div>
                 <div class="card-body">
-                    <div id="carouselParksEntrace" class="carousel slide" data-ride="carousel">
-                        <!-- velhices por baixo do carrousel que indica quantos existem e qual deles está ativo -->
-                        
-
-                        <!-- Dentro desta div vão estar os elementos que formam o carousel -->
-                        <div id="itemsParksCarousel" class="carousel-inner">
-                            <div class="carousel-item active">
-                                <canvas id="barChartLastHour" style="min-height: 350px; height: 350px; max-height: 350px;" height="350"></canvas>
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5 style="color: black;">Last Hour</h5>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <canvas id="barChartToday" style="min-height: 350px; height: 350px; max-height: 350px;" height="350"></canvas>
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5 style="color: black;">Today</h5>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <canvas id="barChartWeek" style="min-height: 350px; height: 350px; max-height: 350px;" height="350"></canvas>
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5 style="color: black;">Last Week</h5>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <canvas id="barChartMonth" style="min-height: 350px; height: 350px; max-height: 350px;" height="350"></canvas>
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5 style="color: black;">Last Month</h5>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- seta que anda para trás-->
-                        <a class="carousel-control-prev" href="#carouselParksEntrace" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-
-                        <!-- seta que anda para a frente-->
-                        <a class="carousel-control-next" href="#carouselParksEntrace" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
+                    <select id="nav-tabs-entranceShopping-select" class="form-control select2 mt-1 mb-1" style="width: 100%;">
+                        <option selected='selected' value="lastHour">Last Hour</option>
+                        <option value="today">Today</option>
+                        <option value="lastWeek">Last Week</option>
+                        <option value="lastMonth">Last Month</option>     
+                    </select>
+                    <div class="position-relative mb-4 mt-4">
+                        <canvas class='d-block w-100' heigh='200' id='test_canvas_shopping' ></canvas>
                     </div>
                 </div>
             </div>
         </div>
         
-
-        <div class="col-12 col-lg-6">
-            <div class="card">
-                <div class="card-header border-0">
-                    <h3 class="card-title">Entraces by Shopping vs by Park</h3>
-                </div>
-
-                <div class="card-body">
-                    <div id="carouselShoppingEntrace" class="carousel slide" data-ride="carousel">
-                        <ol class="carousel-indicators" id="to_remove3">
-                            <li data-target="#carouselShoppingEntrace" data-slide-to="0" class="active"></li>
-                            <li data-target="#carouselShoppingEntrace" data-slide-to="1" class=""></li>
-                            <li data-target="#carouselShoppingEntrace" data-slide-to="2" class=""></li>
-                            <li data-target="#carouselShoppingEntrace" data-slide-to="3" class=""></li>
-                        </ol>
-
-                        <div id="itemsParks" class="carousel-inner">
-                            <div class="carousel-item active">
-                                <canvas id="donutChartLastHour" style="min-height: 350px; height: 350px; max-height: 350px; max-width: 100%; display: block; width: 323px;" width="323" height="250" class="chartjs-render-monitor"></canvas>
-                                <div   class="align-items-center justify-content-center d-none" style=" height:350px " id="donutChartLastHourWarning" >
-                                    <p class="text-center text-danger " >No data available</p>
-                                </div>
-                                <div class="carousel-caption  d-md-block">
-                                    <h5 style="color: black;">Last Hour</h5>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <canvas id="donutChartParkvsShopping" style="min-height: 350px; height: 350px; max-height: 350px; max-width: 100%; display: block; width: 323px;" width="323" height="250" class="chartjs-render-monitor"></canvas>
-                                <div   class="align-items-center justify-content-center d-none" style=" height:350px " id="donutChartParkvsShoppingWarning" >
-                                    <p class="text-center text-danger " >No data available</p>
-                                </div>
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5 style="color: black;">Today</h5>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <canvas id="donutChartParkvsShoppinglastWeek" style="min-height: 350px; height: 350px; max-height: 350px; max-width: 100%; display: block; width: 323px;" width="323" height="250" class="chartjs-render-monitor"></canvas>
-                                <div  class=" align-items-center justify-content-center d-none" style=" height:350px " id="donutChartParkvsShoppinglastWeekWarning" >
-                                    <p  class="text-center text-danger">No data available</p>
-                                </div>
-                                
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5 style="color: black;">Last Week</h5>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <canvas id="donutChartParkvsShoppinglastMonth" style="min-height: 350px; height: 350px; max-height: 350px; max-width: 100%; display: block; width: 323px;" width="323" height="250" class="chartjs-render-monitor"></canvas>
-                                <div  class=" align-items-center justify-content-center  d-none" style=" height:350px " id="donutChartParkvsShoppinglastMonthWarning" >
-                                    <p  class="text-center text-danger ">No data available</p>
-                                </div>
-                                
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5 style="color: black;">Last Month</h5>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a class="carousel-control-prev" href="#carouselShoppingEntrace" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                            <a class="carousel-control-next" href="#carouselShoppingEntrace" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </div>             
-                </div>
-            </div>
-        </div>
     </div>
 <!-- -------------------------------------------------------------------------------------------------------------- -->
 <!--
@@ -245,6 +165,47 @@
         </div>
     </div>
 -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="row">
+                    <div class="col-12 col-md-4">
+                        <div class="d-flex justify-content-between">
+                            <h3 class="card-title">Shopping entrances vs Park  Hours</h3>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <div class="row">
+                            <div class="col-12 col-md-2 float-right">
+                                <p class="text-right"><label>Choose a date:</label></p>
+                            </div>
+                            <div class="col-12 col-md-8">
+                                <div class="form-group">
+                                    <div class="input-group date" id="search_date" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#search_date">
+                                        <div class="input-group-append" data-target="#search_date" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <div class="input-group">
+                                    <a class="btn btn-primary" id="set_date">Render</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="position-relative mb-4">
+                    <canvas id="shoppingByHoursDb" height="350"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
     <div class="col-12">
         <div class="card">
             <div class="card-header border-0">
@@ -325,7 +286,6 @@
 <script src="./AdminLTE-3.1.0/plugins/moment/moment.min.js"></script>
 <!-- Tempusdominus Bootstrap 4 -->
 <script src="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-
 <!-- OPTIONAL SCRIPTS -->
 <script src="./AdminLTE-3.1.0/plugins/chart.js/Chart.js"></script>
 <!-- DataTables  & Plugins -->

@@ -2,9 +2,69 @@ import consts from "./consts.js";
 import SessionManager from "./session.js";
 import { updateView, requestWithToken } from "./common.js"
 
+var date = new Date();
+var day = new Date(date.getTime())
+day= day.getFullYear()+'-'+day.getMonth()+1+'-'+day.getDate()
+var info={};
 
 $(document).ready(function() {
     updateView();
+    $('#search_date').datetimepicker({
+        format: 'DD-MM-YYYY',
+    });
+    $('#search_date input').val(day.split('-').reverse().join('-'))
+
+    $('#set_date').click(function() {
+        day = $('#search_date input').val().split('-').reverse().join('-')
+        console.log(day)
+        loadShoppingByHours();
+    });
+
+    $("#nav-tabs-entranceShopping-select").change(function(e) {
+        var shop, park
+        switch (this.value) {
+            case "today":
+                [shop,park] = info['today_donut']
+                renderDonut(shop,park, "test_canvas_shopping", "Shopping vs Park")
+                break;
+            case "lastWeek":
+                [shop,park] = info['lastWeek_donut']
+                renderDonut(shop,park, "test_canvas_shopping", "Shopping vs Park")
+                break;
+            case "lastMonth":
+                [shop,park] = info['lastMonth_donut']
+                console.log(shop, park)
+                renderDonut(shop,park, "test_canvas_shopping", "Shopping vs Park")
+                break;
+            case "lastHour":
+                [shop,park] = info['lastHour_donut']
+                renderDonut(shop,park, "test_canvas_shopping", "Shopping vs Park")
+                break;
+        }
+    })
+
+
+    $("#nav-tabs-entranceSensor-select").change(function(e) {
+        switch (this.value) {
+            case "today":
+                renderBarGraphicV2(info['today_bar'],'test_canvas')
+                break;
+            case "lastWeek":
+                renderBarGraphicV2(info['lastWeek_bar'],'test_canvas')
+                break;
+            case "lastMonth":
+                renderBarGraphicV2(info['lastMonth_bar'],'test_canvas')
+                break;
+            case "lastHour":
+                renderBarGraphicV2(info['lastHour_bar'],'test_canvas')
+                break;
+        }
+    })
+
+        
+        // renderDonut(tmp_curr, tmp_cap, tmp_id);
+    
+   
 
     initialize();
     setInterval(initialize, 60000);
@@ -13,12 +73,17 @@ $(document).ready(function() {
 const initialize = function() {
     loadPeopleByWeek();
     compareLastWeek();
+
     loadDataBySensorLastHour();
     loadDataBySensorToday();
     loadDataBySensorWeek();
     loadDataBySensorMonth();
+
     loadShoppingByHours();
+    loadShoppingByHoursDay();
+    
 }
+
 
 const loadShoppingByHours = function () {  
     requestWithToken("GET", '/api/sensorsdata/PeopleInShoppingByhours/' + SessionManager.get("session").shopping.id, function(data) {
@@ -26,23 +91,58 @@ const loadShoppingByHours = function () {
     })
 }
 
+const loadShoppingByHoursDay = function () {  
+    
+    console.log(day)
+    $.ajax({
+        url: consts.BASE_URL + '/api/PeopleInShoppingSensorDay/' + SessionManager.get("session").shopping.id +'/'+day,
+        type: "GET", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data){
+            console.log("OKKK",data)
+            var shopping=data["Shopping"]
+            var park = data["Park"]
+            var total = 0
+            for (const [key, value] of Object.entries(park)) {
+                total=total+value
+            }
+            for (const [key, value] of Object.entries(shopping)) {
+                total=total+value
+            }
+            if (total != 0){
+                for (const [key, value] of Object.entries(park)) {
+                    park[key]=value *100/total
+                }
+                for (const [key, value] of Object.entries(shopping)) {
+                    shopping[key]=value *100/total                } 
+            }
+           
+        renderLinearGraphicwith2(shopping,park,'shoppingByHoursDb')
+        },
+        error: function(){
+            console.log("Error calling /api/PeopleInShoppingByhours/'")
+        }
+    })
+}
 
 const loadDataBySensorToday= function(){
     requestWithToken("GET", '/api/sensorsdata/AllSensorsForThatShoppingToday/' + SessionManager.get("session").shopping.id, function(data) {
-        if (data) {
-                
-            renderBarGraphicV2(data,'barChartToday')
+        if (data) { 
+            //renderBarGraphicV2(data,'test_canvas')
+            info['today_bar']=data;
             var shopping =data["Shopping"]
             var park=data["Park"]
             var var_shop=0
             var var_park=0
             for (const [key, value] of Object.entries(shopping)) {
                 var_shop+=value
-              }
+                }
             for (const [key, value] of Object.entries(park)) {
                 var_park+=value
-              }
-            renderDonut(var_shop,var_park, "donutChartParkvsShopping", "Shopping vs Park")
+                }
+            info['today_donut']=[var_shop, var_park]
+            //renderDonut(var_shop,var_park, "test_canvas_shopping", "Shopping vs Park")
 
         } else {
             console.log("No data");
@@ -53,8 +153,8 @@ const loadDataBySensorToday= function(){
 const loadDataBySensorWeek= function(){
     requestWithToken("GET", '/api/sensorsdata/AllSensorsForThatShoppingWeek/' + SessionManager.get("session").shopping.id, function(data) {
         if (data) {
-            renderBarGraphicV2(data,'barChartWeek')
-
+            //renderBarGraphicV2(data,'test_canvas')
+            info['lastWeek_bar']=data;
             var shopping =data["Shopping"]
             var park=data["Park"]
             var var_shop=0
@@ -65,9 +165,9 @@ const loadDataBySensorWeek= function(){
             for (const [key, value] of Object.entries(park)) {
                 var_park+=value
               }
-            renderDonut(var_shop,var_park, "donutChartParkvsShoppinglastWeek", "Shopping vs Park")
-
-
+            info['lastWeek_donut']=[var_shop, var_park];
+            
+            //renderDonut(var_shop,var_park, "test_canvas_shopping", "Shopping vs Park")
         } else {
             console.log("No data");
         }
@@ -76,8 +176,13 @@ const loadDataBySensorWeek= function(){
 const loadDataBySensorLastHour= function(){
     requestWithToken("GET", '/api/sensorsdata/lastHourShoppingAndParksbySensor/' + SessionManager.get("session").shopping.id, function(data) {
         if (data) {
-            renderBarGraphicV2(data,'barChartLastHour')
+            renderBarGraphicV2(data,'test_canvas')
+            $("#nav-tabs-entranceShopping-select").prop("selectedIndex", 0);
+            $("#nav-tabs-entranceSensor-select").prop("selectedIndex", 0);
+            
 
+            
+            info['lastHour_bar']=data;
             var shopping =data["Shopping"]
             var park=data["Park"]
             var var_shop=0
@@ -88,7 +193,8 @@ const loadDataBySensorLastHour= function(){
             for (const [key, value] of Object.entries(park)) {
                 var_park+=value
               }
-            renderDonut(var_shop,var_park, "donutChartLastHour", "Shopping vs Park")
+            info['lastHour_donut']=[var_shop, var_park]
+            renderDonut(var_shop,var_park, "test_canvas_shopping", "Shopping vs Park")
 
 
         } else {
@@ -99,7 +205,8 @@ const loadDataBySensorLastHour= function(){
 const loadDataBySensorMonth= function(){
     requestWithToken("GET", '/api/sensorsdata/AllSensorsForThatShoppingMonth/' + SessionManager.get("session").shopping.id, function(data) {
         if (data) {
-            renderBarGraphicV2(data,'barChartMonth')
+            //renderBarGraphicV2(data,'test_canvas')
+            info['lastMonth_bar']=data;
             var shopping =data["Shopping"]
             var park=data["Park"]
             var var_shop=0
@@ -110,7 +217,8 @@ const loadDataBySensorMonth= function(){
             for (const [key, value] of Object.entries(park)) {
                 var_park+=value
               }
-            renderDonut(var_shop,var_park, "donutChartParkvsShoppinglastMonth", "Shopping vs Park")
+            info['lastMonth_donut']=[var_shop, var_park];
+            //renderDonut(var_shop,var_park, "test_canvas_shopping", "Shopping vs Park")
 
 
         } else {
@@ -442,7 +550,89 @@ const renderBarGraphic = function (data,id) {
         options: barChartOptions
     })
 }
+const renderLinearGraphicwith2= function (data1,data2,id) {
+    var info1 = []
+    var info2=[]
+    var labels=[]
+    for (const [key, value] of Object.entries(data1)) {
+        labels.push(key)
+        info1.push(value)
+    }
+    for (const [key, value] of Object.entries(data2)) {
+        info2.push(value)
+    }
 
+    var areaChartData = {
+        labels  : labels,
+        datasets: [
+            {
+                label               : 'Shopping',
+                borderColor         : '#007bff',
+                data                : info1
+            },
+            {
+                label               : 'Park',
+                borderColor         : '#ced4da',
+                data                : info2
+            },
+        ]
+    }
+
+    var barChartCanvas = $('#'+id).get(0).getContext('2d');
+
+    var barChartData = $.extend(true, {}, areaChartData)
+    var temp0 = areaChartData.datasets[0]
+    var temp1 = areaChartData.datasets[1]
+    barChartData.datasets[0] = temp1
+    barChartData.datasets[1] = temp0
+    var mode = 'index'
+    var intersect = true
+    var ticksStyle = {
+        fontColor: '#495057',
+        fontStyle: 'bold'
+    }
+
+    var barChartOptions = {
+        responsive              : true,
+        maintainAspectRatio     : false,
+        datasetFill             : false,
+        tooltips: {
+            mode: mode,
+            intersect: intersect
+        },
+        hover: {
+            mode: mode,
+            intersect: intersect
+        },
+        legend: {
+            display: false
+        },
+        scales: {
+            yAxes: [{
+                // display: false,
+                gridLines: {
+                    display: true,
+                    lineWidth: '4px',
+                    color: 'rgba(0, 0, 0, .2)',
+                    zeroLineColor: 'transparent'
+                },
+            }],
+            xAxes: [{
+                display: true,
+                gridLines: {
+                    display: false
+                },
+                ticks: ticksStyle
+            }]
+        }
+    }
+
+    new Chart(barChartCanvas, {
+        type: 'line',
+        data: barChartData,
+        options: barChartOptions
+    })
+}
 
 
 const renderGraphic = function (mapa) {

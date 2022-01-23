@@ -41,10 +41,20 @@ $(document).ready(function () {
 
         if (store_name === "" || location === "" || capacity === "" || opening === "" || closing === "") {
             // erro: "All fields must be filled"
+            SweetAlert.fire(
+                'Error!',
+                'All fields must be filled!',
+                'error'
+            )
         }
         else if (parseInt(opening[0]) > parseInt(closing[0]) || 
         (parseInt(opening[0]) == parseInt(closing[0]) && parseInt(opening[1]) > parseInt(closing[1]))) {
             // erro: "Closing must be after opening hours" 
+            SweetAlert.fire(
+                'Error!',
+                'Closing must be after opening hours!',
+                'error'
+            )
         }
         else {
             var data = {
@@ -57,9 +67,25 @@ $(document).ready(function () {
             };
 
             requestWithToken("PUT", '/api/stores/updateStore', function(data) {
-                console.log("Store added");
-                window.location.replace("store_management.html");
-            }, data)
+                SweetAlert.fire(
+                    'Store Updated!',
+                    'You updated the store!',
+                    'success'
+                ).then(function() {
+                    window.location.href = "./store_management.html"
+                })
+            }, 
+            
+            function() {
+                SweetAlert.fire(
+                    'Error!',
+                    'Error editing the store!',
+                    'error'
+                ).then(function() {
+                    window.location.href = "./add_store.html"
+                })
+            },
+            data)
         }
     });
 });
@@ -89,12 +115,19 @@ const loadStore = function(store_id) {
             if (closing_minutes < 10)
                 closing_minutes = "0" + closing_minutes
 
-            $("#opening").val(opening_hours + ":" + opening_minutes)
-            $("#closing").val(closing_hours + ":" + closing_minutes)
-        } else {
-            console.log("No data");
-        }
-    })
+                $("#opening").val(opening_hours + ":" + opening_minutes)
+                $("#closing").val(closing_hours + ":" + closing_minutes)
+            } else {
+                console.log("No data");
+            }
+        },
+        function() {
+            SweetAlert.fire(
+                'Error!',
+                'Error loading store data!',
+                'error'
+            )
+        })
 }
 
 const loadMaxStoreCapacity = function() {
@@ -105,6 +138,14 @@ const loadMaxStoreCapacity = function() {
         } else {
             console.log("No data");
         }
+    },
+
+    function() {
+        SweetAlert.fire(
+            'Error!',
+            'Error loading shopping data!',
+            'error'
+        )
     })
 }
 

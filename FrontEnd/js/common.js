@@ -10,7 +10,7 @@ const updateView = function () {
     $("body").fadeIn(300);
 }
 
-const requestWithToken = function(type, path, callback, data) {
+const requestWithToken = function(type, path, callback, error, data) {
     var ajaxConf = {
         url: consts.BASE_URL + path,
         crossDomain: true,
@@ -22,8 +22,7 @@ const requestWithToken = function(type, path, callback, data) {
         },
 
         error: function(data) {
-            console.log("!!!!!!!!!!!!!!!!!!ERRO")
-
+            //Authorization related errors
             if (data.error) {
                 switch(data.code) {
                     case 401:
@@ -32,8 +31,13 @@ const requestWithToken = function(type, path, callback, data) {
                     case 403:
                         //codigo quando o user ta logged in Mas nao te preMissao para aceder aos endpoints
                 }
+
+            //Logic related errors
+            } else {
+                if (error != null) {
+                    error();
+                }
             }
-        
         }
     }
 

@@ -56,6 +56,14 @@ const userStates = function() {
                 states.push(estados[i].description);
             }
         }
+    },
+
+    function() {
+        SweetAlert.fire(
+            'Error!',
+            'Error loading users information!',
+            'error'
+        )
     })
 }
 
@@ -67,6 +75,14 @@ const loadTable = function() {
         } else {
             console.log("No store managers for this shopping");
         }
+    },
+
+    function() {
+        SweetAlert.fire(
+            'Error!',
+            'Error loading users information!',
+            'error'
+        )
     })
 }
 
@@ -114,16 +130,30 @@ const changeState = function () {
             console.log(idToUpdate)
             requestWithToken("PUT", '/api/storemanagers/updateAcceptStoreManager/'+idToUpdate, function(data) {
                 loadTable();
-            })
+            },
+            function() {
+                SweetAlert.fire(
+                    'Error!',
+                    'Error updating user`s information!',
+                    'error'
+                )
+            }
+            )
         }
 
         if (textSelected === 'Blocked'){
             requestWithToken("PUT", '/api/storemanagers/updateBlockStoreManager/'+idToUpdate, function(data) {
                 loadTable();
-            })
-            // location.reload();
+            },
+            function() {
+                SweetAlert.fire(
+                    'Error!',
+                    'Error updating user`s information!',
+                    'error'
+                )
+            })           
         }
-        
+
     });
 }
 

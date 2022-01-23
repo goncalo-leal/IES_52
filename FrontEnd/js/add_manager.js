@@ -34,13 +34,28 @@ const add_manager = function() {
         "store": store
     };
 
-    console.log(data);
+    
 
 
     requestWithToken("POST", '/api/storemanagers/addStoreManager/' + store, function(data) {
-        alert("Success! Manager added.");
-        window.location.href = "./home.html"
-    }, data)
+        SweetAlert.fire(
+            'Store Manager Added!',
+            'You added a new store manager!',
+            'success'
+        ).then(function() {
+            window.location.href = "./user_management.html"
+        })
+    }, 
+    function() {
+        SweetAlert.fire(
+            "Can't add store manager!",
+            'Error adding new store manager',
+            'error'
+        ).then(function() {
+            window.location.href = "./add_user.html"
+        })
+    },
+    data)
 }
 
 const loadStores = function() {
@@ -53,5 +68,15 @@ const loadStores = function() {
         } else {
             console.log("No stores for this shopping");
         }
+    },
+
+    function() {
+        SweetAlert.fire(
+            "Error!",
+            'Cannot load data!',
+            'error'
+        ).then(function() {
+            window.location.href = "./add_user.html"
+        })
     })
 }

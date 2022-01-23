@@ -35,9 +35,25 @@ $(document).ready(function() {
         
         if ($("#location").val()!="" && $("#store_name").val()!="" && $("#capacity").val()!="" && $("#opening").val()!="" && $("#closing").val()!="" && $("#img_url").val()!="") {
             requestWithToken("POST", '/api/stores/addStore/' + SessionManager.get("session").shopping.id, function(data) {
-                console.log("Store added");
-                window.location.replace("home.html");
-            }, data_complete)
+                SweetAlert.fire(
+                    'Store Added!',
+                    'You added a new store to the shopping!',
+                    'success'
+                ).then(function() {
+                    window.location.href = "./home.html"
+                })
+            }, 
+            
+            function() {
+                SweetAlert.fire(
+                    'Error!',
+                    'Error adding the store!',
+                    'error'
+                ).then(function() {
+                    window.location.href = "./add_store.html"
+                })
+            },
+            data_complete)
         }
     })
 });
@@ -45,12 +61,25 @@ $(document).ready(function() {
 const loadMaxStoreCapacity = function() {
     requestWithToken("GET", '/api/shoppings/Shopping?id=' + SessionManager.get("session").shopping.id, function(data) {
         if (data) {
-            shoppingCapacity = data.capacity;
-            storesCapacity(data.stores);
+            if (data) {
+                shoppingCapacity = data.capacity;
+                storesCapacity(data.stores);
+            } else {
+                console.log("No data");
+            }
         } else {
             console.log("No data");
         }
+    }, function() {
+        SweetAlert.fire(
+            'Error!',
+            'Error calling the method! ' + consts.BASE_URL + '/api/Shopping?id=' + SessionManager.get("session").shopping.id ,
+            'error'
+        ).then(function() {
+            window.location.href = "./add_store.html"
+        })
     })
+
     return;
 }
 
