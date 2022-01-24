@@ -22,7 +22,7 @@ import ies.g52.ShopAholytics.services.UserService;
 
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/sensorspark")
 public class SensorParkController {
     @Autowired
     private SensorParkService SensorParkService;

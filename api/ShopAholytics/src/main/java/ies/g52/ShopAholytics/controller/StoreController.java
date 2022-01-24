@@ -2,6 +2,7 @@ package ies.g52.ShopAholytics.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import ies.g52.ShopAholytics.models.Shopping;
@@ -11,7 +12,7 @@ import ies.g52.ShopAholytics.services.StoreService;
 
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/stores")
 public class StoreController {
     @Autowired
     private StoreService storeService;

@@ -12,9 +12,12 @@ import javax.transaction.Transactional;
 import org.hibernate.event.spi.SaveOrUpdateEventListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import ies.g52.ShopAholytics.auth.AuthConsts;
 import ies.g52.ShopAholytics.enumFolder.SensorEnum;
 import ies.g52.ShopAholytics.models.Shopping;
 import ies.g52.ShopAholytics.models.Park;
@@ -41,6 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.boot.CommandLineRunner;
 @SpringBootApplication
+@EnableAutoConfiguration
 public class ShopAholyticsApplication {
 	
 	
@@ -76,7 +80,7 @@ public class ShopAholyticsApplication {
 				storeService.saveStore(jumbo);
 				storeService.saveStore(hm);
 
-				User user = new User("admin", "admin@ua.pt" ,"Administrador","male","1988-07-28",repository.getUserStateById(2), "ROLE_SHOPPING_MANAGER");
+				User user = new User(new BCryptPasswordEncoder().encode("admin"), "admin@ua.pt" ,"Administrador","male","1988-07-28",repository.getUserStateById(2), AuthConsts.SHOPPING_MANAGER);
 				ShoppingManagerServices.saveShoppingManager(new ShoppingManager(user, shoppingService.getShoppingById(1)));
 				userService.saveUser(user);
 

@@ -1,6 +1,6 @@
 import consts from "./consts.js";
 import SessionManager from "./session.js";
-import updateView from "./common.js"
+import { updateView } from "./common.js"
 
 var stores = [];
 var parks = [];
@@ -40,8 +40,8 @@ const update_index_view = function() {
 const render_shopping_info = function() {
     clear_view();
     $.ajax({
-        url: consts.BASE_URL + '/api/Shopping?id=' + shopping_id,
-        type: "GET", 
+        url: consts.BASE_URL + '/api/shoppings/Shopping?id=' + shopping_id,
+        type: "GET",
         contentType: "application/json",
         dataType: "json",
         success: function(data) {

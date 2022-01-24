@@ -11,7 +11,7 @@ import ies.g52.ShopAholytics.services.StoreService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/products/")
 public class ProductController {
     @Autowired
     private ProductService productService;

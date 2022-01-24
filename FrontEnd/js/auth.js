@@ -30,14 +30,17 @@ const login = function() {
     var psw = $("#psw").val();
     $("#login_error").text("");
     $.ajax({
-        url: consts.BASE_URL + '/auth/login/?email=' + email + "&password=" + psw,
+        url: consts.BASE_URL + '/auth/login',
         type: "POST",
         contentType: "application/json",
-        dataType: "json",
+        crossDomain: true,
+        data: JSON.stringify({"email": email, "password": psw}),
         success: function(data) {
             if (data) {
                 console.log(data)
                 SessionManager.set("session", data);
+                SessionManager.set("token", data.token);
+                
                 if (SessionManager.get("session").user.authority == "ROLE_SHOPPING_MANAGER") {
                     window.location.href = "./home.html";
                 } else {

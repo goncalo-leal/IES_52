@@ -1,11 +1,12 @@
+import { requestWithToken } from "./common.js";
 import consts from "./consts.js";
 import SessionManager from "./session.js";
 
 
 $(document).ready(function () {
     loadUserInformation();
-    $("#submit").click(function (e){ 
-        e.preventDefault()
+    $("#submit").click(function (e){
+        e.preventDefault() 
         updateData()
     });
 });
@@ -15,44 +16,35 @@ var n_nome, n_email, n_pass1, n_pass2;
 
 
 const loadUserInformation = function(){
-    
-    $.ajax({
-        url: consts.BASE_URL + '/api/User?id=' + SessionManager.get("session").user.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                $("#nome_bar").html(data.name);
-                nome = data.name;
-                $("#nome").val(data.name);
-                $("#email").val(data.email);
-                email = data.email;
-                pass = data.password;
-                gender = data.gender;
-                id = data.id;
-                state_id = data.state.id;
-                state_desc = data.state.description;
-                $("#password").val(pass);
-                $("#confirm_password").val(pass);
-                $("#dateTimePicker").val(data.birthday);
-                $("#dateTimePicker").attr('readonly', 'readonly');
-                
-                
+    requestWithToken("GET", '/api/users/User?id=' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            $("#nome_bar").html(data.name);
+            nome = data.name;
+            $("#nome").val(data.name);
+            $("#email").val(data.email);
+            email = data.email;
+            pass = data.password;
+            gender = data.gender;
+            id = data.id;
+            state_id = data.state.id;
+            state_desc = data.state.description;
+            //$("#password").val(pass);
+            //$("#confirm_password").val(pass);
+            $("#dateTimePicker").val(data.birthday);
+            $("#dateTimePicker").attr('readonly', 'readonly');
+            
 
-            } else {
-                console.log("No store for this shopping");
-            }
-        },
-
-        error: function() {
-            SweetAlert.fire(
-                'Error!',
-                'Error loading user`s information!',
-                'error'
-            )
+        } else {
+            console.log("No store for this shopping");
         }
-    })
+
+    }, function() {
+        SweetAlert.fire(
+            'Error!',
+            'Error loading user`s information!',
+            'error'
+        )
+    });
 }
 
 const updateData = function(){
@@ -85,33 +77,26 @@ const updateData = function(){
         }
         else{
             var data = {"id":id,"password":n_pass1,"email":n_email,"name":n_nome,"gender":gender,"birthday":birthday,"state":{"id":state_id,"description":state_desc}}
+            requestWithToken("PUT", '/api/users/updateUser', function(data) {
+                var tp = SessionManager.get("session");
+                tp.user.name = n_nome;
+                SessionManager.set("session", tp);
+                SweetAlert.fire(
+                    'Updated!',
+                    'Users information updated',
+                    'success'
+                )
+                window.location.href = "./home.html";
+            },
             
-            $.ajax({
-                url: consts.BASE_URL + '/api/updateUser',
-                type: "PUT", 
-                data: JSON.stringify(data), 
-                contentType: "application/json",
-                dataType: "json",
-                success: function(){
-                    var tmp = SessionManager.get("session");
-                    tmp.user=data
-                    SessionManager.set("session", tmp);
-                    SweetAlert.fire(
-                        'Updated!',
-                        'Users information updated',
-                        'success'
-                    )
-                },
-                error: function(){
-                    SweetAlert.fire(
-                        'Error!',
-                        'Users information not updated',
-                        'error'
-                    )
-                }
-
-            })
-         
+            function() {
+                SweetAlert.fire(
+                    'Error!',
+                    'Users information not updated',
+                    'error'
+                )
+            },
+            data);        
         }
     }
 

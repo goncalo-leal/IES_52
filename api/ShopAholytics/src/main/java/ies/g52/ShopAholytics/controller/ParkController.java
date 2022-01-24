@@ -8,7 +8,7 @@ import ies.g52.ShopAholytics.services.ShoppingServices;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/parks/")
 public class ParkController {
     @Autowired
     private ParkService parkService;

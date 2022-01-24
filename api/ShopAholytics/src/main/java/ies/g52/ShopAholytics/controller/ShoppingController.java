@@ -15,7 +15,7 @@ import ies.g52.ShopAholytics.services.StoreManagerService;
 
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/shoppings")
 public class ShoppingController {
     @Autowired
     private ShoppingServices shoppingService;
