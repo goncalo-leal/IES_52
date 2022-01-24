@@ -13,7 +13,7 @@ $(document).ready(function() {
     })
     //Date picker
     $('#birthdaydate').datetimepicker({
-        format: 'L'
+        format: 'DD-MM-YYYY',
     });
 });
 
