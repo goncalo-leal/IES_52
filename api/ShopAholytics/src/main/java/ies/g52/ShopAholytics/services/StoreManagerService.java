@@ -44,15 +44,6 @@ public class StoreManagerService {
         return repository.findById((int)id).orElse(null);
     }
 
-    public StoreManager acceptStoreManagerIv(StoreManager storeManager) {
-        StoreManager a = getStoreManagerById(storeManager.getId());
-        User u= a.getUser();
-        u.setState(userStateService.getUserStateById(2));
-        userService.updateUser(u);
-        return updateStoreManager(storeManager);
-
-    }
-
     public String deleteStoreManager(int id) {
         repository.deleteById(id);
         return "StoreManager removed !! " + id;

@@ -76,13 +76,6 @@ public class StoreManagerController {
         return StoreManagerServices.getStoreManagerById(id);
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
-    @PutMapping("/acceptInvite")
-    public StoreManager acceptStoreManager(@RequestBody StoreManager storeManager) {
-        return StoreManagerServices.acceptStoreManagerIv(storeManager);
-
-    }
-
     // Os updates são feitos na no store e no user
     @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping("/updateAcceptStoreManager/{user}")
