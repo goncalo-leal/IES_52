@@ -5,7 +5,7 @@ import json
 class Sender:
     def __init__(self) -> None:
         credentials = pika.PlainCredentials('guest', 'guest')
-        self.host = "192.168.160.238" # "192.168.160.238" -> ip da vm
+        self.host = "http://localhost:8080/mq/" # "192.168.160.238" -> ip da vm
         self.port = "5672"
         self.queue = "QUEUE"
         self.exchange = "EN"

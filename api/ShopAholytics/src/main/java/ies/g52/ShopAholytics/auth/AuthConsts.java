@@ -19,7 +19,7 @@ public class AuthConsts {
     public static final String[] PUBLIC_ENDPOINTS = {
         "/api/shoppings/Shoppings",
         "/api/shoppings/Shopping",
-        "/mq/*"
+        "/mq/**"
     };
 
 
@@ -38,7 +38,7 @@ public class AuthConsts {
         "/api/storemanagers/StoreManagerShopping/{id}",
         "/api/storemanagers/deleteStoreManager/{id}",
         "/api/storemanagers/updateAcceptStoreManager/{user}",
-        "api/updateBlockStoreManager/{user}",
+        "/api/updateBlockStoreManager/{user}",
 
         "/api/stores/addStore/{pid}",
         "/api/stores/Stores",
