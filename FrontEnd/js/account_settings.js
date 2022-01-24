@@ -61,14 +61,15 @@ const updateData = function(){
         )
     }
     else{
-        if (nome==n_nome && email == n_email && n_pass1 ==pass){
+        if (nome==n_nome && email == n_email && (n_pass1=="" && n_pass2=="")){
             SweetAlert.fire(
                 'Error!',
                 'User\'s information not updated',
                 'error'
             )
         }
-        else if(n_nome==="" || n_email==="" || n_pass1==="" || n_pass2===""){
+        else if(n_nome==="" || n_email===""){
+            console.log(SessionManager.get("session").user)
             SweetAlert.fire(
                 'Error!',
                 'All fields must be filled',

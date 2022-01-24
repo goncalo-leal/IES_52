@@ -17,7 +17,7 @@ $(document).ready(function() {
     $('#set_date').click(function() {
         day = $('#search_date input').val().split('-').reverse().join('-')
         console.log(day)
-        loadShoppingByHours();
+        loadShoppingByHoursDay();
     });
 
     $("#nav-tabs-entranceShopping-select").change(function(e) {
@@ -93,20 +93,14 @@ const loadShoppingByHours = function () {
 
 const loadShoppingByHoursDay = function () {  
     
-    console.log(day)
-    $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInShoppingSensorDay/' + SessionManager.get("session").shopping.id +'/'+day,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data){
-            console.log("OKKK",data)
-            var shopping=data["Shopping"]
+    requestWithToken("GET",'/api/sensorsdata/PeopleInShoppingSensorDay/' + SessionManager.get("session").shopping.id +'/'+day , function(data){
+        var shopping=data["Shopping"]
             var park = data["Park"]
             var total = 0
             for (const [key, value] of Object.entries(park)) {
                 total=total+value
             }
+            console.log("total "+total)
             for (const [key, value] of Object.entries(shopping)) {
                 total=total+value
             }
@@ -117,13 +111,9 @@ const loadShoppingByHoursDay = function () {
                 for (const [key, value] of Object.entries(shopping)) {
                     shopping[key]=value *100/total                } 
             }
-           
         renderLinearGraphicwith2(shopping,park,'shoppingByHoursDb')
-        },
-        error: function(){
-            console.log("Error calling /api/PeopleInShoppingByhours/'")
-        }
     })
+    
 }
 
 const loadDataBySensorToday= function(){

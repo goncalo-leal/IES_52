@@ -1103,7 +1103,8 @@ public class SensorDataService {
                     int dia_atual=LocalDateTime.now().getDayOfYear();
                     int ano_atual=LocalDateTime.now().getYear();
                     int hora = data.getDate().getHour();
-                    if(dia_pedido ==dia && ano == ano_pedido  ){
+                    
+                    if(dia ==dia_pedido && ano_atual == ano_pedido  ){
                         
                         if (x.getSensorShopping().isPark_associated()){
                             p1.put(hora, p1.get(hora)+1);
