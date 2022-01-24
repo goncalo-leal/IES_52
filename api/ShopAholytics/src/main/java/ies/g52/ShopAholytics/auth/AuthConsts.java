@@ -18,12 +18,12 @@ public class AuthConsts {
 
     public static final String[] PUBLIC_ENDPOINTS = {
         "/api/shoppings/Shoppings",
-        "/api/shoppings/Shopping"
+        "/api/shoppings/Shopping",
+        "/mq/*"
     };
 
 
     public static final String[] SHOPPING_MANAGER_PROTECTED_ENDPOINTS = {
-        "/mq/*",
         "/api/parks/*",
 
         "/api/users/addUser/{pid}",
