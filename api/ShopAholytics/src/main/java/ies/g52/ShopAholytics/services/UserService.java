@@ -13,6 +13,9 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private UserStateService userStateService;
+
     public User saveUser(User user) {
         return repository.save(user);
     }
@@ -38,12 +41,20 @@ public class UserService {
         return "product removed !! " + id;
     }
 
+    public User acceptStoreManagerIv(User storeManager) {
+        storeManager.setState(userStateService.getUserStateById(2));
+        return this.updateUser(storeManager);
+
+    }
+
     public User updateUser(User user) {
+        System.out.println(user);
         User existingUser = repository.findById((int)user.getId()).orElse(null);
         existingUser.setEmail(user.getEmail());
         existingUser.setGender(user.getGender());
         existingUser.setPassword(user.getPassword());
         existingUser.setName(user.getName());
+        existingUser.setState(user.getState());
         return repository.save(existingUser);
     }
 

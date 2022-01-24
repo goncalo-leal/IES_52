@@ -58,6 +58,13 @@ public class UserController {
         
     }
 
+    @CrossOrigin(origins = "http://localhost:8000")
+    @PutMapping("/acceptInvite")
+    public User acceptStoreManager(@RequestBody User storeManager) {
+        return userService.acceptStoreManagerIv(storeManager);
+
+    }
+
 
     @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping("/updateUser")

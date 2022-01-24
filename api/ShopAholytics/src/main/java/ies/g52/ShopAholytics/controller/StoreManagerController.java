@@ -1,16 +1,23 @@
 package ies.g52.ShopAholytics.controller;
 
+import java.nio.charset.Charset;
+import java.security.SecureRandom;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import ies.g52.ShopAholytics.email.Email;
+import ies.g52.ShopAholytics.email.EmailConsts;
+import ies.g52.ShopAholytics.email.EmailService;
 import ies.g52.ShopAholytics.models.StoreManager;
 import ies.g52.ShopAholytics.models.User;
 import ies.g52.ShopAholytics.services.StoreManagerService;
 import ies.g52.ShopAholytics.services.StoreService;
 import ies.g52.ShopAholytics.services.UserService;
 import ies.g52.ShopAholytics.services.UserStateService;
+import net.bytebuddy.utility.RandomString;
 
 
 
@@ -29,6 +36,9 @@ public class StoreManagerController {
     @Autowired
     private UserStateService userStateService;
 
+    @Autowired
+    private EmailService emailService;
+
     @PostMapping("/addStoreManager/{pid}/{store}")
     public StoreManager newStoreManager(@PathVariable(value = "pid") int pid, @PathVariable(value = "store") int store) {
         return StoreManagerServices.saveStoreManager(new StoreManager (serviceUser.getUserById(pid),StoreServices.getStoreById(store)));
@@ -36,11 +46,23 @@ public class StoreManagerController {
 
     @PostMapping("/addStoreManager/{store}")
     public StoreManager newShoppingManagerWithNewUser( @PathVariable(value = "store") int store,@RequestBody User m) {
+        String psw = genPass();
+        Email e = new Email(EmailConsts.OUR_EMAIL ,m.getEmail());
+        e.setSubject(EmailConsts.STORE_MANAGER_INVITE_SUBJECT);
 
-        User user = new User(m.getPassword(),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1), "ROLE_STORE_MANAGER");
-        serviceUser.saveUser(user);
+        //TODO: (PARA TI OH ARQUITETO) MUDAR A STRING "SHOPPING" AQUI EM BAIXO PARA O NOME DO SHOPPING A QUE A LOJA PERTENCE
 
-        return StoreManagerServices.saveStoreManager(new StoreManager (user,StoreServices.getStoreById(store)));
+        e.setText(EmailConsts.STORE_MANAGER_INVITE_CONTENT(m.getEmail(), StoreServices.getStoreById(store).getName(), "SHOPPING", psw));
+
+
+        if (emailService.send(e)) {
+            User user = new User(psw,m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1), "ROLE_STORE_MANAGER");
+            serviceUser.saveUser(user);
+            return StoreManagerServices.saveStoreManager(new StoreManager (user,StoreServices.getStoreById(store)));
+        }
+        else {
+            return null;
+        }
     }
     
 
@@ -51,15 +73,7 @@ public class StoreManagerController {
     }
     @GetMapping("/StoreManager")
     public StoreManager findStoreManagerById(@RequestParam(value = "id")  int id) {
-        List<StoreManager> a = StoreManagerServices.getStoreManagers();
-        
-        for (StoreManager qu: a){
-            if (qu.getId() == id ){
-                return qu;
-            }
-        }
-        return null;
-        
+        return StoreManagerServices.getStoreManagerById(id);
     }
 
     // Os updates são feitos na no store e no user
@@ -89,6 +103,18 @@ public class StoreManagerController {
     @GetMapping("/StoreManagerShopping/{id}")
     public List<StoreManager> findAllStoreManagersShopping(@PathVariable int id) {
         return StoreManagerServices.storeManagersOfShopping(id);
+    }
+
+
+    private String genPass() {
+        int len = 15;
+        SecureRandom sr = new SecureRandom();
+        String alnum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        StringBuilder sb = new StringBuilder(len);
+        for (int i=0; i < len; i++) {
+            sb.append(alnum.charAt(sr.nextInt(alnum.length())));
+        }
+        return sb.toString();
     }
 }
 

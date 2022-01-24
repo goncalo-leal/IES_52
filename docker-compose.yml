@@ -13,11 +13,18 @@ services:
     volumes:
       - datafiles:/var/lib/mysql
     restart: always
+    healthcheck:
+      test: "mysql $MYSQL_DATABASE -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'SELECT 1;'"
+      interval: 30s
+      timeout: 10s
+      retries: 10
       
   api:
     depends_on:
-      - db
-      - mq
+      db:
+        condition: service_healthy
+      mq:
+        condition: service_healthy
     build: ./api/ShopAholytics
     env_file: ./.env
     environment:
@@ -36,10 +43,16 @@ services:
     ports:
       - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
     restart: on-failure
+    healthcheck:
+      test: "curl http://localhost:$SPRING_DOCKER_PORT/"
+      interval: 30s
+      timeout: 10s
+      retries: 10
       
   client:
     depends_on:
-      - api
+      api: 
+        condition: service_healthy
     build: ./FrontEnd
     env_file: ./.env
     environment:
@@ -48,12 +61,22 @@ services:
       - $CLIENT_LOCAL_PORT:$CLIENT_DOCKER_PORT
     volumes:
       - ./FrontEnd:/usr/share/nginx/html
+    healthcheck:
+      test: "curl http://localhost:$CLIENT_DOCKER_PORT/"
+      interval: 30s
+      timeout: 10s
+      retries: 10
 
   mq:
     image: rabbitmq:management
     ports:
       - $RMQ_HTTP_LOCAL_PORT:$RMQ_HTTP_DOCKER_PORT
       - $RMQ_AMQP_LOCAL_PORT:$RMQ_AMQP_DOCKER_PORT
+    healthcheck:
+      test: "rabbitmq-diagnostics -q status"
+      interval: 30s
+      timeout: 10s
+      retries: 10
 
 volumes:
   datafiles:
