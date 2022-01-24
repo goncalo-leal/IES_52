@@ -49,51 +49,15 @@ const render_shopping_info = function() {
                 parks = data.parks;
                 stores = data.stores;
                 parks.forEach(function(park) {
-                    total_parking_capacity += park.capacity;
-                    current_parking_capacity += park.current_capacity;
+                    
 
-                    let opening_hours = park.opening[0]
-                    if (opening_hours < 10)
-                        opening_hours = "0" + opening_hours
-
-                    let opening_minutes = park.opening[1]
-                    if (opening_minutes < 10)
-                        opening_minutes = "0" + opening_minutes
-
-                    let closing_hours = park.closing[0]
-                    if (closing_hours < 10)
-                        closing_hours = "0" + closing_hours
-
-                    let closing_minutes = park.closing[1]
-                    if (closing_minutes < 10)
-                        closing_minutes = "0" + closing_minutes
-
-                    $("#park_container").append(park_card_template(park.name, park.location, park.current_capacity, park.capacity, opening_hours+":"+opening_minutes, closing_hours+":"+closing_minutes))
+                    $("#park_container").append(park_card_template(park.name, park.location, park.current_capacity, park.capacity, park.opening.substring(0,5), park.closing.substring(0,5)))
                 })
 
                 stores.forEach(function(store) {
                     //TODO: Comparar se a store ta aberta
-                    if (true) {
-                        open_stores += 1;
-                    }
 
-                    let opening_hours = store.opening[0]
-                    if (opening_hours < 10)
-                        opening_hours = "0" + opening_hours
-
-                    let opening_minutes = store.opening[1]
-                    if (opening_minutes < 10)
-                        opening_minutes = "0" + opening_minutes
-
-                    let closing_hours = store.closing[0]
-                    if (closing_hours < 10)
-                        closing_hours = "0" + closing_hours
-
-                    let closing_minutes = store.closing[1]
-                    if (closing_minutes < 10)
-                        closing_minutes = "0" + closing_minutes
-
-                    $("#store_container").append(store_card_template(store.name, store.location, store.current_capacity, store.capacity, opening_hours+":"+opening_minutes, closing_hours+":"+closing_minutes, store.img))
+                    $("#store_container").append(store_card_template(store.name, store.location, store.current_capacity, store.capacity, store.opening.substring(0,5), store.closing.substring(0,5), store.img))
                 });
 
                 $("#sh_name").text(data.name);
