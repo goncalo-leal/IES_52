@@ -2,6 +2,8 @@ import consts from "./consts.js";
 import SessionManager from "./session.js";
 import updateView from "./common.js"
 
+var store = "";
+var store_id;
 $(document).ready(function() {
     updateView();
     get_cur_info();
@@ -41,12 +43,22 @@ const accept_manager = function() {
             var tp = SessionManager.get("session");
             tp.user.name = username;
             SessionManager.set("session", tp);
-            alert("Success! You can start managing your store.");
-            window.location.href = "./index.html"
+            SweetAlert.fire(
+                'Signed In!',
+                'You can now start managing ' +  store,
+                'success'
+            ).then(function() {
+                window.location.href = "./store.html?id=" + store_id;
+            })
         },
 
         error: function() {
-            console.log("erro");
+            SweetAlert.fire(
+                'Error!',
+                'Something went wrong',
+                'error'
+            ).then(function() {
+            })
         }
 
     })
@@ -60,6 +72,8 @@ const get_cur_info = function() {
         contentType: "application/json",
         dataType: "json",
         success: function(data) {
+            store_id = data.store.id;
+            store = data.store.name;
             $("#store").text(data.store.name)
             $("#email").val(data.user.email)
         },
