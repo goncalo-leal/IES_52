@@ -78,7 +78,7 @@ We store all our data on a **mySQL** database.
 
 #### Data Model
 
-![databaseDiagram](Schemas/database.png)
+![databaseDiagram](Schemas/db.png)
 
 ## API Documentation
 https://documenter.getpostman.com/view/18307586/UVXqEsXR#f958822b-acc7-4fd8-a702-bc5df7df1369
