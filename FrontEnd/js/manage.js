@@ -1,6 +1,6 @@
 import consts from "./consts.js";
 import SessionManager from "./session.js";
-import updateView from "./common.js"
+import { updateView, requestWithToken } from "./common.js"
 
 var users;
 var table;
@@ -49,51 +49,40 @@ $(document).ready(function() {
 
 const userStates = function() {
     var estados='';
-    $.ajax({
-        url: consts.BASE_URL + '/api/UserStates/',
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                estados = data;
-                for (var i=0; i< estados.length; i++){
-                    states.push(estados[i].description);
-                }
+    requestWithToken("GET", '/api/users/UserStates/', function(data) {
+        if (data) {
+            estados = data;
+            for (var i=0; i< estados.length; i++){
+                states.push(estados[i].description);
             }
-        },
-        error: function() {
-            SweetAlert.fire(
-                'Error!',
-                'Error loading users information!',
-                'error'
-            )
         }
+    },
+
+    function() {
+        SweetAlert.fire(
+            'Error!',
+            'Error loading users information!',
+            'error'
+        )
     })
 }
 
 const loadTable = function() {
-    $.ajax({
-        url: consts.BASE_URL + '/api/StoreManagerShopping/' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                users = data;
-                renderTable(data);
-            } else {
-                console.log("No store managers for this shopping");
-            }
-        },
-
-        error: function() {
-            SweetAlert.fire(
-                'Error!',
-                'Error loading users information!',
-                'error'
-            )
+    requestWithToken("GET", '/api/storemanagers/StoreManagerShopping/' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            users = data;
+            renderTable(data);
+        } else {
+            console.log("No store managers for this shopping");
         }
+    },
+
+    function() {
+        SweetAlert.fire(
+            'Error!',
+            'Error loading users information!',
+            'error'
+        )
     })
 }
 
@@ -139,69 +128,33 @@ const changeState = function () {
         console.log(textSelected)
         if (textSelected === 'Approved'){
             console.log(idToUpdate)
-            $.ajax({
-                url: consts.BASE_URL + '/api/updateAcceptStoreManager/'+idToUpdate,
-                type: "PUT",
-                contentType: "application/json",
-                dataType: "json",
-                success: function(data) {
-                    loadTable();
-                },
-                error: function() {
-                    SweetAlert.fire(
-                        'Error!',
-                        'Error updating user`s information!',
-                        'error'
-                    )
-                }
-            });
-            //location.reload();
+            requestWithToken("PUT", '/api/storemanagers/updateAcceptStoreManager/'+idToUpdate, function(data) {
+                loadTable();
+            },
+            function() {
+                SweetAlert.fire(
+                    'Error!',
+                    'Error updating user`s information!',
+                    'error'
+                )
+            }
+            )
         }
 
         if (textSelected === 'Blocked'){
-            $.ajax({
-                url: consts.BASE_URL + '/api/updateBlockStoreManager/'+idToUpdate,
-                type: "PUT",
-                contentType: "application/json",
-                dataType: "json",
-                success: function(data) {
-                    loadTable();
-                },
-                error: function() {
-                    SweetAlert.fire(
-                        'Error!',
-                        'Error updating user`s information!',
-                        'error'
-                    )
-                }
-            });
-            // location.reload();
+            requestWithToken("PUT", '/api/storemanagers/updateBlockStoreManager/'+idToUpdate, function(data) {
+                loadTable();
+            },
+            function() {
+                SweetAlert.fire(
+                    'Error!',
+                    'Error updating user`s information!',
+                    'error'
+                )
+            })           
         }
-        
-    });
-}
 
-const trTemplate = function (name, email, shop, id ,i) {
-    return `
-    <tr>
-        <td>
-            ${name}
-        </td>
-        <td class="text-center">
-            ${email}
-        </td>
-        <td class="text-center">
-            ${shop}
-        </td>
-        <td class="text-center">
-            <select name="states${i}" class="browser-default custom-select" style="max-width:200px;">
-            </select>
-        </td>
-        <td id="userId" style="display:none">
-            ${id}
-        </td>
-    </tr>
-    `
+    });
 }
 
 

@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import ies.g52.ShopAholytics.email.Email;
 import ies.g52.ShopAholytics.email.EmailConsts;
 import ies.g52.ShopAholytics.email.EmailService;
+import ies.g52.ShopAholytics.auth.AuthConsts;
 import ies.g52.ShopAholytics.models.StoreManager;
 import ies.g52.ShopAholytics.models.User;
 import ies.g52.ShopAholytics.services.StoreManagerService;
@@ -20,10 +22,13 @@ import ies.g52.ShopAholytics.services.UserStateService;
 import net.bytebuddy.utility.RandomString;
 
 
-
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/storemanagers")
 public class StoreManagerController {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private StoreManagerService StoreManagerServices;
 
@@ -56,7 +61,7 @@ public class StoreManagerController {
 
 
         if (emailService.send(e)) {
-            User user = new User(psw,m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1), "ROLE_STORE_MANAGER");
+            User user = new User(passwordEncoder.encode(psw),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1), "ROLE_STORE_MANAGER");
             serviceUser.saveUser(user);
             return StoreManagerServices.saveStoreManager(new StoreManager (user,StoreServices.getStoreById(store)));
         }
@@ -77,7 +82,6 @@ public class StoreManagerController {
     }
 
     // Os updates são feitos na no store e no user
-    @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping("/updateAcceptStoreManager/{user}")
     public User updateAcceptStoreManager(@PathVariable(value = "user") StoreManager user) {
         StoreManager a = StoreManagerServices.getStoreManagerById(user.getId());
@@ -86,7 +90,6 @@ public class StoreManagerController {
         return serviceUser.updateUser(u);
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
     @PutMapping("/updateBlockStoreManager/{user}")
     public User updateBlockStoreManager( @PathVariable(value = "user") StoreManager user) {
         StoreManager a = StoreManagerServices.getStoreManagerById(user.getId());

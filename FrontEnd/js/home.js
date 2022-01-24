@@ -1,6 +1,6 @@
 import consts from "./consts.js";
 import SessionManager from "./session.js";
-import updateView from "./common.js"
+import { updateView, requestWithToken } from "./common.js"
 
 var stores_table;
 var parks_table;
@@ -133,43 +133,35 @@ const initialize = function() {
 const loadShoppingInfo = function() {
     $("#s_name").text(SessionManager.get("session").shopping.name);
 
-    $.ajax({
-        url: consts.BASE_URL + '/api/Shopping?id=' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                var cur_capacity = 0;
-                stores = data.stores;
-                parks = data.parks;
-                
-                
-                $("#shopcurcap").text(data.current_capacity);
-                $("#shopmaxcap").text(data.capacity);
-                
-                renderDonut(data.current_capacity, data.capacity, "donutShopping");
-                if (parks.length > 0) {
-                    console.log("calculate parks...");
-                } else {
-                    $("#parkingTab").empty();
-                }
 
-
-                loadShoppingsParks();
-                loadShoppingStores();
-
-                past_info_parks = getAllParksLastHourEntrance();
-                getAllStoresLastHourEntrance();
+    requestWithToken("GET", '/api/shoppings/Shopping?id=' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            var cur_capacity = 0;
+            stores = data.stores;
+            parks = data.parks;
+            
+            
+            $("#shopcurcap").text(data.current_capacity);
+            $("#shopmaxcap").text(data.capacity);
+            
+            renderDonut(data.current_capacity, data.capacity, "donutShopping");
+            if (parks.length > 0) {
+                console.log("calculate parks...");
             } else {
-                console.log("No store for this shopping");
+                $("#parkingTab").empty();
             }
-        },
 
-        error: function() {
-            console.log("erro na call");
+
+            loadShoppingsParks();
+            loadShoppingStores();
+
+            past_info_parks = getAllParksLastHourEntrance();
+            getAllStoresLastHourEntrance();
+        } else {
+            console.log("No store for this shopping");
         }
     })
+    
 }
 
 const loadShoppingStores = function() {
@@ -336,86 +328,52 @@ const loadShoppingsParks = function() {
 }
 
 const getAllStoresLastHourEntrance= function(){
-
-    $.ajax({
-        url: consts.BASE_URL + '/api/CountLastHoursForStores/' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                past_info_stores = data;
-                renderStoresTable(stores);
-                return;
-            } else {
-                console.log("No data");
-            }
-        },
-
-        error: function() {
-            console.log(" erro na call");
+    requestWithToken("GET", '/api/sensorsdata/CountLastHoursForStores/' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            past_info_stores = data;
+            renderStoresTable(stores);
+            return;
+        } else {
+            console.log("No data");
         }
-    });
+    })
 }
 
 const getAllParksLastHourEntrance= function(){
+    requestWithToken("GET", '/api/sensorsdata/CountLastHoursForParks/' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            past_info_parks = data
+            renderParksTable(parks);
 
-    $.ajax({
-        url: consts.BASE_URL + '/api/CountLastHoursForParks/' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                past_info_parks = data
-                renderParksTable(parks);
-
-            } else {
-                console.log("No data");
-            }
-        },
-
-        error: function() {
-            console.log(" erro na call");
+        } else {
+            console.log("No data");
         }
-    });
-
+    })
 }
 
 const loadShoppingEntrancesLastHour= function(){
-    $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInShoppingInLastHour/' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                let horas_atrs=data["2_hours_ago"];
-                let horas_atual=data["last_hour"];
-                let diferença=0
-                if (horas_atrs ==0 ){
-                    diferença=(horas_atual- horas_atrs)*100
-               
-                }
-                else{
-                    diferença=(( horas_atual- horas_atrs)/horas_atrs)*100
-                    
-                }
-                if (diferença >0){
-                    $("#shopping_capacity_percentagem").html("<i class='ion ion-android-arrow-up text-success' >"+diferença+ "% in last hour</i>")
-                }
-                else{
-                    $("#shopping_capacity_percentagem").html("<i class='ion ion-android-arrow-down text-warning' >"+diferença+ "% in last hour</i>")
-
-                }
-            } else {
-                console.log("No data");
+    requestWithToken("GET", '/api/sensorsdata/PeopleInShoppingInLastHour/' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            let horas_atrs=data["2_hours_ago"];
+            let horas_atual=data["last_hour"];
+            let diferença=0
+            if (horas_atrs ==0 ){
+                diferença=(horas_atual- horas_atrs)*100
+           
             }
+            else{
+                diferença=(( horas_atual- horas_atrs)/horas_atrs)*100
+                
+            }
+            if (diferença >0){
+                $("#shopping_capacity_percentagem").html("<i class='ion ion-android-arrow-up text-success' >"+diferença+ "% in last hour</i>")
+            }
+            else{
+                $("#shopping_capacity_percentagem").html("<i class='ion ion-android-arrow-down text-warning' >"+diferença+ "% in last hour</i>")
 
-        },
-
-        error: function() {
-            console.log(" erro na call");
+            }
+        } else {
+            console.log("No data");
         }
     })
 }
@@ -481,50 +439,40 @@ const renderParksTable = function (data) {
 }
 
 const loadPeopleByWeek = function() {
-    $.ajax({
-        url: consts.BASE_URL + '/api/PeopleInShoppingLast7Days/' + SessionManager.get("session").shopping.id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            if (data) {
-                var number = [data.mapa["MONDAY"], data.mapa["TUESDAY"], data.mapa["WEDNESDAY"], data.mapa["THURSDAY"], data.mapa["FRIDAY"], data.mapa["SATURDAY"], data.mapa["SUNDAY"]];
-                var total_visitors = 0;
-                for (var i=0; i<number.length; i++){
-                    total_visitors =total_visitors + number[i];
-                }
-                var numbers = [data.mapa["LAST_MONDAY"], data.mapa["LAST_TUESDAY"], data.mapa["LAST_WEDNESDAY"], data.mapa["LAST_THURSDAY"], data.mapa["LAST_FRIDAY"], data.mapa["LAST_SATURDAY"], data.mapa["LAST_SUNDAY"]];
-                var total_visitors_last = 0;
-                for (var x=0; x<numbers.length; x++){
-                    total_visitors_last = total_visitors_last + numbers[x];
-                }
-                $("#shopping_capacity").html(total_visitors);
-                let diferença=0
-                if (total_visitors_last ==0 ){
-                    diferença=(total_visitors- total_visitors_last)*100
-               
-                }
-                else{
-                    diferença=(( total_visitors- total_visitors_last)/total_visitors_last)*100
-                    
-                }
-                diferença=diferença.toFixed(2)
-                if (diferença > 0){
-                    $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-up text-success' ></i> " + diferença + "% Since last week")
-                }
-                else{
-                    $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-down text-warning' ></i> " + diferença+ "% Since last week")
 
-                }
-                renderGraphic(data.mapa);
-            } else {
-                console.log("No data");
+    requestWithToken("GET", '/api/sensorsdata/PeopleInShoppingLast7Days/' + SessionManager.get("session").shopping.id, function(data) {
+        if (data) {
+            var number = [data.mapa["MONDAY"], data.mapa["TUESDAY"], data.mapa["WEDNESDAY"], data.mapa["THURSDAY"], data.mapa["FRIDAY"], data.mapa["SATURDAY"], data.mapa["SUNDAY"]];
+            var total_visitors = 0;
+            for (var i=0; i<number.length; i++){
+                total_visitors =total_visitors + number[i];
             }
+            var numbers = [data.mapa["LAST_MONDAY"], data.mapa["LAST_TUESDAY"], data.mapa["LAST_WEDNESDAY"], data.mapa["LAST_THURSDAY"], data.mapa["LAST_FRIDAY"], data.mapa["LAST_SATURDAY"], data.mapa["LAST_SUNDAY"]];
+            var total_visitors_last = 0;
+            for (var x=0; x<numbers.length; x++){
+                total_visitors_last = total_visitors_last + numbers[x];
+            }
+            $("#shopping_capacity").html(total_visitors);
+            let diferença=0
+            if (total_visitors_last ==0 ){
+                diferença=(total_visitors- total_visitors_last)*100
+           
+            }
+            else{
+                diferença=(( total_visitors- total_visitors_last)/total_visitors_last)*100
+                
+            }
+            diferença=diferença.toFixed(2)
+            if (diferença > 0){
+                $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-up text-success' ></i> " + diferença + "% Since last week")
+            }
+            else{
+                $("#Total_diferença_semanas").html("<i class='ion ion-android-arrow-down text-warning' ></i> " + diferença+ "% Since last week")
 
-        },
-
-        error: function() {
-            console.log("erro na call");
+            }
+            renderGraphic(data.mapa);
+        } else {
+            console.log("No data");
         }
     })
 }

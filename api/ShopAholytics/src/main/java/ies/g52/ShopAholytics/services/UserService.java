@@ -3,6 +3,7 @@ package ies.g52.ShopAholytics.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ies.g52.ShopAholytics.models.User;
@@ -10,6 +11,9 @@ import ies.g52.ShopAholytics.repository.UserRepository;
 
 @Service
 public class UserService {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private UserRepository repository;
 
@@ -52,7 +56,7 @@ public class UserService {
         User existingUser = repository.findById((int)user.getId()).orElse(null);
         existingUser.setEmail(user.getEmail());
         existingUser.setGender(user.getGender());
-        existingUser.setPassword(user.getPassword());
+        existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         existingUser.setName(user.getName());
         existingUser.setState(user.getState());
         return repository.save(existingUser);

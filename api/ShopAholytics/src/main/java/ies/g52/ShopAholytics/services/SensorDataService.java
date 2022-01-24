@@ -1069,7 +1069,6 @@ public class SensorDataService {
         int mes_pedido=Integer.parseInt(escolha[1]);
         int dia_pedido=Integer.parseInt(escolha[2]);
 
-    
         List<SensorData> a = this.getSensorDatas();
         Collections.reverse(a);
         HashMap<String ,HashMap<Integer,Integer>> map = new HashMap<>();
@@ -1099,6 +1098,8 @@ public class SensorDataService {
                 if (x.getSensorShopping() != null && x.getSensorShopping().getShopping().getId()==pid ){
                     int dia =data.getDate().getDayOfYear();
                     int ano = data.getDate().getYear();
+                    int mes = data.getDate().getMonthValue();
+
                     int dia_atual=LocalDateTime.now().getDayOfYear();
                     int ano_atual=LocalDateTime.now().getYear();
                     int hora = data.getDate().getHour();
@@ -1111,6 +1112,7 @@ public class SensorDataService {
                         else{
                             s1.put(hora, s1.get(hora)+1);
                         }
+                        System.out.println("FIZ UM INSERT");
                     
                     }
                     
