@@ -7,6 +7,7 @@ from api_connector import ApiConnector
 
 sg.theme('Reddit')
 
+sender = Sender()
 api = ApiConnector()
 
 def get_shoppings_list():
@@ -185,7 +186,6 @@ def show_sensors_list(shopping, sensors_list):
 
                             window_generating = sg.Window("ShopAholytics", layout_loading, size=(300, 50), finalize=True)
                             
-                            sender = Sender()
                             while True:
                                 
                                 for i in range(number):
@@ -196,7 +196,6 @@ def show_sensors_list(shopping, sensors_list):
 
                                 break
 
-                            sender.close_connection()
                             window_generating.close()
                             window_generate.close()
                             window.close()
@@ -226,3 +225,4 @@ if shopping == None:
 k = shopping["id"]
 sensors = get_sensors_list(k)
 show_sensors_list(shopping, sensors)
+sender.close_connection()
