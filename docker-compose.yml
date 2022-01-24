@@ -15,7 +15,7 @@ services:
     restart: always
     healthcheck:
       test: "mysql $MYSQL_DATABASE -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'SELECT 1;'"
-      interval: 30s
+      interval: 10s
       timeout: 10s
       retries: 10
       
@@ -45,7 +45,7 @@ services:
     restart: on-failure
     healthcheck:
       test: "curl http://localhost:$SPRING_DOCKER_PORT/"
-      interval: 30s
+      interval: 10s
       timeout: 10s
       retries: 10
       
@@ -63,7 +63,7 @@ services:
       - ./FrontEnd:/usr/share/nginx/html
     healthcheck:
       test: "curl http://localhost:$CLIENT_DOCKER_PORT/"
-      interval: 30s
+      interval: 10s
       timeout: 10s
       retries: 10
 
@@ -74,7 +74,7 @@ services:
       - $RMQ_AMQP_LOCAL_PORT:$RMQ_AMQP_DOCKER_PORT
     healthcheck:
       test: "rabbitmq-diagnostics -q status"
-      interval: 30s
+      interval: 10s
       timeout: 10s
       retries: 10
 
