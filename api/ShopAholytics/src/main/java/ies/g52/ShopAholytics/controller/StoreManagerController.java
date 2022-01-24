@@ -73,15 +73,14 @@ public class StoreManagerController {
     }
     @GetMapping("/StoreManager")
     public StoreManager findStoreManagerById(@RequestParam(value = "id")  int id) {
-        List<StoreManager> a = StoreManagerServices.getStoreManagers();
-        
-        for (StoreManager qu: a){
-            if (qu.getId() == id ){
-                return qu;
-            }
-        }
-        return null;
-        
+        return StoreManagerServices.getStoreManagerById(id);
+    }
+
+    @CrossOrigin(origins = "http://localhost:8000")
+    @PutMapping("/acceptInvite")
+    public StoreManager acceptStoreManager(@RequestBody StoreManager storeManager) {
+        return StoreManagerServices.acceptStoreManagerIv(storeManager);
+
     }
 
     // Os updates são feitos na no store e no user

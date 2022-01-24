@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ies.g52.ShopAholytics.models.Shopping;
 import ies.g52.ShopAholytics.models.Store;
 import ies.g52.ShopAholytics.models.StoreManager;
+import ies.g52.ShopAholytics.models.User;
 import ies.g52.ShopAholytics.repository.StoreManagerRepository;
 
 
@@ -20,6 +21,12 @@ public class StoreManagerService {
 
     @Autowired
     private ShoppingServices shoppingServices;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserStateService userStateService;
 
     public StoreManager saveStoreManager(StoreManager StoreManager) {
         return repository.save(StoreManager);
@@ -35,6 +42,15 @@ public class StoreManagerService {
 
     public StoreManager getStoreManagerById(int id) {
         return repository.findById((int)id).orElse(null);
+    }
+
+    public StoreManager acceptStoreManagerIv(StoreManager storeManager) {
+        StoreManager a = getStoreManagerById(storeManager.getId());
+        User u= a.getUser();
+        u.setState(userStateService.getUserStateById(2));
+        userService.updateUser(u);
+        return updateStoreManager(storeManager);
+
     }
 
     public String deleteStoreManager(int id) {

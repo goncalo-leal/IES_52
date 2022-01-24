@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShopAholytics | Sign up</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/daterangepicker/daterangepicker.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+    <div class="login-logo">
+        <h1>You were invited to manage <b><span id="store"></span></b></h1>
+    </div>
+    <!-- /.login-logo -->
+    <div class="card">
+        <div class="card-body login-card-body">
+            <p class="login-box-msg">Manager Sign Up</p>
+
+            <form>
+                <div class="input-group mb-3">
+                    <input type="email" class="form-control" placeholder="Email" id="email">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Username" id="username">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" placeholder="Password" id="password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-check-inline">
+                    <div class="form-check">
+                        <input type="radio" id="male" value="male" class="form-check-input" name="gender" checked>
+                        <label for="male" class="form-check-label">
+                            Male
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" id="female" value="female" class="form-check-input" name="gender">
+                        <label for="female" class="form-check-label">
+                            Female
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" id="other" value="other" class="form-check-input" name="gender">
+                        <label for="other" class="form-check-label">
+                            Other
+                        </label>
+                    </div>
+                </div>
+                    <!-- Date -->
+                <div class="form-group mb-3">
+                    <div class="input-group date" id="birthdaydate" data-target-input="nearest">
+                        <input type="text" class="form-control datetimepicker-input" data-target="#birthdaydate" placeholder="Birthday"/>
+                        <div class="input-group-append" data-target="#birthdaydate" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+                    <!-- /.col -->
+                <div class="row">
+                    <div class="col-8">
+                        <div class="icheck-primary">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">
+                                By clickig you accept
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button id="accept" type="submit" class="btn btn-primary btn-block">Accept</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+        </div>
+        <!-- /.login-card-body -->
+    </div>
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery -->
+<script src="./AdminLTE-3.1.0/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="./AdminLTE-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="./AdminLTE-3.1.0/dist/js/adminlte.min.js"></script>
+<script type="module" src="./js/register.js"></script>
+</body>
+</html>

@@ -26,7 +26,11 @@ const login = function() {
                 if (SessionManager.get("session").user.authority == "ROLE_SHOPPING_MANAGER") {
                     window.location.href = "./home.html";
                 } else {
-                    window.location.href = "./store.html?id=" + data.store.id
+                    if (SessionManager.get("session").user.state.id == 1) {
+                        window.location.href = "./register.html"
+                    } else {
+                        window.location.href = "./store.html?id=" + data.store.id
+                    }
                 }
             } else {
                 console.log("nao autenticado");

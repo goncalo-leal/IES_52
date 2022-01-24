@@ -133,7 +133,7 @@ class NavbarIndex extends HTMLElement {
                                             <li class="nav-item">
                                                 <a href="/add_user.html" class="nav-link">
                                                     <i class="far fa-circle nav-icon"></i>
-                                                    <p>Add User</p>
+                                                    <p>Invite Managers</p>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
@@ -324,7 +324,7 @@ class SideBar extends HTMLElement {
                                     <li class="nav-item">
                                         <a href="/add_user.html" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Add User</p>
+                                            <p>Invite Managers</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
