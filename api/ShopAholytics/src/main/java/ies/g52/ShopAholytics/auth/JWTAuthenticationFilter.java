@@ -79,6 +79,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         userDTO.put("id", u.getId());
         userDTO.put("authority", u.getAuthority());
         userDTO.put("name", u.getName());
+        userDTO.put("state", u.getState().getId());
 
 
         StoreManager user = storeManagerService.getStoreManagerById(u.getId());

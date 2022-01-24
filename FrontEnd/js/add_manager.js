@@ -28,8 +28,8 @@ const add_manager = function() {
 
     requestWithToken("POST", '/api/storemanagers/addStoreManager/' + store, function(data) {
         SweetAlert.fire(
-            'Store Manager Added!',
-            'You added a new store manager!',
+            'Store Manager Invited!',
+            'An email has been sent to ' + email,
             'success'
         ).then(function() {
             window.location.href = "./user_management.html"

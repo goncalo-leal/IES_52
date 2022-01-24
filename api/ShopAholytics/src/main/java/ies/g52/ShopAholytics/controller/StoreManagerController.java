@@ -61,7 +61,7 @@ public class StoreManagerController {
 
 
         if (emailService.send(e)) {
-            User user = new User(psw,m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1), "ROLE_STORE_MANAGER");
+            User user = new User(passwordEncoder.encode(psw),m.getEmail(),m.getName(),m.getGender(),m.getBirthday(),userStateService.getUserStateById(1), "ROLE_STORE_MANAGER");
             serviceUser.saveUser(user);
             return StoreManagerServices.saveStoreManager(new StoreManager (user,StoreServices.getStoreById(store)));
         }
