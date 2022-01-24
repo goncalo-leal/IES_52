@@ -17,7 +17,7 @@ $(document).ready(function() {
     $('#set_date').click(function() {
         day = $('#search_date input').val().split('-').reverse().join('-')
         console.log(day)
-        loadShoppingByHours();
+        loadShoppingByHoursDay();
     });
 
     $("#nav-tabs-entranceShopping-select").change(function(e) {
@@ -102,7 +102,7 @@ const loadShoppingByHours = function () {
 
 const loadShoppingByHoursDay = function () {  
     
-    console.log(day)
+    console.log("day "+day)
     $.ajax({
         url: consts.BASE_URL + '/api/PeopleInShoppingSensorDay/' + SessionManager.get("session").shopping.id +'/'+day,
         type: "GET", 
