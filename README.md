@@ -80,6 +80,7 @@ We store all our data on a **mySQL** database.
 
 ![databaseDiagram](Schemas/database.png)
 
-
+## API Documentation
+https://documenter.getpostman.com/view/18307586/UVXqEsXR#f958822b-acc7-4fd8-a702-bc5df7df1369
 
 
