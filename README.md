@@ -78,7 +78,7 @@ We store all our data on a **mySQL** database.
 
 #### Data Model
 
-![databaseDiagram](Schemas/database.png)
+![databaseDiagram](Schemas/db.png)
 
 
 

@@ -1,6 +1,6 @@
 import consts from "./consts.js";
 import SessionManager from "./session.js";
-import updateView from "./common.js";
+import {updateView, requestWithToken} from "./common.js";
 
 var shoppingCapacity;
 var complete_data;
@@ -27,29 +27,28 @@ $(document).ready(function() {
             "capacity":$("#capacity").val(), "opening":$("#opening").val(), "closing":$("#closing").val()};
         
         if ($("#location").val()!="" && $("#park_name").val()!="" && $("#capacity").val()!="" && $("#opening").val()!="" && $("#closing").val()!="")
-            $.ajax({
-                url: consts.BASE_URL + '/api/addPark/' + SessionManager.get("session").shopping.id,
-                type: "POST", 
-                data: JSON.stringify(data_complete),
-                contentType: "application/json",
-                dataType: "json",
-                success: function() {
+            
+            requestWithToken(
+                "POST", 
+                "/api/parks/addPark/" + SessionManager.get("session").shopping.id, 
+                function(){
                     SweetAlert.fire(
                         'Park Added!',
                         'You added a new park to the shopping!',
                         'success'
                     ).then(function() {
-                        window.location.href = "./home.html"
+                        window.location.href = "./park_management.html"
                     })
                 },
-        
-                error: function() {
+                function(){
                     SweetAlert.fire(
                         'Error!',
                         'Error while adding a new park to the shopping!',
                         'error'
                     )
-                }
-            });
+                },
+                data_complete   
+                );
+
     })
 });

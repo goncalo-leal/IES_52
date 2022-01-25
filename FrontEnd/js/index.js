@@ -38,6 +38,9 @@ const update_index_view = function() {
 
 
 const render_shopping_info = function() {
+    var today = new Date()
+    var horas_atuais=today.getHours()
+    var minutos_atuais=today.getMinutes()
     clear_view();
     $.ajax({
         url: consts.BASE_URL + '/api/shoppings/Shopping?id=' + shopping_id,
@@ -53,10 +56,29 @@ const render_shopping_info = function() {
 
                     $("#park_container").append(park_card_template(park.name, park.location, park.current_capacity, park.capacity, park.opening.substring(0,5), park.closing.substring(0,5)))
                 })
-
+                console.log(open_stores)
                 stores.forEach(function(store) {
                     //TODO: Comparar se a store ta aberta
+                    var horas_abertura=store.opening.slice(0,2)
+                    var minutos_abertura=store.opening.slice(3,5)
+                    var horas_fecho=store.closing.slice(0,2)
+                    var minutos_fecho=store.closing.slice(3,5)
+                    console.log("horas",store.opening)
+                    console.log("horas",minutos_fecho)
 
+                    if (horas_abertura < horas_atuais && horas_fecho > horas_atuais){
+                        open_stores=open_stores+1
+                    }
+                    else if (horas_abertura == horas_atuais && minutos_atuais > minutos_abertura ){
+                        open_stores=open_stores+1 
+                    }
+                    else if (horas_fecho < horas_atuais &&  horas_abertura < horas_atuais && horas_abertura > horas_fecho){
+                        open_stores=open_stores+1 
+                    }
+                    else if (horas_fecho == horas_atuais && minutos_fecho > minutos_atuais   ){
+                        open_stores=open_stores+1 
+                    }
+                    
                     $("#store_container").append(store_card_template(store.name, store.location, store.current_capacity, store.capacity, store.opening.substring(0,5), store.closing.substring(0,5), store.img))
                 });
 
