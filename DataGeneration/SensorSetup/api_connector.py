@@ -5,7 +5,7 @@ import requests
 
 class ApiConnector:
     def __init__(self) -> None:
-        self.api_url = "http://localhost:8080/mq/" # "http://192.168.160.238:6868/mq/"
+        self.api_url = "http://192.168.160.238:6868/mq/" # "http://localhost:8080/mq/" # "http://192.168.160.238:6868/mq/"
 
     def get_shoppings_list(self):
         method = "Shoppings"

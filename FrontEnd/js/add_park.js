@@ -22,8 +22,6 @@ $(document).ready(function() {
         $(this).val($(this).val().replace(/[^0-9]/g, ''));
     });
     
-
-    
     $("#add_park").click(function(){
         var data_complete = {"location":$("#location").val(), "name":$("#park_name").val(),
             "capacity":$("#capacity").val(), "opening":$("#opening").val(), "closing":$("#closing").val()};

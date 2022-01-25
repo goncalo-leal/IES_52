@@ -382,6 +382,18 @@ class SideBar extends HTMLElement {
                                             <p>Add Park</p>
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="/sensors_management.html" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Manage Sensors</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/add_sensor.html" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Add Sensor</p>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             `

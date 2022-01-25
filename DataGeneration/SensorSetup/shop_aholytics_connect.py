@@ -213,6 +213,7 @@ def show_sensors_list(shopping, sensors_list):
                             break
                         # except:
                         #     sg.popup('You must write a number!', title="Error!", font=14)
+    sender.close_connection()
     window.close()
 
 # primeiro passo, carregar os shoppings e mostrar a lista
@@ -225,4 +226,3 @@ if shopping == None:
 k = shopping["id"]
 sensors = get_sensors_list(k)
 show_sensors_list(shopping, sensors)
-sender.close_connection()
