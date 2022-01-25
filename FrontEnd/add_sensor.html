@@ -15,12 +15,12 @@
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/daterangepicker/daterangepicker.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="./AdminLTE-3.1.0/dist/css/adminlte.min.css">
-  <!-- SweetAlert -->
-  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/sweetalert2/sweetalert2.min.css">
   <!-- DataTables -->
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- SweetAlert -->
+  <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/sweetalert2/sweetalert2.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
   <link rel="stylesheet" href="./AdminLTE-3.1.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 </head>
@@ -33,7 +33,7 @@
   * sidebar-collapse
   * sidebar-mini
 -->
-<body class="hold-transition sidebar-mini" style="display: none">
+<body class="hold-transition sidebar-mini">
 <div class="wrapper">
     <div class="preloader flex-column justify-content-center align-items-center">
         <h2 class="brand-text font-weight-bold">ShopAholytics</h2>
@@ -50,7 +50,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Invite Store Manager</h1>
+                    <h1 class="m-0">New Sensor</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -61,29 +61,38 @@
     <div class="content">
         <div class="card d-flex mt-5 justify-content-center mx-auto" style="width:900px">
             <div class="card-body login-card-body">
-                <p class="login-box-msg">User Information</p>
+                <p class="login-box-msg">Sensor Information</p>
     
                 <form>
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Email" id="email">
+                        <input type="text" class="form-control" placeholder="Name" id="sensor_name">
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                                <span class="fas fa-signature"></span>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group mb-3">
-                        <div class="row">
-                            <div class="col-12">
-                                <label for="store">Store</label>
-                                <select class="form-control" id="store">
-                                    <option selected>Choose a store...</option>
-                                </select>
-                            </div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-6 form-group mb-3">
+                            <select id="sensor_type" class="form-control">
+                                <option value="-1" selected disabled>Type</option>
+                                <option value="Entrance">Entrance</option>
+                                <option value="Exit">Exit</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6 form-group mb-3">
+                            <select id="sensor_location" class="form-control">
+                                <option value="-1" selected disabled>Location</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Store">Store</option>
+                                <option value="Park">Park</option>
+                            </select>
                         </div>
                     </div>
+
                     <div class="justify-content-center d-flex mx-auto">
-                        <button id="add_manager" type="button" class="btn btn-primary btn-block" style="width:200px">Send Invite</button>
+                        <button id="add_sensor" type="button" class="btn btn-primary btn-block" style="width:200px">Create</button>
                     </div>
                 </form>
 
@@ -123,10 +132,10 @@
 
 <!-- OPTIONAL SCRIPTS -->
 <script src="./AdminLTE-3.1.0/plugins/chart.js/Chart.js"></script>
-<!-- SweetAlert 2 -->
-<script src="./AdminLTE-3.1.0/plugins/sweetalert2/sweetalert2.min.js"></script>
 <!-- DataTables  & Plugins -->
 <script src="./AdminLTE-3.1.0/plugins/datatables/jquery.dataTables.min.js"></script>
+<!-- SweetAlert 2 -->
+<script src="./AdminLTE-3.1.0/plugins/sweetalert2/sweetalert2.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
@@ -138,32 +147,7 @@
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="./AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<script type="module" src="js/add_manager.js"></script>
-<script type="module" src="js/components.js"></script>
-<script>
-    $(function () {
-        var table = $("#example1").DataTable({
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "autoWidth": false,
-            "responsive": true,
-            "paging": false,
-            "lengthChange": false,
-            "info": false,
-            "columnDefs": [
-                { "searchable": true, "targets": 0 },
-                { "searchable": false, "targets": 1 },
-                { "searchable": false, "targets": 2 },
-                { "searchable": false, orderable: false, "targets": 3 },
-            ],
-            "dom": '<"top"i>rt<"bottom"><"clear">'
-        });
-        
-        $('#mySearchButton').on( 'keyup click', function () {
-            table.search($('#mySearchText').val()).draw();
-        } );  
-    });
-</script>
+<script type="module" src="./js/add_sensor.js"></script>
+<script type="module" src="./js/components.js"></script>
 </body>
 </html>
