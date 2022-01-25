@@ -1,6 +1,6 @@
 import consts from "./consts.js";
 import SessionManager from "./session.js";
-import updateView from "./common.js";
+import {updateView, requestWithToken } from "./common.js";
 
 var shoppingCapacity;
 var maxCapacity;
@@ -45,15 +45,6 @@ $(document).ready(function () {
                 'error'
             )
         }
-        else if (parseInt(opening[0]) > parseInt(closing[0]) || 
-        (parseInt(opening[0]) == parseInt(closing[0]) && parseInt(opening[1]) > parseInt(closing[1]))) {
-            // erro: "Closing must be after opening hours" 
-            SweetAlert.fire(
-                'Error!',
-                'Closing must be after opening hours!',
-                'error'
-            )
-        }
         else {
             var data = {
                 "id":       park_id,
@@ -63,14 +54,9 @@ $(document).ready(function () {
                 "opening":  [parseInt(opening[0]), parseInt(opening[1])],
                 "closing":  [parseInt(closing[0]), parseInt(closing[1])]
             };
-
-            $.ajax({
-                url: consts.BASE_URL + '/api/updatePark',
-                type: "PUT", 
-                data: JSON.stringify(data),
-                contentType: "application/json",
-                dataType: "json",
-                success: function() {
+            requestWithToken("PUT", 
+                '/api/parks/updatePark', 
+                function(){
                     SweetAlert.fire(
                         'Park Updated!',
                         'You updated the park!',
@@ -78,26 +64,23 @@ $(document).ready(function () {
                     ).then(function() {
                         window.location.href = "./park_management.html"
                     })
-                },        
-                error: function() {
+                },
+                function(){
                     SweetAlert.fire(
                         'Error!',
                         'Error updating the park!',
                         'error'
                     )
-                }
-            });
+                },
+                data
+            );
         }
     });
 });
 
 const loadPark = function(park_id) {
-    $.ajax({
-        url: consts.BASE_URL + '/api/Park?id=' + park_id,
-        type: "GET", 
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
+    requestWithToken("GET", "/api/parks/Park?id=" + park_id, 
+        function(data){
             if (data) {
                 console.log(data);
 
@@ -121,18 +104,64 @@ const loadPark = function(park_id) {
                 if (closing_minutes < 10)
                     closing_minutes = "0" + closing_minutes
 
-                $("#opening").val(opening_hours + ":" + opening_minutes)
-                $("#closing").val(closing_hours + ":" + closing_minutes)
+                //$("#opening").val(opening_hours + ":" + opening_minutes)
+                $("#opening").val(data.opening.substring(0,5))
+                //$("#closing").val(closing_hours + ":" + closing_minutes)
+                $("#closing").val(data.closing.substring(0,5))
+
             } else {
                 console.log("No data");
             }
         },
-        error: function() {
+        function(){
             SweetAlert.fire(
                 'Error!',
                 'Error loading park data!',
                 'error'
             )
         }
-    });
+    );
+    //$.ajax({
+    //    url: consts.BASE_URL + '/api/Park?id=' + park_id,
+    //    type: "GET", 
+    //    contentType: "application/json",
+    //    dataType: "json",
+    //    success: function(data) {
+    //        if (data) {
+    //            console.log(data);
+//
+    //            $("#park_name").val(data.name);
+    //            $("#location").val(data.location);
+    //            $("#capacity").val(data.capacity);
+//
+    //            let opening_hours = data.opening[0]
+    //            if (opening_hours < 10)
+    //                opening_hours = "0" + opening_hours
+//
+    //            let opening_minutes = data.opening[1]
+    //            if (opening_minutes < 10)
+    //                opening_minutes = "0" + opening_minutes
+//
+    //            let closing_hours = data.closing[0]
+    //            if (closing_hours < 10)
+    //                closing_hours = "0" + closing_hours
+//
+    //            let closing_minutes = data.closing[1]
+    //            if (closing_minutes < 10)
+    //                closing_minutes = "0" + closing_minutes
+//
+    //            $("#opening").val(opening_hours + ":" + opening_minutes)
+    //            $("#closing").val(closing_hours + ":" + closing_minutes)
+    //        } else {
+    //            console.log("No data");
+    //        }
+    //    },
+    //    error: function() {
+    //        SweetAlert.fire(
+    //            'Error!',
+    //            'Error loading park data!',
+    //            'error'
+    //        )
+    //    }
+    //});
 }
