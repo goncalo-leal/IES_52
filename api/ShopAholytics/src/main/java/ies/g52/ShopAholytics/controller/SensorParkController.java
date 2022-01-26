@@ -66,7 +66,7 @@ public class SensorParkController {
     @PostMapping("/addSensorPark/{park}")
     public SensorPark newSensorParkWithNewSensor(@PathVariable(value = "park") int park, @RequestBody Sensor s1) {
         
-        if (s1.getType().equals("entrace") || s1.getType().equals("exit")){}
+        if (s1.getType().equalsIgnoreCase("entrance") || s1.getType().equalsIgnoreCase("exit")){}
         else{
             return null;
         }

@@ -20,7 +20,6 @@ const requestWithToken = function(type, path, callback, error, data) {
         success: function(data) {
             callback(data);
         },
-
         error: function(data) {
             //Authorization related errors
             if (data.error) {

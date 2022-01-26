@@ -62,7 +62,7 @@ public class SensorShoppingController {
     }
     @PostMapping("/addSensorShopping/{shopping}")
     public SensorShopping newSensorShoppingWithNewSensor(@PathVariable(value = "shopping") int shopping, @RequestBody SensorShoppingPark s1) {
-        if (s1.getType().equalsIgnoreCase("entrace") || s1.getType().equalsIgnoreCase("exit")){}
+        if (s1.getType().equalsIgnoreCase("entrance") || s1.getType().equalsIgnoreCase("exit")){}
         else{
             return null;
         }

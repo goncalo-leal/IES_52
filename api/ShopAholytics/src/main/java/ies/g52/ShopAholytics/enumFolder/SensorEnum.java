@@ -2,7 +2,7 @@ package ies.g52.ShopAholytics.enumFolder;
 
 
 public enum SensorEnum {
-    ENTRACE("Entrace"),EXIT("Exit");
+    ENTRACE("Entrance"),EXIT("Exit");
     private final String name;  
     private SensorEnum(String s) {
         this.name = s;

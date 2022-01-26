@@ -65,18 +65,18 @@ public class SensorStoreController {
     }
     @PostMapping("/addSensorStore/{store}")
     public SensorStore newSensorStoreWithNewSensor(@PathVariable(value = "store") int store, @RequestBody Sensor s1) {
-        
-        if (s1.getType().equals("entrace") || s1.getType().equals("exit")){}
+        if (s1.getType().equalsIgnoreCase("entrance") || s1.getType().equalsIgnoreCase("exit")){
+            System.out.println(s1.getType());
+        }
         else{
+            System.out.println("aquiiiiiiii");
             return null;
         }
         Sensor s = new Sensor(s1.getType(), s1.getName());
-
        
         sensorService.saveSensor(s);
         if (s.getSensorPark() == null && s.getSensorShopping()==null && s.getSensorStore()==null ){
             return SensorStoreServices.saveSensorStore(new SensorStore (storeService.getStoreById(store),s));
-
         }
         
         return null;
